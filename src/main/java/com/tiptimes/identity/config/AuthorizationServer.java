@@ -51,6 +51,9 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private JwtAccessTokenConverter accessTokenConverter;
 
+    @Autowired
+    private CustomAdditionalInformation customAdditionalInformation;
+
     // 密码编辑器
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -90,7 +93,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         services.setTokenStore(tokenStore); // 令牌存储策略
         // 令牌增强
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter));
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter, customAdditionalInformation));
         services.setTokenEnhancer(tokenEnhancerChain);
 
         services.setAccessTokenValiditySeconds(7200); // 令牌默认有效期--2小时
@@ -144,6 +147,8 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         security.checkTokenAccess("permitAll()"); // check_token公开
         security.allowFormAuthenticationForClients();// 表单认证 (申请令牌)，
     }
+
+
 
 
 

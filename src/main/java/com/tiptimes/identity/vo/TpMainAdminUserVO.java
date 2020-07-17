@@ -1,5 +1,6 @@
 package com.tiptimes.identity.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.util.Date;
@@ -47,7 +48,7 @@ public class TpMainAdminUserVO {
 
     private String post; // 岗位
 
-    private Integer order; // 排序
+    private Integer sort; // 排序
 
     private String department; // 部门
 

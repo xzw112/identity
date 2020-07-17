@@ -40,4 +40,6 @@ public class TpMainAdminUser {
 
     private Integer isAdmin;
 
+    private Integer sort;
+
 }
