@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tiptimes.identity.dao.TpMainAdminUserMapper" >
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.TpMainAdminUser" >
+      <id column="id" property="id" jdbcType="VARCHAR"/>
+      <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+      <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+      <result column="login_password" property="loginPassword" jdbcType="VARCHAR"/>
+      <result column="user_contact" property="userContact" jdbcType="VARCHAR"/>
+      <result column="user_address" property="userAddress" jdbcType="VARCHAR"/>
+      <result column="mail" property="mail" jdbcType="VARCHAR"/>
+      <result column="role_id" property="roleId" jdbcType="VARCHAR"/>
+      <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+      <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
+      <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+      <result column="status" property="status" jdbcType="INTEGER"/>
+      <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+      <result column="remark" property="remark" jdbcType="VARCHAR"/>
+      <result column="is_admin" property="isAdmin" jdbcType="INTEGER"/>
+      <result column="is_leave" property="isLeave" jdbcType="INTEGER"/>
+      <result column="nature" property="nature" jdbcType="INTEGER"/>
+      <result column="post" property="post" jdbcType="VARCHAR"/>
+      <result column="order" property="order" jdbcType="INTEGER"/>
+      <result column="department" property="department" jdbcType="VARCHAR"/>
+      <result column="header_url" property="headerUrl" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_name, login_name, login_password, user_contact, user_address, mail, role_id, 
+    create_user, create_time, update_user, update_time, status, is_delete,remark, is_admin,
+    is_leave, nature, post, order, department, header_url
+  </sql>
+
+  <select id="selectList" parameterType="com.tiptimes.identity.bo.AdminUserParam"
+          resultType="com.tiptimes.identity.vo.TpMainAdminUserVO">
+    SELECT
+        u.id AS id,
+        u.user_name AS userName,
+        u.login_name AS loginName,
+        u.user_contact AS userContact,
+        u.user_address AS userAddress,
+        u.mail AS mail,
+        u.create_time AS createTime,
+        u.update_time AS updateTime,
+        u.status AS status,
+        u.is_admin AS isAdmin,
+        u.is_leave AS isLeave,
+        u.nature AS nature,
+        u.post AS post,
+        u.order AS order,
+        u.department AS department,
+        u.header_url AS headerUrl
+    FROM
+        tp_main_admin_user u
+    WHERE
+        u.is_delete = 0
+    ORDER BY
+        u.create_time DESC
+  </select>
+</mapper>

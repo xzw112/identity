@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+
+    <th:block th:include="include :: header('人员管理')" />
+
+    <style>
+        .example-modal .modal {
+            position: relative;
+            top: auto;
+            bottom: auto;
+            right: auto;
+            left: auto;
+            display: block;
+            z-index: 1;
+        }
+
+        .example-modal .modal {
+            background: transparent !important;
+        }
+
+        .modal {
+            overflow: auto !important;
+        }
+    </style>
+</head>
+<body class="modal-open" style="overflow: hidden">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-body">
+                            <div class="margin">
+                                <div class="btn-group" shiro:hasPermission="adminUser_add">
+                                    <button type="button" class="btn btn-sm btn-primary pull-left m-t-n-xs"
+                                            style="margin-left:10px" onclick="addAdminUser();">新建
+                                    </button>
+                                </div>
+                                <div class="btn-group" shiro:hasPermission="adminUser_edit">
+                                    <button type="button" class="btn btn-sm btn-info pull-left m-t-n-xs"
+                                            style="margin-left:10px" onclick="editAdminUser();">编辑
+                                    </button>
+                                </div>
+                                <div class="btn-group" shiro:hasPermission="adminUser_del">
+                                    <button type="button" id="del" class="btn btn-sm btn-danger pull-left m-t-n-xs"
+                                            style="margin-left:10px" onclick="delAdminUser();">删除
+                                    </button>
+                                </div>
+                                <div class="btn-group" shiro:hasPermission="adminUser_enable">
+                                    <button type="button" id="enable" class="btn btn-sm btn-success pull-left m-t-n-xs"
+                                            style="margin-left:10px" onclick="enableAdminUser();">启用
+                                    </button>
+                                </div>
+                                <div class="btn-group" shiro:hasPermission="adminUser_disable">
+                                    <button type="button" id="disable" class="btn btn-sm btn-warning pull-left m-t-n-xs"
+                                            style="margin-left:10px" onclick="disableAdminUser();">禁用
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-body">
+                            <div class="example-wrap" style="position: relative;">
+                                <div class="example">
+                                    <div class="hidden-xs" id="exampleToolbar" role="group">
+                                        <form id="search_form">
+
+                                        </form>
+                                    </div>
+                                    <table id="examplePagination" data-mobile-responsive="true"
+                                           data-icon-size="outline"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!--新增/修改modal-->
+<div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 id="title_name" class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="partner_form">
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="loginName">用户名:</label>
+                        <input id="loginName" type="text" class="form-control" maxlength="16" placeholder="请输入用户名">
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="loginPassword">登录密码:</label>
+                        <input id="loginPassword" type="password" class="form-control" maxlength="16" placeholder="请输入登录密码">
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="roleId">角色:</label>
+                        <select id="roleId" class="form-control">
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="userName">姓名:</label>
+                        <input id="userName" type="text" class="form-control" maxlength="20" placeholder="请输入姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="userContact">联系方式:</label>
+                        <input id="userContact" type="text" class="form-control" maxlength="12" placeholder="请输入联系方式">
+                    </div>
+                    <div class="form-group">
+                        <label for="userAddress">联系地址:</label>
+                        <input id="userAddress" type="text" class="form-control" maxlength="255" placeholder="请输入联系地址">
+                    </div>
+                    <div class="form-group">
+                        <label for="mail">电子邮件:</label>
+                        <input id="mail" type="text" class="form-control" maxlength="100" placeholder="请输入电子邮件">
+                    </div>
+                    <div class="form-group">
+                        <label for="remark">备注:</label>
+                        <textarea id="remark" class="form-control" rows="3" placeholder="请输入备注" maxlength="500"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="save_btn" type="button" class="btn btn-primary">保存</button>
+                <button id="cancel" type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: del" />
+<th:block th:include="include :: footer" />
+<!--自定义js-->
+<script th:src="@{/js/adminUser/adminUser_index.js}"></script>
+</body>
+</html>

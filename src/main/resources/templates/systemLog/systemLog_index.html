@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('操作日志')" />
+</head>
+<body class="modal-open" style="overflow: hidden">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-body">
+                            <div class="example-wrap" style="position: relative;">
+                                <div class="example">
+                                    <div class="hidden-xs" id="exampleToolbar" role="group">
+                                        <form id="search_form">
+                                            <div class="col-xs-3">
+                                                <label for="modules">所属模块:</label>
+                                                <input id="modules" type="text" class="form-control" placeholder="请输入所属模块">
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <label for="operateType">操作类型:</label>
+                                                <input id="operateType" type="text" class="form-control" placeholder="请输入操作类型">
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <label for="operatorName">操作人员:</label>
+                                                <input id="operatorName" type="text" class="form-control" placeholder="请输入操作人员">
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <div class="form-group">
+                                                    <label for="operateTime">操作时间范围</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-clock-o"></i>
+                                                        </div>
+                                                        <input type="text" class="form-control pull-right"
+                                                               id="operateTime">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3"
+                                                 style="line-height: 78px">
+                                                <input type="button" class="btn btn-sm btn-info" value="查询"
+                                                       style="margin-left:10px" onclick="queryData();"/>
+                                                <input type="button" class="btn btn-sm btn-danger" value="重置"
+                                                       style="margin-left:10px" onclick="resetData();"/>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <table id="examplePagination" data-mobile-responsive="true"
+                                           data-icon-size="outline"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<th:block th:include="include :: footer" />
+<!--自定义js-->
+<script th:src="@{/js/systemLog/systemLog_index.js}"></script>
+</body>
+</html>

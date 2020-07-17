@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tiptimes.identity.dao.TpMainPermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.TpMainPermission" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="permission_name" property="permissionName" jdbcType="VARCHAR" />
+    <result column="permission_url" property="permissionUrl" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="order_number" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="UserPermissionResultMap" type="String">
+    <result column="permission_url" jdbcType="VARCHAR" property="permissionUrl"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, permission_name, permission_url, parent_id, create_user, create_time,
+    update_user, update_time, is_delete, order_number, remark
+  </sql>
+
+  <select id="selectPermissionByRoleId" resultMap="UserPermissionResultMap">
+        SELECT
+            p.permission_url
+        FROM
+            tp_main_role_permission rp
+            INNER JOIN tp_main_permission p ON rp.permission_id = p.id
+        WHERE
+            rp.role_id = #{roleId}
+  </select>
+
+</mapper>

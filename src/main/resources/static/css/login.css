@@ -1,0 +1,74 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; }
+
+.login {
+  background: url("/images/login-bg.png") 0 0 no-repeat;
+  padding-top: 120px;
+  width: 100%;
+  height: 100%; }
+  .login .title {
+    margin: 0 auto;
+    display: block; }
+
+.login-cont {
+  width: 380px;
+  height: 380px;
+  box-shadow: 1px 1px 10px 5px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  border-radius: 10px;
+  background: #fff;
+  padding: 20px; }
+  .login-cont .title {
+    color: #1E6330;
+    font-size: 17px;
+    font-weight: bold; }
+  .login-cont .login-item {
+    margin-top: 20px;
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 50px;
+    border-bottom: 1px solid #D2D2D2;
+    padding-bottom: 1px;
+    width: 100%; }
+    .login-cont .login-item .label_in {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50px;
+      color: #111111;
+      font-size: 14px;
+      font-weight: bold; }
+    .login-cont .login-item .in {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      outline: none; }
+    .login-cont .login-item .login-code {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 120px;
+      text-align: center; }
+      .login-cont .login-item .login-code .cd {
+        width: auto;
+        height: 25px;
+        display: inline-block; }
+      .login-cont .login-item .login-code .code-tip {
+        font-size: 12px;
+        color: #1D6FDE;
+        line-height: 15px;
+        margin-bottom: 0;
+        cursor: pointer; }
+  .login-cont .login-btn {
+    width: 320px;
+    height: 50px;
+    text-align: center;
+    background-color: #1E6330;
+    color: #fff;
+    margin: 60px auto 0;
+    display: block;
+    border: 0;
+    border-radius: 3px; }

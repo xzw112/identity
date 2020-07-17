@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiptimes.identity.dao.GroupMapper">
+
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.Group">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="is_del" jdbcType="INTEGER" property="isDel" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_user" jdbcType="TIMESTAMP" property="updateUser" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, group_name, order, is_del, status, create_time, update_time, create_user, update_user
+  </sql>
+
+  <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from group
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="com.tiptimes.identity.entity.Group">
+    insert into group (id, group_name, order, 
+      is_del, status, create_time, 
+      update_time, create_user, update_user
+      )
+    values (#{id,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, 
+      #{isDel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+
+  <update id="updateById" parameterType="com.tiptimes.identity.entity.Group">
+    update group
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      order = #{order,jdbcType=INTEGER},
+      is_del = #{isDel,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

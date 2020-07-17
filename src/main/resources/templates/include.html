@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header(title)">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <!--/*@thymesVar id="title" type=""*/-->
+    <title th:text="${title}"></title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+    <!--table-->
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap-table.min.css}"/>
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" th:href="@{/plugins/iCheck/minimal/_all.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/res/css/plugins/jsTree/style.min.css}">
+    <link rel="stylesheet" th:href="@{/res/css/style.css}">
+
+    <link rel="stylesheet" th:href="@{/res/modal/css/demo.css}">
+    <link rel="stylesheet" th:href="@{/res/modal/css/naranja.min.css}">
+
+    <!-- element-ui -->
+    <link rel="stylesheet" th:href="@{/plugins/element-ui/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{/plugins/element-ui/css/icon.css}"/>
+    <link rel="stylesheet" th:href="@{/plugins/element-ui/css/date-picker.css}"/>
+
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-daterangepicker/daterangepicker.css}"/>
+
+    <!-- select2 -->
+    <link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}"/>
+</head>
+<body>
+
+<div th:fragment="del">
+    <!--删除提示modal-->
+    <div class="modal fade" id="modal-delete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>确认要删除吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="del_btn" type="button" class="btn btn-success">确定</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="report">
+    <!--上报提示modal-->
+    <div class="modal fade" id="modal-report">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>确认上报信息吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="report_btn" type="button" class="btn btn-success">确定</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="passInfo">
+    <!--通过提示modal-->
+    <div class="modal fade" id="modal-pass">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>确认通过当前审核吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="pass_btn" type="button" class="btn btn-success">确定</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="returnInfo">
+    <!--退回提示modal-->
+    <div class="modal fade" id="modal-return">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">退回</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="returnReason">退回理由:</label>
+                        <textarea id="returnReason" class="form-control" maxlength="255" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="return_btn" type="button" class="btn btn-success">确定</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 通用JS -->
+<div th:fragment="footer">
+    <!-- jQuery 3 -->
+    <script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <!--table-->
+    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap-table.min.js}"></script>
+    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap-table-zh-CN.min.js}"></script>
+    <!-- iCheck 1.0.1 -->
+    <script th:src="@{/plugins/iCheck/icheck.min.js}"></script>
+    <!--jsTree-->
+    <script th:src="@{/res/js/plugins/jsTree/jstree.js}"></script>
+    <!-- 弹框 -->
+    <script th:src="@{/res/modal/js/naranja.js}"></script>
+    <!--base 64加密-->
+    <script th:src="@{/res/js/Base64.js}"></script>
+
+    <!-- 设置dialog可拖拽 -->
+    <script th:src="@{/plugins/jquery-ui/jquery-ui.js}"></script>
+
+    <!-- element-ui -->
+    <script th:src="@{/plugins/element-ui/vue.2.6.11.js}"></script>
+    <script th:src="@{/plugins/element-ui/element-ui.js}"></script>
+
+    <!-- bootstrap datepicker -->
+    <script th:src="@{/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
+
+    <!-- date-range-picker -->
+    <script th:src="@{/bower_components/moment/min/moment.min.js}"></script>
+    <script th:src="@{/bower_components/bootstrap-daterangepicker/daterangepicker.js}"></script>
+
+    <!-- ueditor -->
+    <script th:src="@{/plugins/ueditor/ueditor.config.js}"></script>
+    <script th:src="@{/plugins/ueditor/ueditor.all.js}"> </script>
+    <script th:src="@{/plugins/ueditor/lang/zh-cn/zh-cn.js}"></script>
+
+    <!-- ajaxfileupload -->
+    <script th:src="@{/plugins/ajaxfileupload/ajaxfileupload.js}"></script>
+
+    <!-- echarts -->
+    <script th:src="@{/plugins/echarts/echarts.min.js}"></script>
+
+    <!-- select2 -->
+    <script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
+
+    <!--公共js-->
+    <script th:src="@{/js/common.js}"></script>
+
+    <!--公共业务相关js-->
+    <script th:src="@{/js/public.js}"></script>
+
+    <!-- Page script -->
+    <script>
+        $(function () {
+            //iCheck for checkbox and radio inputs
+            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+        });
+    </script>
+
+    <script type="text/javascript" th:inline="javascript" >
+        /*<![CDATA[*/
+        var ctxPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+    </script>
+</div>
+</body>
+</html>

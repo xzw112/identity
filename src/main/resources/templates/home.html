@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('首页')" />
+
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+    <div class="home">
+        首页
+    </div>
+<th:block th:include="include :: footer" />
+<!--自定义js-->
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>

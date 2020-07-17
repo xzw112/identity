@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base th:href="${#request.getContextPath()}+'/'">
+    <title>后台网站</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" th:href="@{/bower_components/Ionicons/css/ionicons.min.css}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" th:href="@{/dist/css/skins/_all-skins.min.css}">
+    <!--style-->
+    <link rel="stylesheet" th:href="@{/res/css/style.css}">
+
+    <link rel="stylesheet" th:href="@{/res/modal/css/naranja.min.css}">
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100% !important;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            min-height: auto !important;
+        }
+
+        .content-wrapper {
+            height: calc(100% - 50px) !important;
+            min-height: auto !important;
+        }
+
+        .wrapper_out {
+            background-color: #fff !important;
+            height: 100% !important;
+            min-height: auto !important;
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!--/*@thymesVar id="userType" type=""*/-->
+<input type="hidden" id="userType" th:value="${session.userType}"/>
+<div class="wrapper wrapper_out">
+    <header class="main-header">
+        <!-- Logo -->
+        <div class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>后台网站</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>后台网站</b></span>
+        </div>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img th:src="@{/images/user.png}" class="user-image" alt="User Image">
+                            <span id="userName" class="hidden-xs"></span>
+                            <span id="userId" class="hidden-xs" hidden></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img th:src="@{/images/user.png}" class="img-circle" alt="User Image">
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="javascript:" class="btn btn-default btn-flat" onclick="logout()">退出</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="treeview" id="homeLi">
+                    <a class="J_menuItem" href="admin/home" data-index="0">
+                        <i class="fa fa-home"></i>
+                        <span>首页</span>
+                    </a>
+                </li>
+                <li class="treeview has-submenu" shiro:hasPermission="personal_index">
+                    <a href="#">
+                        <i class="fa fa-user"></i> <span>个人中心</span>
+                        <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li shiro:hasPermission="personalInfo_index">
+                            <a class="J_menuItem" href="admin/personalInfo_index" data-index="0">
+                                <i class="fa fa-circle-o"></i>个人资料
+                            </a>
+                        </li>
+                        <li shiro:hasPermission="modifyPassword_index">
+                            <a class="J_menuItem" href="admin/modifyPassword_index" data-index="0">
+                                <i class="fa fa-circle-o"></i>修改密码
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview has-submenu" shiro:hasPermission="organization_index">
+                    <a href="#">
+                        <i class="fa fa-code-fork"></i> <span>组织架构</span>
+                        <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li shiro:hasPermission="adminUser_index">
+                            <a class="J_menuItem" href="admin/adminUser_index" data-index="0">
+                                <i class="fa fa-circle-o"></i>人员管理
+                            </a>
+                        </li>
+                        <li shiro:hasPermission="role_index">
+                            <a class="J_menuItem" href="admin/role_index" data-index="0">
+                                <i class="fa fa-circle-o"></i>角色管理
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview has-submenu" shiro:hasPermission="sysConfig_index">
+                    <a href="#">
+                        <i class="fa fa-cog"></i> <span>系统设置</span>
+                        <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li shiro:hasPermission="systemLog_index">
+                            <a class="J_menuItem" href="admin/systemLog_index" data-index="0">
+                                <i class="fa fa-circle-o"></i>操作日志
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content-header" height="5%">
+            <h1 id="navigation_title" style="font-family: cursive;">首页</h1>
+        </section>
+        <div class="row J_mainContent page-iframe">
+            <iframe class="J_iframe single-page-main" name="iframe0" src="admin/home" id="myiframe" frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+
+<!--删除提示modal-->
+<div class="modal fade" id="modal-logout">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>确认要退出登录吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button id="realLogout" type="button" class="btn btn-success">确定</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- ./wrapper -->
+<!-- jQuery 3 -->
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/bower_components/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.7 -->
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<!-- Sparkline -->
+<script th:src="@{/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js}"></script>
+<!-- jQuery Knob Chart -->
+<script th:src="@{/bower_components/jquery-knob/dist/jquery.knob.min.js}"></script>
+<script th:src="@{/bower_components/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<!-- Slimscroll -->
+<script th:src="@{/bower_components/jquery-slimscroll/jquery.slimscroll.min.js}"></script>
+<!-- FastClick -->
+<script th:src="@{/bower_components/fastclick/lib/fastclick.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.min.js}"></script>
+<!-- AdminLTE for demo purposes -->
+<script th:src="@{/dist/js/demo.js}"></script>
+<!--base 64加密-->
+<script th:src="@{/res/js/Base64.js}"></script>
+<!-- 弹框 -->
+<script th:src="@{/res/modal/js/naranja.js}"></script>
+<!--公共js-->
+<script th:src="@{/js/common.js}"></script>
+<!--contabsjs-->
+<script th:src="@{/js/contabs.js}"></script>
+<!-- 自定义js -->
+<script th:src="@{/js/menu.js}"></script>
+<script type="text/javascript" th:inline="javascript" >
+    /*<![CDATA[*/
+    var ctxPath = /*[[@{/}]]*/ '';
+    /*]]>*/
+</script>
+<script language="javascript">        
+    //防止页面后退
+    $(function () {
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+server:
+  port: 8081
+#mybatis
+mybatis:
+  mapper-locations: classpath*:mybatis/*.xml
+  type-aliases-package: com.tiptimes.*.entity
+
+#分页插件
+pagehelper:
+  auto-dialect: mysql
+  params: count=countSql
+  reasonable: false
+  support-methods-arguments: true
+#mysql配置
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/identity?useUnicode=true&characterEncoding=UTF-8&useSSL=false&useTimezone=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&autoReconnect=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    hikari:
+      idle-timeout: 600000
+      maximum-pool-size: 30
+      minimum-idle: 10
+      max-lifetime: 1800000
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    com:
+      tiptimes:
+        identity:
+          dao: debug

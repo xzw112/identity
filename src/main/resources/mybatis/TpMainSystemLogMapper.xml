@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tiptimes.identity.dao.TpMainSystemLogMapper" >
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.TpMainSystemLog" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
+    <result column="operator_number" property="operatorNumber" jdbcType="VARCHAR" />
+    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="modules" property="modules" jdbcType="VARCHAR" />
+    <result column="operate_type" property="operateType" jdbcType="VARCHAR" />
+    <result column="operate_terminal" property="operateTerminal" jdbcType="VARCHAR" />
+    <result column="operate_detail" property="operateDetail" jdbcType="VARCHAR" />
+    <result column="ip_address" property="ipAddress" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, operator_name, operator_number, operate_time, modules, operate_type, operate_terminal, 
+    operate_detail, ip_address, remark
+  </sql>
+</mapper>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base th:href="${#request.getContextPath()}+'/'">
+    <title>青少年运动员|登录</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" th:href="@{/bower_components/Ionicons/css/ionicons.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}">
+
+    <link rel="stylesheet" th:href="@{/res/modal/css/naranja.min.css}">
+
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+</head>
+<body>
+<div class="login">
+    <img src="/images/login-tl.png" class="title"/>
+    <form>
+        <div class="login-cont">
+            <p class="title">登录</p>
+            <div class="login-item">
+                <span class="label_in">账号</span>
+                <input id="loginName" placeholder="请输入账号" class="in"/>
+            </div>
+            <div class="login-item">
+                <span class="label_in">密码</span>
+                <input  id="password" type="password" placeholder="请输入密码" class="in"/>
+            </div>
+            <div class="login-item">
+                <span class="label_in">验证码</span>
+                <input id="code" maxlength="4" placeholder="请输入验证码" class="in"/>
+                <div class="login-code">
+                    <img id="imgObj" border="4" src="/admin/validateCode/getCode"/>
+                    <p class="code-tip" onclick="changeImg()">看不清，换一张</p>
+                </div>
+            </div>
+            <button type="button" id="login" class="login-btn">登录</button>
+        </div>
+    </form>
+</div>
+
+<!-- jQuery 3 -->
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<!-- 弹框 -->
+<script th:src="@{/res/modal/js/naranja.js}"></script>
+<!--base 64加密-->
+<script th:src="@{/res/js/Base64.js}"></script>
+<!--公共js-->
+<script th:src="@{/js/common.js}"></script>
+<!--自定义js-->
+<script th:src="@{/js/login.js}"></script>
+<script type="text/javascript" th:inline="javascript" >
+    /*<![CDATA[*/
+    var ctxPath = /*[[@{/}]]*/ '';
+    /*]]>*/
+</script>
+</body>
+</html>

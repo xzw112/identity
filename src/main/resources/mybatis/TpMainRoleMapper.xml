@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tiptimes.identity.dao.TpMainRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.TpMainRole" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="role_number" property="roleNumber" jdbcType="VARCHAR" />
+    <result column="order_number" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, role_name, role_number, order_number, create_user, create_time, update_user, 
+    update_time, status, is_delete, remark
+  </sql>
+
+  <select id="selectList" parameterType="com.tiptimes.identity.bo.RoleParam"
+          resultType="com.tiptimes.identity.vo.TpMainRoleVO">
+    SELECT
+        r.id as id,
+        r.role_name as roleName,
+        r.remark as remark,
+        r.create_time as createTime,
+        r.update_time as updateTime,
+        r.status as status
+    FROM
+        tp_main_role r
+    WHERE
+        r.is_delete = 0
+    ORDER BY
+        r.create_time DESC
+  </select>
+
+</mapper>

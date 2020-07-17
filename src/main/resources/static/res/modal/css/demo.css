@@ -1,0 +1,183 @@
+body, html { font-size: 100%; 	padding: 0; margin: 0;}
+
+/* Reset */
+*,
+*:after,
+*:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* Clearfix hack by Nicolas Gallagher: http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+body{
+    font-family: "Microsoft YaHei","Segoe UI", "Lucida Grande", Helvetica, Arial,sans-serif;
+}
+ html, body {
+     padding: 0;
+     margin: 0;
+     font-size: 13px;
+     overflow: auto;
+ }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.tag {
+    border-bottom: 1px solid #7dc1fd;
+    padding: 0;
+}
+
+.tag:after {
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0;
+}
+
+.clf:after {
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0;
+}
+
+.tag li {
+    float: left;
+    padding: 8px 10px;
+    margin: 0 4px;
+    list-style: none;
+    cursor: pointer;
+}
+
+.tag li:first-child {
+    margin-left: 0;
+}
+
+.tag li.active {
+    border-bottom: 3px solid #1f85ec;
+}
+
+.fl {
+    float: left;
+}
+
+.tree-box {
+    border: 1px solid #ccc;
+    width: 400px;
+    height: 260px;
+    overflow: auto;
+}
+
+.tree-top {
+    width: 100%;
+    height: 50px;
+    background-color: #f6f9f9;
+}
+
+.tree-search {
+    width: 92%;
+    height: 26px;
+    margin: 10px auto;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+}
+
+.tc {
+    text-align: center;
+}
+
+.tree-margin {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding-left: 20px;
+    line-height: 50px;
+    box-sizing: border-box;
+}
+
+.tree-box-ul {
+    padding: 0 10px;
+}
+
+.tree-box-ul li {
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.tree-box-ul li span {
+    margin: 3px 0;
+    display: inline-block;
+}
+
+.tree-box-ul li span:first-child {
+    width: 160px;
+}
+
+.tree-box-ul li span:last-child {
+    width: calc(100% - 160px);
+}
+
+.tree-box-ul li.active {
+    background-color: #1e90ff;
+    color: #fff;
+}
+
+.ul-big {
+    height: 570px;
+}
+
+.transfer {
+    margin-top: 240px;
+}
+
+.transfer div {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    margin: 0 10px 14px;
+    border-radius: 4px;
+}
+.tree-select select{
+    width: 100%;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+}
+.tree-bg{
+    width: 100%;
+    height: 50px;
+    position: relative;
+    background-color: #f6f9f9;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+.tree-bg input{
+    width: 50%;
+    position: absolute;
+    top: 3px;
+    right: 10px;
+    height: 26px;
+    margin: 10px auto;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+}
