@@ -118,14 +118,6 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     // 配置客户端详细信息服务
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.inMemory() // TODO 注意 修改成数据库存储
-//                .withClient("c1")// 客户端id
-//                .secret(new BCryptPasswordEncoder().encode("secret"))//客户端秘钥
-//                .resourceIds("res1")// 资源列表
-//                .authorizedGrantTypes("authorization_code", "password", "refresh_token")// 允许client访问的类型
-//                .scopes("all") // 允许的授权范围
-//                .autoApprove(false) // false :如果使用的是授权码模式，会跳转到授权页面
-//                .redirectUris("http://www.baidu.com");
         clients.withClientDetails(clientDetailsService);
     }
 

@@ -16,6 +16,12 @@
     <result column="archived" jdbcType="TINYINT" property="archived" />
     <result column="trusted" jdbcType="TINYINT" property="trusted" />
     <result column="autoapprove" jdbcType="VARCHAR" property="autoapprove" />
+    <result column="redirect_url" jdbcType="VARCHAR" property="redirectUrl"/>
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+    <result column="status" jdbcType="INTEGER" property="status"/>
+    <result column="client_type" jdbcType="INTEGER" property="clientType"/>
+    <result column="client_name" jdbcType="VARCHAR" property="clientName"/>
+    <result column="client_domain" jdbcType="INTEGER" property="clientDomain"/>
   </resultMap>
 
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.tiptimes.identity.entity.OauthClientDetails">
@@ -25,7 +31,7 @@
   <sql id="Base_Column_List">
     client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, 
     authorities, access_token_validity, refresh_token_validity, create_time, archived, 
-    trusted, autoapprove
+    trusted, autoapprove, redirect_url, img_url, status, client_type, client_name, client_domain
   </sql>
 
   <sql id="Blob_Column_List">
@@ -46,12 +52,18 @@
       scope, authorized_grant_types, web_server_redirect_uri, 
       authorities, access_token_validity, refresh_token_validity, 
       create_time, archived, trusted, 
-      autoapprove, additional_information)
+      autoapprove, additional_information,
+      redirect_url, img_url,
+      status, client_type,
+      client_name, client_domain)
     values (#{clientId,jdbcType=VARCHAR}, #{resourceIds,jdbcType=VARCHAR}, #{clientSecret,jdbcType=VARCHAR}, 
       #{scope,jdbcType=VARCHAR}, #{authorizedGrantTypes,jdbcType=VARCHAR}, #{webServerRedirectUri,jdbcType=VARCHAR}, 
       #{authorities,jdbcType=VARCHAR}, #{accessTokenValidity,jdbcType=INTEGER}, #{refreshTokenValidity,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{archived,jdbcType=TINYINT}, #{trusted,jdbcType=TINYINT}, 
-      #{autoapprove,jdbcType=VARCHAR}, #{additionalInformation,jdbcType=LONGVARCHAR})
+      #{autoapprove,jdbcType=VARCHAR}, #{additionalInformation,jdbcType=LONGVARCHAR},
+      #{redirectUrl, jdbcType=VARCHAR}, #{imgUrl, jdbcType=VARCHAR},
+      #{status, jdbcType=INTEGER}, #{clientType, jdbcType=INTEGER},
+      #{clientName, jdbcType=VARCHAR}, #{clientDomain, jdbcType=VARCHAR})
   </insert>
 
 

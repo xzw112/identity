@@ -3,10 +3,11 @@ package com.tiptimes.identity.vo;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class TpMainAdminUserVO {
+public class TpMainAdminUserVO implements Serializable {
 
     private String id;
 

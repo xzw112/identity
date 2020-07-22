@@ -1,3 +1,4 @@
+var baseUrl = window.location.origin;
 $(function(){
 
 	$(".select2").select2();

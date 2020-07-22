@@ -76,7 +76,7 @@ function uploadImg(_this){
 	var photo = file.substring(0, file.length-5);
 	// 判断浏览器类型
 	var ieVersion = IEVersion();
-	var uploadUrl = "admin/file/upload";
+	var uploadUrl = "admin/file/uploadDFSFile";
 	// IE11时
 	if(ieVersion == 11){
 		if(_this.val() !== ''){
@@ -90,11 +90,11 @@ function uploadImg(_this){
 				fileElementId : [file],
 				success: function (res){//上传成功
 					if(res.code === 0){
-						narn("error", "只支持png, jpg, jpeg格式");
+						narn("error", res.message);
 						return;
 					}
-					$("#" + photo + "_img").attr("src", "admin/file/downloadFile?fileId=" + res.data);
-					$("#" + photo + "").val(res.data);
+					$("#" + photo + "_img").attr("src", res.data.fileId);
+					$("#" + photo + "").val(res.data.fileId);
 				},
 				error: function(){
 					narn("error", "上传失败");
@@ -117,12 +117,13 @@ function uploadImg(_this){
 				fileElementId : [file],
 				success: function (res){
 					if(res.code === 0){
-						narn("error", "只支持png, jpg, jpeg格式");
+						narn("error", res.message);
 						document.getElementById(file).value = "";
 						return;
 					}
-					$("#" + photo + "_img").attr("src", "admin/file/downloadFile?fileId=" + res.data);
-					$("#" + photo + "").val(res.data);
+					console.log(res.data);
+					$("#" + photo + "_img").attr("src", res.data.fileId);
+					$("#" + photo + "").val(res.data.fileId);
 					document.getElementById(file).value = "";
 				},
 				error: function(){
@@ -153,13 +154,175 @@ function uploadBase64Img(selectId, base64Url){
 				narn("error", "只支持png, jpg, jpeg格式");
 				return;
 			}
-			$("#photo0_img").attr("src", "admin/file/downloadFile?fileId=" + res.data);
-			$("#photo0").val(res.data);
+			$("#photo0_img").attr("src", "admin/file/downloadFile?fileId=" + res.data.fileId);
+			$("#photo0").val(res.data.fileId);
 		},
 		error: function(){
 			narn("error", "上传失败");
 		}
 	});
+}
+
+/**
+ * 加载文件上传插件
+ * @returns
+ */
+var myDropzone;
+//上传附件用
+var fileIdArr = [];
+var fileNameArr = [];
+function loadDropZone(maxFiles, fileType){
+	//可上传文件数量
+	if(maxFiles === undefined){
+		maxFiles = 10;
+	}
+
+	//允许上传的类型
+	var acceptedFiles;
+	if(fileType === undefined){
+		acceptedFiles = ".doc,.docx,.xls,.xlsx,.pdf,.jpg,.jpeg,.png,.zip,.rar,.mp4";
+	}else{
+		acceptedFiles = fileType;
+	}
+	Dropzone.autoDiscover = false;
+	myDropzone = new Dropzone("#myDropzone", {
+		url: "admin/file/uploadDFSFile",
+		paramName: "mainfile", //对应后台参数名称
+		maxFilesize: 100, // MB 单个文件大小上限
+		maxFiles: maxFiles, //最大上传数量
+		acceptedFiles: acceptedFiles, //允许上传的类型
+		createImageThumbnails:false,
+		autoProcessQueue:true,//自动上传
+		success: function (file, res) {
+			if(res.code === 1){
+				var index = myDropzone.files.indexOf(file);
+				//上传成功触发的事件
+				if(fileIdArr.length >= maxFiles){
+					narn("error","文件数量已达上限");
+					myDropzone.files.splice(index, 1);
+					return false;
+				}else if(fileNameArr.indexOf(res.data.fileName) === -1){
+					var imgUrl = getFileImgUrl(res.data.fileName);
+					var str = '<div class="enclosure-item">\n' +
+						'                <img src="' + imgUrl + '">\n' +
+						'                <div class="enclosure-message">\n' +
+						'                    <div class="enclosure-item-title" onclick="downloadFile(\'' + res.data.fileId + '\',\'' + res.data.fileName + '\');" title=' + res.data.fileName + '>' + res.data.fileName + '</div>\n' +
+						'                    <div class="enclosure-item-delete dz-delect"><a onclick=\"delFile(this,\'' + res.data.fileId + '\')\">删除</a></div>\n' +
+						'                </div>\n' +
+						'            </div>';
+					$("#myDropzone").append(str);
+					fileIdArr.push(res.data.fileId);
+					fileNameArr.push(res.data.fileName);
+				}else{
+					myDropzone.files.splice(index, 1);
+					narn("error", "文件已上传");
+					return false;
+				}
+			}else{
+				narn("error", res.message);
+				return false;
+			}
+		},
+		previewTemplate: '<div></div>',
+		init: function (file) {
+			this.on("removedfile",function(file){
+				//删除文件时触发的方法
+
+			});
+		}
+	});
+
+	myDropzone.on('maxfilesexceeded',function(file){
+		narn("error", "文件数量已达上限");
+		var index = myDropzone.files.indexOf(file);
+		myDropzone.files.splice(index, 1);
+		return false;
+	});
+}
+
+/**
+ * 下载附件
+ */
+function downloadFile(fileId, fileName) {
+	var url = ctxPath + "admin/file/downloadDFSFile?fileId=" + fileId + "&fileName=" + fileName;
+	var downloadFrame = $('#downloadFrame');
+	if(downloadFrame.length === 0){
+		downloadFrame = $('<iframe id="downloadFrame" src="" style="display:none"></iframe>');
+		$('body').append(downloadFrame);
+	}
+	downloadFrame.attr('src',url);
+}
+
+/**
+ * 通过文件名称获取要显示的图片路径
+ * @param fileName
+ * @returns
+ */
+function getFileImgUrl(fileName){
+	var imgUrl = "";
+	var index = fileName.lastIndexOf(".");
+	var suffix = fileName.substring(index + 1, fileName.length);
+	if(suffix === 'doc' || suffix === 'docx'){
+		imgUrl = "/images/img_doc.png";
+	}else if(suffix === 'xls' || suffix === 'xlsx'){
+		imgUrl = "/images/img_xls.png";
+	}else if(suffix === 'pdf'){
+		imgUrl = "/images/img_pdf.png";
+	}else if(suffix === 'jpg' || suffix === 'jpeg' || suffix === 'png'){
+		imgUrl = "/images/img_png.png";
+	}else if (suffix === 'zip'){
+		imgUrl = "/images/img_zip.png";
+	}else if (suffix === 'rar') {
+		imgUrl = "/images/img_rar.png";
+	}else if (suffix === 'mp4') {
+		imgUrl = "/images/img_mp4.png";
+	}
+	return imgUrl;
+}
+
+/**
+ * 删除附件
+ * @param th
+ * @param fileId
+ */
+function delFile(th, fileId){
+	$(th).parent().parent().parent().remove();
+	var index = fileIdArr.indexOf(fileId);
+	if(index > -1){
+		fileIdArr.splice(index, 1);
+		fileNameArr.splice(index, 1);
+		myDropzone.files.splice(index, 1);
+	}
+}
+
+/**
+ * 编辑回显附件
+ * @param data
+ */
+function loadDropZoneFile(data) {
+	//附件信息加载
+	if(data.fileId !== null && data.fileId !== ""){
+		$("#tipTitle").hide();
+		var tempFileIdArr = data.fileId.split(',');
+		var tempFileNameArr = data.fileName.split(',');
+		for(var i = 0; i < tempFileIdArr.length; i++){
+			var imgUrl = getFileImgUrl(tempFileNameArr[i]);
+			var str = '<div class="enclosure-item">\n' +
+				'                <img src="' + imgUrl + '">\n' +
+				'                <div class="enclosure-message">\n' +
+				'                    <div class="enclosure-item-title" onclick="downloadFile(\'' + tempFileIdArr[i] + '\',\'' + tempFileNameArr[i] + '\');" title=' + tempFileNameArr[i] + '>' + tempFileNameArr[i] + '</div>\n' +
+				'                    <div class="enclosure-item-delete dz-delect"><a onclick=\"delFile(this,\'' + tempFileIdArr[i] + '\')\">删除</a></div>\n' +
+				'                </div>\n' +
+				'            </div>';
+			$("#myDropzone").append(str);
+			if(fileNameArr.indexOf(tempFileNameArr[i]) === -1){
+				fileIdArr.push(tempFileIdArr[i]);
+				fileNameArr.push(tempFileNameArr[i]);
+			}
+		}
+	}else{
+		$("#tipTitle").show();
+	}
 }
 
 /**

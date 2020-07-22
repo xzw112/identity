@@ -30,6 +30,23 @@ public class AdminGoToController {
         return "home";
     }
 
+    /**
+     * 添加应用
+     */
+    @RequestMapping("/applicationList")
+    public String applicationList() {
+        return "application/index";
+    }
+
+    /**
+     * 添加应用
+     */
+    @RequestMapping("/addApplication")
+    public String addApplication() {
+        return "application/add";
+    }
+
+
 
     /**
      * 人员管理

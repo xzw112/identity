@@ -12,10 +12,12 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.misc.BASE64Decoder;
 import tk.mybatis.mapper.entity.Example;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -40,12 +42,12 @@ public class LoginController {
     @PostMapping("/login")
     public JSONObject login(HttpServletRequest request, @RequestBody LoginParam loginParam) {
         JSONObject map = new JSONObject();
-        String sessionCode = (String) request.getSession().getAttribute("code");
-        if (!StringUtils.equalsIgnoreCase(loginParam.getCode(), sessionCode)) {  //忽略验证码大小写
+        //String sessionCode = (String) request.getSession().getAttribute("code");
+        /*if (!StringUtils.equalsIgnoreCase(loginParam.getCode(), sessionCode)) {  //忽略验证码大小写
             map.put("code", 0);
             map.put("message", "验证码不正确");
             return map;
-        }
+        }*/
         String username = loginParam.getLoginName();
         String password = loginParam.getLoginPassword();
         String decryptPassword = BASE64Util.getFromBase64(password);

@@ -13,6 +13,5 @@ public interface DepartmentService {
 
     int insert(Department department);
 
-
     int updateById(Department department);
 }

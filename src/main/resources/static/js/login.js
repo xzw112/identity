@@ -25,14 +25,14 @@ function login() {
         narn("error", "请输入密码！");
         return false;
     }
-    if ($("#code").val().trim() === "") {
-        narn("error", "请输入验证码！");
-        return false;
-    }
+    // if ($("#code").val().trim() === "") {
+    //     narn("error", "请输入验证码！");
+    //     return false;
+    // }
     var params = {};
     params['loginName'] = $("#loginName").val();
     params['loginPassword'] = new Base64().encode($("#password").val());
-    params['code'] = $("#code").val().trim();
+    //params['code'] = $("#code").val().trim();
     $.ajax({
         url: "admin/login/login",
         cache: false,

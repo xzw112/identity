@@ -3,6 +3,7 @@ package com.tiptimes.identity.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 基础跳转模块
@@ -24,12 +25,22 @@ public class IndexGoTo {
 	}
 
 	/**
-	 * 后台首页
+	 * oauth2跳转地址--登录页
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/index")
-	public String index(HttpServletRequest request){
+	@RequestMapping("/clientLogin")
+	public String clientLogin(HttpServletRequest request, HttpServletResponse response){
+		return "client_login";
+	}
+
+	/**
+	 * oauth2跳转地址--首页
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/toIndex")
+	public String toIndex(HttpServletRequest request){
 		return "index";
 	}
 }

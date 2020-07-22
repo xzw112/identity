@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="include :: header('添加应用')" />
+    </head>
+    <body>
+        <div class="outter">
+            <div class="row">
+                <div class="top-nav col-md-12">
+                    <span class="label_name">应用列表</span>
+                    <div class="crumbs">
+                        <span class="gray">主页</span> <i>&nbsp;/&nbsp;</i>
+                        <span>组件</span> <i>&nbsp;/&nbsp;</i>
+                        <span>导航</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row add-cont">
+                <div class="col-md-12 add-title">填写应用资料:</div>
+                <form action="" class="new-form col-md-12">
+                    <div class="form-item">
+                        <span class="name"><i class="star"></i>应用图标</span>
+                        <div>
+                            <input type="hidden" id="photo">
+                            <div>
+                                <input type="file" id="photo_file" accept=".png, .jpg, .jpeg" name="mainfile" style="display: none">
+                                <img src="/images/pic-upload.png" id="photo_img" style="width:80px;height:80px;" alt="">
+                            </div>
+                        </div>
+                        <p class="tip">支持扩展名.png,.jpg，图片大小不超过1M</p>
+                    </div>
+                    <div class="form-item" hidden>
+                        <span class="name">应用ID</span>
+                        <div class="form-cont">
+                            <div class="form-in">idaas_sdnakdsakhaidjakdhjkadh_akdan</div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <span class="name"><i class="star"></i>应用名称</span>
+                        <div class="form-cont">
+                            <div class="form-in">
+                                <div class="form-group">
+                                    <input type="text" id="appName" class="form-control" placeholder="请输入应用名称">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <span class="name"><i class="star"></i>所属领域</span>
+                        <div class="form-cont">
+                            <div class="form-in">
+                                <div class="form-group">
+                                    <select class="form-control" id="appDomain">
+                                        <option value="1">内部应用</option>
+                                        <option value="2">外部应用</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <span class="name"><i class="star"></i>应用类型</span>
+                        <div class="form-cont">
+                            <div class="form-in">
+                                <div class="form-group">
+                                    <div class="form-check radio-inline">
+                                        <input class="form-check-input" type="radio" name="appType" id="exampleRadios1" value="1" checked>
+                                        <label class="form-check-label" for="exampleRadios1">
+                                            Web应用
+                                        </label>
+                                    </div>
+                                    <div class="form-check radio-inline">
+                                        <input class="form-check-input" type="radio" name="appType" id="exampleRadios2" value="2">
+                                        <label class="form-check-label" for="exampleRadios2">
+                                            移动应用
+                                        </label>
+                                    </div>
+                                    <div class="form-check radio-inline">
+                                        <input class="form-check-input" type="radio" name="appType" id="exampleRadios3" value="3">
+                                        <label class="form-check-label" for="exampleRadios3">
+                                            PC客户端
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                    <div class="form-item">
+                        <span class="name"><i class="star"></i>回调地址</span>
+                        <div class="form-cont">
+                            <div class="form-in form-in-textarea">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <span class="name"><i class="star"></i>应用状态</span>
+                        <div class="form-cont">
+                            <div class="form-in">
+                                <input type="hidden" id="sw_value" >
+                                <div class="form-group">
+                                    <input type="checkbox" name="my-checkbox" data-on-text="启用" data-off-text="不启用">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="save_btn" type="button" class="btn btn-primary">保存</button>
+                    <button id="cancel" type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                </form>
+            </div>
+        </div>
+
+        <th:block th:include="include :: footer" />
+        <!--自定义js-->
+        <script th:src="@{/js/application/add.js}"></script>
+
+        <script>
+            $("[name='my-checkbox']").bootstrapSwitch();
+            $("[name='my-checkbox']").on('switchChange.bootstrapSwitch', function (event,state) {
+                if (state) {
+                    $("#sw_value").val(1)
+                }
+                if (!state) {
+                    $("#sw_value").val(0)
+                }
+
+
+            });
+            $('#datetimepicker1').datepicker({
+                format:'yyyy-mm-dd',
+                stepping:'1',
+                language:'zh-CN'
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>客户端登录---统一身份认证</title>
+</head>
+<body>
+
+<div>
+    <!--/*@thymesVar id="code" type=""*/-->
+    <input type="text" id="code" th:value="${code}"/>
+    <form th:action="@{/login}" method="post">
+        <input type="text" name="username"/>
+        <input type="text" name="password"/>
+        <button type="submit">登录</button>
+    </form>
+</div>
+
+<!-- jQuery 3 -->
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+
+<script th:src="@{/js/client_login.js}"></script>
+
+</body>
+</html>

@@ -11,6 +11,7 @@ pagehelper:
   params: count=countSql
   reasonable: false
   support-methods-arguments: true
+
 #mysql配置
 spring:
   datasource:
@@ -32,3 +33,15 @@ logging:
       tiptimes:
         identity:
           dao: debug
+#fastDFS
+fdfs:
+  soTimeout: 1500
+  connectTimeout: 600
+  pool:
+    jmx-enabled: false
+  thumb-image:
+    width: 150
+    height: 150
+  tracker-list: 121.36.175.7:22122
+  resHost: http://121.36.175.7
+  storagePort: 80

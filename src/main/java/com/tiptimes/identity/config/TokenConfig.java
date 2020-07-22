@@ -1,5 +1,6 @@
 package com.tiptimes.identity.config;
 
+import com.tiptimes.identity.common.Constants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -12,7 +13,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 public class TokenConfig {
 
-    private final String SIGNING_KEY = "xzw";
+    private final String SIGNING_KEY = Constants.SIGNING_KEY;
 
     @Bean
     public TokenStore tokenStore () {

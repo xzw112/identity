@@ -1,33 +1,93 @@
-package com.tiptimes.identity.controller.admin;
+package com.tiptimes.identity.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tiptimes.identity.common.ErrorConstants;
+import com.tiptimes.identity.common.ResponseResult;
+import com.tiptimes.identity.component.FastDFSClientWrapper;
 import com.tiptimes.identity.entity.TpMainFile;
 import com.tiptimes.identity.service.TpMainFileService;
 import com.tiptimes.identity.utils.FileUtil;
 import com.tiptimes.identity.utils.UUIDUtil;
+import com.tiptimes.identity.vo.FileVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.Date;
 
-@Controller
+@RestController
 @RequestMapping("/admin/file")
 public class FileController {
 
     @Autowired
     private TpMainFileService tpMainFileService;
 
+    @Autowired
+    private FastDFSClientWrapper fastDFSClientWrapper;
+
+    @Value("${fdfs.resHost}")
+    private String host;
+
+    @Value("${fdfs.storagePort}")
+    private String port;
+
+    /**
+     * 使用FastDFS进行文件上传
+     *
+     * @param mainfile
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/uploadDFSFile")
+    public ResponseResult uploadDFSFile(@RequestParam("mainfile") MultipartFile mainfile) throws IOException {
+        String path = fastDFSClientWrapper.uploadFile(mainfile);
+        if(StringUtils.isNotBlank(path)){
+            String fileName = mainfile.getOriginalFilename();
+            FileVO fileVO = new FileVO();
+            fileVO.setFileId(host + "/" + path);
+            fileVO.setFileName(fileName);
+            return ResponseResult.successWithData(fileVO);
+        }else{
+            return ResponseResult.error(ErrorConstants.UPLOAD_ERROR);
+        }
+    }
+
+    /**
+     * 下载
+     * @param fileId 文件地址
+     * @param fileName 文件名称
+     * @param response
+     * @throws IOException
+     */
+    @GetMapping("/downloadDFSFile")
+    public void downloadFile(String fileId, String fileName, HttpServletResponse response) throws IOException {
+        byte[] bytes = fastDFSClientWrapper.downloadFile(fileId);
+        response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        response.setCharacterEncoding("UTF-8");
+        ServletOutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            outputStream.write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 将上传的base64图片，转换成文件存入磁盘
@@ -37,9 +97,8 @@ public class FileController {
      * @return
      * @throws IOException
      */
-    @RequestMapping("/uploadBase64")
-    public void uploadBase64(HttpServletRequest request, HttpServletResponse response, HttpEntity<String> data) throws IOException{
-        JSONObject map = new JSONObject();
+    @PostMapping("/uploadBase64")
+    public ResponseResult uploadBase64(HttpServletRequest request, HttpServletResponse response, HttpEntity<String> data) throws IOException{
         JSONObject jsonParam = JSONObject.parseObject(data.getBody());
         // 获取base64格式的图片
         String base64Url = jsonParam.getString("base64Url");
@@ -69,18 +128,15 @@ public class FileController {
             tpMainFile.setFileMd5(fileStr);
             int result = tpMainFileService.saveMainFile(tpMainFile);
             if(result > 0){
-                map.put("code", 1);
-                map.put("data", fileStr);
-                response.getWriter().write(JSON.toJSONString(map));
+                FileVO fileVO = new FileVO();
+                fileVO.setFileId(fileStr);
+                fileVO.setFileName(fileStr);
+                return ResponseResult.successWithData(fileVO);
             }else{
-                map.put("code", 0);
-                map.put("message", ErrorConstants.UPLOAD_ERROR);
-                response.getWriter().write(JSON.toJSONString(map));
+                return ResponseResult.error(ErrorConstants.UPLOAD_ERROR);
             }
         }catch (Exception e){
-            map.put("code", 0);
-            map.put("message", ErrorConstants.UPLOAD_ERROR);
-            response.getWriter().write(JSON.toJSONString(map));
+            return ResponseResult.error(ErrorConstants.UPLOAD_ERROR);
         }finally {
             if(bos != null){
                 try{
@@ -100,8 +156,7 @@ public class FileController {
     }
 
     @RequestMapping("/upload")
-    public void upload(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile mainfile) throws IOException {
-        JSONObject map = new JSONObject();
+    public ResponseResult upload(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile mainfile) throws IOException {
         try {
             String uuid = UUIDUtil.getUUID();
             byte[] buffer = mainfile.getBytes();
@@ -132,18 +187,15 @@ public class FileController {
                 result = tpMainFileService.saveMainFile(tpMainFile);
             }
             if(result > 0){
-                map.put("code", 1);
-                map.put("data", uuid);
-                response.getWriter().write(JSON.toJSONString(map));
+                FileVO fileVO = new FileVO();
+                fileVO.setFileId(uuid);
+                fileVO.setFileName(mainfile.getOriginalFilename());
+                return ResponseResult.successWithData(fileVO);
             }else{
-                map.put("code", 0);
-                map.put("message", ErrorConstants.UPLOAD_ERROR);
-                response.getWriter().write(JSON.toJSONString(map));
+                return ResponseResult.error(ErrorConstants.UPLOAD_ERROR);
             }
         } catch (Exception e) {
-            map.put("code", 0);
-            map.put("message", ErrorConstants.UPLOAD_ERROR);
-            response.getWriter().write(JSON.toJSONString(map));
+            return ResponseResult.error(ErrorConstants.UPLOAD_ERROR);
         }
     }
 

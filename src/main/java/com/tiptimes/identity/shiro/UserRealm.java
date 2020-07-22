@@ -11,6 +11,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import tk.mybatis.mapper.entity.Example;
 import javax.annotation.Resource;
 import java.util.HashSet;
@@ -88,7 +89,7 @@ public class UserRealm extends AuthorizingRealm {
         }
         TpMainAdminUser tpMainAdminUser = list.get(0);
         if (tpMainAdminUser != null) {
-            if (MD5Util.encryptByMD5(password).equals(tpMainAdminUser.getLoginPassword())) {
+            if (BCrypt.checkpw(password, tpMainAdminUser.getLoginPassword())) {
                 return new SimpleAuthenticationInfo(username,password,getName());
             }else {
                 throw new IncorrectCredentialsException("密码错误");

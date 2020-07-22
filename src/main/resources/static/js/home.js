@@ -1,28 +1,28 @@
 var regYear;
 $(function () {
-    $.ajax({
-        type : "POST",
-        url : "admin/base/timeData",
-        async:false,
-        contentType:'application/json;charset=UTF-8',
-        success : function(res) {
-            if(res.code === 1){
-                regYear = res.data;
-                //判断是否有到期运动员
-                showExpireDialog();
-                //展示统计数字
-                showStatisticNumber();
-                //展示饼状图
-                showPieChart();
-            }else{
-                narn("error", res.message);
-            }
-        }
-    });
+    // $.ajax({
+    //     type : "POST",
+    //     url : "admin/base/timeData",
+    //     async:false,
+    //     contentType:'application/json;charset=UTF-8',
+    //     success : function(res) {
+    //         if(res.code === 1){
+    //             regYear = res.data;
+    //             //判断是否有到期运动员
+    //             showExpireDialog();
+    //             //展示统计数字
+    //             showStatisticNumber();
+    //             //展示饼状图
+    //             showPieChart();
+    //         }else{
+    //             narn("error", res.message);
+    //         }
+    //     }
+    // });
     //展示系统消息
-    showSysMsg();
+    //showSysMsg();
     //展示通知公告
-    showNotice();
+    //showNotice();
 });
 
 /**

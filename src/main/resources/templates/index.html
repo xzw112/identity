@@ -1,12 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>统一身份认证首页</title>
 </head>
 <body>
 
 <h1>首页</h1>
+
+
+<!--/*@thymesVar id="result" type=""*/-->
+<input type="hidden" id="result" th:value="${result}"/>
+<!--/*@thymesVar id="code" type=""*/-->
+<input type="hidden" id="code" th:value="${code}"/>
+
+
+<button type="submit" name="redirctLearn" onclick="redirctLearn()">知识学习平台</button>
+
+
+
+<!-- jQuery 3 -->
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+
+<script th:src="@{/js/index.js}"></script>
 
 </body>
 </html>

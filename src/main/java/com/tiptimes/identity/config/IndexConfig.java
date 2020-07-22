@@ -4,7 +4,7 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
-@SpringBootConfiguration
+//@SpringBootConfiguration
 public class IndexConfig {
     @EventListener({ApplicationReadyEvent.class})
     public void applicationReadyEvent() {

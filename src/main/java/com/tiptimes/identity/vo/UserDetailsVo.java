@@ -1,16 +1,14 @@
 package com.tiptimes.identity.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tiptimes.identity.entity.OauthClientDetails;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Data
 public class UserDetailsVo implements UserDetails, Serializable {
@@ -63,13 +61,23 @@ public class UserDetailsVo implements UserDetails, Serializable {
 
     private String headerUrl; // 头像
 
+    private List<String> authorities; // 权限
+
+    private List<OauthClientDetails> clientList; //客户端信息
+
     @Override
-    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> au = new ArrayList<>();
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("p1");
-        au.add(grantedAuthority);
-        return au;
+        List<GrantedAuthority> list = new ArrayList<>();
+        if (authorities.size() > 0) {
+            StringBuffer sb =  new StringBuffer();
+            for (int i = 0; i < authorities.size(); i++) {
+                sb.append(authorities.get(i) + ",");
+            }
+            String str = sb.toString();
+            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(str.substring(0, str.length()-1));
+            list.add(grantedAuthority);
+        }
+        return list;
     }
 
     @Override
