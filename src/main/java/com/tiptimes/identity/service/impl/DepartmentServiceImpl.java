@@ -3,7 +3,7 @@ package com.tiptimes.identity.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.tiptimes.identity.dao.DepartmentMapper;
 import com.tiptimes.identity.entity.Department;
-import com.tiptimes.identity.entity.Qo.DepartmentRequest;
+import com.tiptimes.identity.qo.DepartmentRequest;
 import com.tiptimes.identity.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

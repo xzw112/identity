@@ -49,4 +49,6 @@ public class OauthClientDetails implements Serializable {
 
     private String clientDomain; // 应用领域（1内部应用 2外部应用）
 
+    private Integer isDel; // 是否删除（1未删除 0删除）
+
 }

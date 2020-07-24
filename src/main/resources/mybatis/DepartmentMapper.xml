@@ -22,7 +22,7 @@
     create_user, update_user, order
   </sql>
 
-  <select id="selectDepartmentList" parameterType="com.tiptimes.identity.entity.Qo.DepartmentRequest" resultType="com.tiptimes.identity.entity.Department">
+  <select id="selectDepartmentList" parameterType="com.tiptimes.identity.qo.DepartmentRequest" resultType="com.tiptimes.identity.entity.Department">
     SELECT
       id id,
       parent_id parentId,

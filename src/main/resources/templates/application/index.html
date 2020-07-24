@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>应用列表</title>
-        <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
-        <link rel="stylesheet" th:href="@{/css/new.css}">
-        <link rel="stylesheet" th:href="@{/plugins/bootstrap-switch/bootstrap-switch.css}">
-
-        
+        <th:block th:include="include :: header('应用列表')" />
     </head>
     <body>
         <div class="outter">
@@ -26,85 +19,87 @@
             <div class="ap-search row">
                 <div class="col-md-6">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="请输入" aria-describedby="basic-addon2">
+                        <input type="text" id="searchText" class="form-control" placeholder="请输入" aria-describedby="basic-addon2">
                         <span class="input-group-addon" id="basic-addon2">搜 索</span>
                     </div>
                 </div>
                 <div class="col-md-1 pull-right">
-                    <button type="button" class="btn btn-default blue-btn">添加应用</button>
+                    <button type="button" id="addApp" class="btn btn-default blue-btn">添加应用</button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <table class="new-table">
-                        <tr>
-                            <th>应用图标</th>
-                            <th>应用名称</th>
-                            <th>应用ID</th>
-                            <th>设备类型</th>
-                            <th>应用状态</th>
-                            <th>操作</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img src="../static/images/letter.png" class="icon">
-                            </td>
-                            <td><a class="blue">协同办公系统</a></td>
-                            <td>idassdsjakdskj-sdandsaknnkn</td>
-                            <td>Web应用</td>
-                            <td>
-                                <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关">
-                            </td>
-                            <td class="btns">
-                                <a class="blue">修改</a>
-                                <a class="blue">详情</a>
-                                <a class="red">删除</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img src="../static/images/letter.png" class="icon">
-                            </td>
-                            <td><a class="blue">协同办公系统</a></td>
-                            <td>idassdsjakdskj-sdandsaknnkn</td>
-                            <td>Web应用</td>
-                            <td>
-                                <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关">
-                            </td>
-                            <td class="btns">
-                                <a class="blue">修改</a>
-                                <a class="blue">详情</a>
-                                <a class="red">删除</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img src="../static/images/letter.png" class="icon">
-                            </td>
-                            <td><a class="blue">协同办公系统</a></td>
-                            <td>idassdsjakdskj-sdandsaknnkn</td>
-                            <td>Web应用</td>
-                            <td>
-                                <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关">
-                            </td>
-                            <td class="btns">
-                                <a class="blue">修改</a>
-                                <a class="blue">详情</a>
-                                <a class="red">删除</a>
-                            </td>
-                        </tr>
-                    </table>
+                    <table id="examplePagination" data-mobile-responsive="true"
+                           data-icon-size="outline"></table>
+<!--                    <table class="new-table">-->
+<!--                        <tr>-->
+<!--                            <th>应用图标</th>-->
+<!--                            <th>应用名称</th>-->
+<!--                            <th>应用ID</th>-->
+<!--                            <th>设备类型</th>-->
+<!--                            <th>应用状态</th>-->
+<!--                            <th>操作</th>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <img src="../static/images/letter.png" class="icon">-->
+<!--                            </td>-->
+<!--                            <td><a class="blue">协同办公系统</a></td>-->
+<!--                            <td>idassdsjakdskj-sdandsaknnkn</td>-->
+<!--                            <td>Web应用</td>-->
+<!--                            <td>-->
+<!--                                <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关">-->
+<!--                            </td>-->
+<!--                            <td class="btns">-->
+<!--                                <a class="blue">修改</a>-->
+<!--                                <a class="blue">详情</a>-->
+<!--                                <a class="red">删除</a>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <img src="../static/images/letter.png" class="icon">-->
+<!--                            </td>-->
+<!--                            <td><a class="blue">协同办公系统</a></td>-->
+<!--                            <td>idassdsjakdskj-sdandsaknnkn</td>-->
+<!--                            <td>Web应用</td>-->
+<!--                            <td>-->
+<!--                                <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关">-->
+<!--                            </td>-->
+<!--                            <td class="btns">-->
+<!--                                <a class="blue">修改</a>-->
+<!--                                <a class="blue">详情</a>-->
+<!--                                <a class="red">删除</a>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <img src="../static/images/letter.png" class="icon">-->
+<!--                            </td>-->
+<!--                            <td><a class="blue">协同办公系统</a></td>-->
+<!--                            <td>idassdsjakdskj-sdandsaknnkn</td>-->
+<!--                            <td>Web应用</td>-->
+<!--                            <td>-->
+<!--                                <input type="checkbox" name="my-checkbox" data-on-text="开" data-off-text="关">-->
+<!--                            </td>-->
+<!--                            <td class="btns">-->
+<!--                                <a class="blue">修改</a>-->
+<!--                                <a class="blue">详情</a>-->
+<!--                                <a class="red">删除</a>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </table>-->
                 </div>
             </div>
             
         </div>
 
+        <th:block th:include="include :: footer" />
+        <!--自定义js-->
+        <script th:src="@{/js/application/index.js}"></script>
+
         <script>
             $("[name='my-checkbox']").bootstrapSwitch();
         </script>
-
-        <script th:src="@{/bower_components/jquery/dist/jquery.js}"></script>
-        <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.js}"></script>
-        <script th:src="@{/plugins/bootstrap-switch/bootstrap-switch.js}"></script>
     </body>
 </html>

@@ -61,23 +61,24 @@ public class UserDetailsVo implements UserDetails, Serializable {
 
     private String headerUrl; // 头像
 
-    private List<String> authorities; // 权限
-
-    private List<OauthClientDetails> clientList; //客户端信息
+//    private List<String> authorities; // 权限
+//
+//    private List<OauthClientDetails> clientList; //客户端信息
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> list = new ArrayList<>();
-        if (authorities.size() > 0) {
-            StringBuffer sb =  new StringBuffer();
-            for (int i = 0; i < authorities.size(); i++) {
-                sb.append(authorities.get(i) + ",");
-            }
-            String str = sb.toString();
-            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(str.substring(0, str.length()-1));
-            list.add(grantedAuthority);
-        }
-        return list;
+//        List<GrantedAuthority> list = new ArrayList<>();
+//        if (authorities.size() > 0) {
+//            StringBuffer sb =  new StringBuffer();
+//            for (int i = 0; i < authorities.size(); i++) {
+//                sb.append(authorities.get(i) + ",");
+//            }
+//            String str = sb.toString();
+//            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(str.substring(0, str.length()-1));
+//            list.add(grantedAuthority);
+//        }
+//        return list;
+        return null;
     }
 
     @Override

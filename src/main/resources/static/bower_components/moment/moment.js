@@ -3718,7 +3718,7 @@
 
     // FORMATTING
 
-    addFormatToken('Q', 0, 'Qo', 'quarter');
+    addFormatToken('Q', 0, 'qo', 'quarter');
 
     // ALIASES
 

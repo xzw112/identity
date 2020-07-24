@@ -9,7 +9,9 @@ import com.tiptimes.identity.entity.TpMainAdminUser;
 import com.tiptimes.identity.enums.DataStatus;
 import com.tiptimes.identity.service.TpMainAdminUserService;
 import com.tiptimes.identity.utils.DateUtil;
+import com.tiptimes.identity.vo.ClientUserVo;
 import com.tiptimes.identity.vo.TpMainAdminUserVO;
+import com.tiptimes.identity.vo.UserDetailsVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
@@ -46,6 +48,11 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
         pageResult.setTotal(pageInfo.getTotal());
         pageResult.setRows(list);
         return pageResult;
+    }
+
+    @Override
+    public ClientUserVo selectUserById(String id) {
+        return tpMainAdminUserMapper.selectUserById(id);
     }
 
     @Override

@@ -1,19 +1,35 @@
 package com.tiptimes.identity.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tiptimes.identity.common.Constants;
+import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.dao.OauthClientDetailsMapper;
 import com.tiptimes.identity.entity.OauthClientDetails;
+import com.tiptimes.identity.qo.ClientRequest;
 import com.tiptimes.identity.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class ClientServiceImpl implements ClientService {
     @Autowired
     private OauthClientDetailsMapper oauthClientDetailsMapper;
+
+    @Override
+    public PageResult<OauthClientDetails> selectClientList(ClientRequest clientRequest) {
+        PageHelper.startPage(clientRequest.getPageNumber(), clientRequest.getPageSize());
+        List<OauthClientDetails> list = oauthClientDetailsMapper.selectClientList(clientRequest);
+        PageInfo<OauthClientDetails> pageInfo = new PageInfo<>(list);
+        PageResult<OauthClientDetails> result = new PageResult<>();
+        result.setTotal(pageInfo.getTotal());
+        result.setRows(list);
+        return result;
+    }
 
     @Override
     public OauthClientDetails selectDetail(String clientId) {
@@ -36,6 +52,11 @@ public class ClientServiceImpl implements ClientService {
         oauthClientDetails.setTrusted(num);
         oauthClientDetails.setAutoapprove("true");
         return oauthClientDetailsMapper.insert(oauthClientDetails);
+    }
+
+    @Override
+    public int del(String[] clientId) {
+        return oauthClientDetailsMapper.del(clientId);
     }
 
     @Override

@@ -23,16 +23,16 @@ public class OAuthUserDetailService implements UserDetailsService {
     public UserDetailsVo loadUserByUsername(String account) throws UsernameNotFoundException {
         UserDetailsVo user = userMapper.selectUserByName(account);
         // TODO 后期读取数据库，目前先写固定
-        List<String> authorities =  new ArrayList<>();
-        authorities.add("p1");
-        authorities.add("p2");
-        user.setAuthorities(authorities);
-        List<OauthClientDetails> clientDetailsList = new ArrayList<>();
-        OauthClientDetails oauthClientDetails = new OauthClientDetails();
-        oauthClientDetails.setClientId("c1");
-        oauthClientDetails.setWebServerRedirectUri("http://192.168.1.120/admin/menu");
-        clientDetailsList.add(oauthClientDetails);
-        user.setClientList(clientDetailsList);
+//        List<String> authorities =  new ArrayList<>();
+//        authorities.add("p1");
+//        authorities.add("p2");
+//        user.setAuthorities(authorities);
+//        List<OauthClientDetails> clientDetailsList = new ArrayList<>();
+//        OauthClientDetails oauthClientDetails = new OauthClientDetails();
+//        oauthClientDetails.setClientId("c1");
+//        oauthClientDetails.setWebServerRedirectUri("http://192.168.1.120/admin/menu");
+//        clientDetailsList.add(oauthClientDetails);
+//        user.setClientList(clientDetailsList);
         User.withUsername(user.getLoginName()).password(user.getLoginPassword()).authorities("p1").build();
         return user;
     }

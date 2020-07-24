@@ -2,7 +2,7 @@ package com.tiptimes.identity.controller;
 
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.Department;
-import com.tiptimes.identity.entity.Qo.DepartmentRequest;
+import com.tiptimes.identity.qo.DepartmentRequest;
 import com.tiptimes.identity.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -7,6 +7,8 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.util.unit.DataSize;
 import tk.mybatis.spring.annotation.MapperScan;
 import javax.servlet.MultipartConfigElement;
@@ -30,4 +32,11 @@ public class IdentityApplication {
         SpringApplication.run(IdentityApplication.class, args);
     }
 
+
+    @Bean
+public HttpFirewall allowUrlSemicolonHttpFirewall() {
+    StrictHttpFirewall firewall = new StrictHttpFirewall();
+    firewall.setAllowSemicolon(true);
+    return firewall;
+}
 }

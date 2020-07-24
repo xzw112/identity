@@ -159,6 +159,31 @@
                         </li>
                     </ul>
                 </li>
+                <li class="treeview has-submenu">
+                    <a href="#">
+                        <i class="fa fa-code-fork"></i> <span>用户</span>
+                        <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a class="J_menuItem" href="admin/applicationList" data-index="0">
+                                <i class="fa fa-circle-o"></i>机构与组
+                            </a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="admin/addApplication" data-index="0">
+                                <i class="fa fa-circle-o"></i>外部用户
+                            </a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="admin/addApplication" data-index="0">
+                                <i class="fa fa-circle-o"></i>内部用户
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="treeview has-submenu" shiro:hasPermission="sysConfig_index">
                     <a href="#">
                         <i class="fa fa-cog"></i> <span>系统设置</span>

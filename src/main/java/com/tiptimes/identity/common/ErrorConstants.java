@@ -89,4 +89,14 @@ public class ErrorConstants {
 	 */
 	public final static String REGISTER_ERROR = "注册失败";
 
+	/**
+	 * 查询成功
+	 */
+	public final static String SELECT_OK = "查询成功";
+	/**
+	 * 查询失败
+	 */
+	public final static String SELECT_ERROR = "查询失败";
+
+
 }

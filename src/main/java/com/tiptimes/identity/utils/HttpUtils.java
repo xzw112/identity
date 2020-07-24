@@ -27,7 +27,7 @@ public class HttpUtils {
     public static String getData(String url, String token) {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet get = new HttpGet(url);
-        get.setHeader("Authorization", "Bearer " + token);
+        //get.setHeader("Authorization", "Bearer " + token);
         try{
             CloseableHttpResponse response = client.execute(get);
             int statusCode = response.getStatusLine().getStatusCode();

@@ -1,7 +1,7 @@
 package com.tiptimes.identity.service;
 
 import com.tiptimes.identity.entity.Department;
-import com.tiptimes.identity.entity.Qo.DepartmentRequest;
+import com.tiptimes.identity.qo.DepartmentRequest;
 
 import java.util.List;
 

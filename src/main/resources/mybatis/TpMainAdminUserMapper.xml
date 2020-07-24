@@ -79,7 +79,33 @@
             u.department AS department,
             u.header_url AS headerUrl
         FROM tp_main_admin_user u
-        WHERE login_name = #{userName}
+        WHERE u.login_name = #{userName}
+        AND status = 0
+        AND is_delete = 0
+    </select>
+
+    <select id="selectUserById" resultType="com.tiptimes.identity.vo.ClientUserVo"
+            parameterType="java.lang.String">
+        SELECT
+            u.id AS id,
+            u.user_name AS userName,
+            u.login_name AS loginName,
+            u.login_password AS loginPassword,
+            u.user_contact AS userContact,
+            u.user_address AS userAddress,
+            u.mail AS mail,
+            u.create_time AS createTime,
+            u.update_time AS updateTime,
+            u.status AS status,
+            u.is_admin AS isAdmin,
+            u.is_leave AS isLeave,
+            u.nature AS nature,
+            u.post AS post,
+            u.sort AS sort,
+            u.department AS department,
+            u.header_url AS headerUrl
+        FROM tp_main_admin_user u
+        WHERE u.id = #{id}
         AND status = 0
         AND is_delete = 0
     </select>

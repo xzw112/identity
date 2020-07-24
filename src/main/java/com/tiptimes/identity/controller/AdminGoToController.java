@@ -1,5 +1,6 @@
 package com.tiptimes.identity.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +32,7 @@ public class AdminGoToController {
     }
 
     /**
-     * 添加应用
+     * 应用列表
      */
     @RequestMapping("/applicationList")
     public String applicationList() {
@@ -42,7 +43,9 @@ public class AdminGoToController {
      * 添加应用
      */
     @RequestMapping("/addApplication")
-    public String addApplication() {
+    public String addApplication(HttpServletRequest request, String clientId, String action) {
+        request.setAttribute("clientId", clientId);
+        request.setAttribute("action", action);
         return "application/add";
     }
 

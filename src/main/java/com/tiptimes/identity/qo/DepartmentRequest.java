@@ -1,4 +1,4 @@
-package com.tiptimes.identity.entity.Qo;
+package com.tiptimes.identity.qo;
 
 import lombok.Data;
 

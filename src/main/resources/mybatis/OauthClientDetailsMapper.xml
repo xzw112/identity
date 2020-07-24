@@ -2,52 +2,71 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tiptimes.identity.dao.OauthClientDetailsMapper">
 
-  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.OauthClientDetails">
-    <id column="client_id" jdbcType="VARCHAR" property="clientId" />
-    <result column="resource_ids" jdbcType="VARCHAR" property="resourceIds" />
-    <result column="client_secret" jdbcType="VARCHAR" property="clientSecret" />
-    <result column="scope" jdbcType="VARCHAR" property="scope" />
-    <result column="authorized_grant_types" jdbcType="VARCHAR" property="authorizedGrantTypes" />
-    <result column="web_server_redirect_uri" jdbcType="VARCHAR" property="webServerRedirectUri" />
-    <result column="authorities" jdbcType="VARCHAR" property="authorities" />
-    <result column="access_token_validity" jdbcType="INTEGER" property="accessTokenValidity" />
-    <result column="refresh_token_validity" jdbcType="INTEGER" property="refreshTokenValidity" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="archived" jdbcType="TINYINT" property="archived" />
-    <result column="trusted" jdbcType="TINYINT" property="trusted" />
-    <result column="autoapprove" jdbcType="VARCHAR" property="autoapprove" />
-    <result column="redirect_url" jdbcType="VARCHAR" property="redirectUrl"/>
-    <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
-    <result column="status" jdbcType="INTEGER" property="status"/>
-    <result column="client_type" jdbcType="INTEGER" property="clientType"/>
-    <result column="client_name" jdbcType="VARCHAR" property="clientName"/>
-    <result column="client_domain" jdbcType="INTEGER" property="clientDomain"/>
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.OauthClientDetails">
+        <id column="client_id" jdbcType="VARCHAR" property="clientId"/>
+        <result column="resource_ids" jdbcType="VARCHAR" property="resourceIds"/>
+        <result column="client_secret" jdbcType="VARCHAR" property="clientSecret"/>
+        <result column="scope" jdbcType="VARCHAR" property="scope"/>
+        <result column="authorized_grant_types" jdbcType="VARCHAR" property="authorizedGrantTypes"/>
+        <result column="web_server_redirect_uri" jdbcType="VARCHAR" property="webServerRedirectUri"/>
+        <result column="authorities" jdbcType="VARCHAR" property="authorities"/>
+        <result column="access_token_validity" jdbcType="INTEGER" property="accessTokenValidity"/>
+        <result column="refresh_token_validity" jdbcType="INTEGER" property="refreshTokenValidity"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="archived" jdbcType="TINYINT" property="archived"/>
+        <result column="trusted" jdbcType="TINYINT" property="trusted"/>
+        <result column="autoapprove" jdbcType="VARCHAR" property="autoapprove"/>
+        <result column="redirect_url" jdbcType="VARCHAR" property="redirectUrl"/>
+        <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="client_type" jdbcType="INTEGER" property="clientType"/>
+        <result column="client_name" jdbcType="VARCHAR" property="clientName"/>
+        <result column="client_domain" jdbcType="INTEGER" property="clientDomain"/>
+        <result column="is_del" jdbcType="INTEGER" property="isDel"></result>
+    </resultMap>
 
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.tiptimes.identity.entity.OauthClientDetails">
-    <result column="additional_information" jdbcType="LONGVARCHAR" property="additionalInformation" />
-  </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.tiptimes.identity.entity.OauthClientDetails">
+        <result column="additional_information" jdbcType="LONGVARCHAR" property="additionalInformation"/>
+    </resultMap>
 
-  <sql id="Base_Column_List">
-    client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, 
-    authorities, access_token_validity, refresh_token_validity, create_time, archived, 
-    trusted, autoapprove, redirect_url, img_url, status, client_type, client_name, client_domain
+    <sql id="Base_Column_List">
+    ocd.client_id clientId, ocd.resource_ids resourceIds,
+    ocd.client_secret clientSecret, ocd.scope scope,
+    ocd.authorized_grant_types authorizedGrantTypes, ocd.web_server_redirect_uri webServerRedirectUri,
+    ocd.authorities authorities, ocd.access_token_validity accessTokenValidity,
+    ocd.refresh_token_validity refreshTokenValidity, ocd.create_time createTime,
+    ocd.archived archived, ocd.trusted trusted,
+    ocd.autoapprove autoapprove, ocd.redirect_url redirectUrl,
+    ocd.img_url imgUrl, ocd.status status,
+    ocd.client_type clientType, ocd.client_name clientName,
+    ocd.client_domain clientDomain, ocd.is_del isDel
   </sql>
 
-  <sql id="Blob_Column_List">
-    additional_information
+    <sql id="Blob_Column_List">
+    ocd.additional_information
   </sql>
 
-  <select id="selectDetail" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from oauth_client_details
-    where client_id = #{clientId,jdbcType=VARCHAR}
-  </select>
+    <select id="selectClientList" parameterType="com.tiptimes.identity.qo.ClientRequest"
+            resultType="com.tiptimes.identity.entity.OauthClientDetails">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM oauth_client_details ocd
+        WHERE ocd.is_del = 1
+        <if test="searchText != null and searchText != ''">
+            AND ocd.client_name LIKE CONCAT('%',#{searchText},'%')
+        </if>
+    </select>
 
-  <insert id="insert" parameterType="com.tiptimes.identity.entity.OauthClientDetails">
+    <select id="selectDetail" parameterType="java.lang.String" resultType="com.tiptimes.identity.entity.OauthClientDetails">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from oauth_client_details ocd
+        where client_id = #{clientId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="com.tiptimes.identity.entity.OauthClientDetails">
     insert into oauth_client_details (client_id, resource_ids, client_secret, 
       scope, authorized_grant_types, web_server_redirect_uri, 
       authorities, access_token_validity, refresh_token_validity, 
@@ -66,21 +85,25 @@
       #{clientName, jdbcType=VARCHAR}, #{clientDomain, jdbcType=VARCHAR})
   </insert>
 
+    <update id="del" parameterType="String">
+        update
+        oauth_client_details
+        set is_del = 0
+        where client_id in
+        <foreach collection="array" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </update>
 
-  <update id="updateById" parameterType="com.tiptimes.identity.entity.OauthClientDetails">
+
+    <update id="updateById" parameterType="com.tiptimes.identity.entity.OauthClientDetails">
     update oauth_client_details
-    set resource_ids = #{resourceIds,jdbcType=VARCHAR},
-      client_secret = #{clientSecret,jdbcType=VARCHAR},
-      scope = #{scope,jdbcType=VARCHAR},
-      authorized_grant_types = #{authorizedGrantTypes,jdbcType=VARCHAR},
-      web_server_redirect_uri = #{webServerRedirectUri,jdbcType=VARCHAR},
-      authorities = #{authorities,jdbcType=VARCHAR},
-      access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},
-      refresh_token_validity = #{refreshTokenValidity,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      archived = #{archived,jdbcType=TINYINT},
-      trusted = #{trusted,jdbcType=TINYINT},
-      autoapprove = #{autoapprove,jdbcType=VARCHAR}
+    set client_name = #{clientName,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      client_domain = #{clientDomain,jdbcType=VARCHAR},
+      client_type = #{clientType,jdbcType=INTEGER},
+      redirect_url = #{redirectUrl,jdbcType=VARCHAR},
+      status = #{status, jdbcType=INTEGER}
     where client_id = #{clientId,jdbcType=VARCHAR}
   </update>
 </mapper>

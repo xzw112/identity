@@ -4,6 +4,10 @@
         <th:block th:include="include :: header('添加应用')" />
     </head>
     <body>
+    <!--/*@thymesVar id="clientId" type=""*/-->
+    <input type="hidden" id="clientId" th:value="${clientId}"/>
+    <!--/*@thymesVar id="action" type=""*/-->
+    <input type="hidden" id="action" th:value="${action}"/>
         <div class="outter">
             <div class="row">
                 <div class="top-nav col-md-12">
@@ -30,10 +34,10 @@
                         </div>
                         <p class="tip">支持扩展名.png,.jpg，图片大小不超过1M</p>
                     </div>
-                    <div class="form-item" hidden>
+                    <div class="form-item" id="appDiv">
                         <span class="name">应用ID</span>
                         <div class="form-cont">
-                            <div class="form-in">idaas_sdnakdsakhaidjakdhjkadh_akdan</div>
+                            <div class="form-in" id="appId"></div>
                         </div>
                     </div>
                     <div class="form-item">
@@ -126,7 +130,6 @@
                 if (!state) {
                     $("#sw_value").val(0)
                 }
-
 
             });
             $('#datetimepicker1').datepicker({
