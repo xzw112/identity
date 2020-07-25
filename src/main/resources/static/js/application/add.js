@@ -75,3 +75,8 @@ $("#photo_img").click(function () {
     uploadImg($("#photo_file"));
 });
 
+// 取消
+$("#cancel").click(function () {
+    window.location.href = baseUrl + "/admin/applicationList"
+});
+

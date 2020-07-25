@@ -1,6 +1,8 @@
 package com.tiptimes.identity.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.dao.DepartmentMapper;
 import com.tiptimes.identity.entity.Department;
 import com.tiptimes.identity.qo.DepartmentRequest;
@@ -18,15 +20,24 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentMapper departmentMapper;
 
     @Override
-    public List<Department> selectDepartmentList(DepartmentRequest departmentRequest) {
+    public PageResult<Department> selectDepartmentList(DepartmentRequest departmentRequest) {
         PageHelper.startPage(departmentRequest.getPageNumber(), departmentRequest.getPageSize());
-        List<Department> list = departmentMapper.selectDepartmentList();
-        return list;
+        List<Department> list = departmentMapper.selectDepartmentList(departmentRequest);
+        PageInfo<Department> pageInfo = new PageInfo<>(list);
+        PageResult<Department> result = new PageResult<>();
+        result.setTotal(pageInfo.getTotal());
+        result.setRows(list);
+        return result;
     }
 
     @Override
     public Department selectDetail(Integer id) {
-        return null;
+        return departmentMapper.selectDetail(id);
+    }
+
+    @Override
+    public int del(Integer id) {
+        return departmentMapper.del(id);
     }
 
     @Override
@@ -37,6 +48,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public int updateById(Department department) {
-        return 0;
+        return departmentMapper.updateById(department);
     }
 }

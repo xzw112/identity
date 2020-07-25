@@ -1,0 +1,82 @@
+* {
+  margin : 0;
+  padding: 0;
+}
+
+.container-m {
+  margin: 0 20px;
+}
+
+.title {
+  padding      : 12px;
+  font-size    : 16px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tag {
+  display      : flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.tag li {
+  padding                : 10px 20px;
+  list-style             : none;
+  border-top-left-radius : 8px;
+  border-top-right-radius: 8px;
+  cursor                 : pointer;
+}
+
+.tag li.active {
+  border          : 1px solid #ddd;
+  border-bottom   : none;
+  background-color: #f0f0f0;
+}
+
+.tag li:hover {
+  background-color: #f0f0f0;
+
+}
+
+.flex-around {
+  display: flex;
+
+}
+
+.mar16 {
+  margin-right: 16px;
+}
+
+.flex-between {
+  display        : flex;
+  justify-content: space-between;
+}
+
+.table>tbody>tr>td,
+.table>tbody>tr>th,
+.table>tfoot>tr>td,
+.table>tfoot>tr>th,
+.table>thead>tr>td,
+.table>thead>tr>th {
+  padding   : 12px 10px;
+  border-top: none;
+}
+
+.table>tbody>tr>td>span {
+  margin-right: 10px;
+  cursor      : pointer;
+}
+
+.fontcolor-blue {
+  color: rgb(25, 120, 254);
+}
+
+.fontcolor-red {
+  color: rgb(252, 0, 65);
+}
+.btn-primary {
+  background: #368FFE;
+}
+.input-group-btn .btn-primary{
+  border-radius: 0;
+}

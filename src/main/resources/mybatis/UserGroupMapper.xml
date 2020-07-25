@@ -2,35 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tiptimes.identity.dao.UserGroupMapper">
 
-  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.UserGroup">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="group_id" jdbcType="INTEGER" property="groupId" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.UserGroup">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="group_id" jdbcType="INTEGER" property="groupId"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+    </resultMap>
 
-  <sql id="Base_Column_List">
+    <sql id="Base_Column_List">
     id, group_id, user_id
   </sql>
 
-  <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from user_group
-    where id = #{id,jdbcType=INTEGER}
-  </select>
+    <select id="selectUserListByGroupId" parameterType="com.tiptimes.identity.qo.GroupRequest" resultType="com.tiptimes.identity.vo.UserVo">
+        SELECT
+            au.id userId,
+            au.user_name userName
+        FROM
+            user_group ug
+        INNER JOIN GROUP g ON ( g.id = ug.group_id )
+        INNER JOIN tp_main_admin_user au ON ( au.id = ug.user_id )
+        WHERE ug.group_id = #{groupId}
+    </select>
 
-  <insert id="insert" parameterType="com.tiptimes.identity.entity.UserGroup">
+
+    <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_group
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insert" parameterType="com.tiptimes.identity.entity.UserGroup">
     insert into user_group (id, group_id, user_id
       )
     values (#{id,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
       )
   </insert>
 
-  <update id="updateById" parameterType="com.tiptimes.identity.entity.UserGroup">
+    <update id="updateById" parameterType="com.tiptimes.identity.entity.UserGroup">
     update user_group
     set group_id = #{groupId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <delete id="del" parameterType="java.lang.Integer">
+        delete from user_group where id = #{id}
+    </delete>
 
 </mapper>

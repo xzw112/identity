@@ -4,7 +4,6 @@ import com.tiptimes.identity.common.ResponseResult;
 
 import com.tiptimes.identity.service.TpMainAdminUserService;
 import com.tiptimes.identity.vo.ClientUserVo;
-import com.tiptimes.identity.vo.UserDetailsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

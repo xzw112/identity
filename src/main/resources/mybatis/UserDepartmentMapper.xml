@@ -11,6 +11,17 @@
     id, department_id, user_id
   </sql>
 
+  <select id="selectUserByDepartmentId" parameterType="java.lang.Integer" resultType="com.tiptimes.identity.vo.UserVo">
+    SELECT
+            au.id userId,
+            au.user_name userName
+        FROM
+            user_department ud
+        INNER JOIN department d ON ( d.id = ud.department_id)
+        INNER JOIN tp_main_admin_user au ON ( au.id = ud.user_id)
+        WHERE ud.department_id = #{departmentId}
+  </select>
+
   <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -31,4 +42,8 @@
       user_id = #{userId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <delete id="del" parameterType="java.lang.Integer">
+    DELETE FROM user_department WHERE id = #{id}
+  </delete>
 </mapper>

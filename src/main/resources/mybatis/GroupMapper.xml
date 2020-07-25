@@ -4,6 +4,7 @@
 
   <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.Group">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="order" jdbcType="INTEGER" property="order" />
     <result column="is_del" jdbcType="INTEGER" property="isDel" />
@@ -15,8 +16,22 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, group_name, order, is_del, status, create_time, update_time, create_user, update_user
+    g.id id, g.parent_id parentId,
+    g.group_name groupName, g.order order,
+    g.is_del isDel, g.status status,
+    g.create_time createTime, g.update_time updateTime,
+    g.create_user createUser, g.update_user updateUser
   </sql>
+
+  <select id="selectGroupList" parameterType="com.tiptimes.identity.qo.GroupRequest" resultType="com.tiptimes.identity.entity.Group">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM group g
+    WHERE g.is_del = 0
+    <if test="groupName != null and groupName != ''">
+      AND g.group_name LIKE CONCAT('%',#{groupName},'%')
+    </if>
+  </select>
 
   <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -26,11 +41,11 @@
   </select>
 
   <insert id="insert" parameterType="com.tiptimes.identity.entity.Group">
-    insert into group (id, group_name, order, 
+    insert into group (id, parent_id, group_name, order,
       is_del, status, create_time, 
       update_time, create_user, update_user
       )
-    values (#{id,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER},
       #{isDel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=TIMESTAMP}
       )
@@ -40,13 +55,18 @@
   <update id="updateById" parameterType="com.tiptimes.identity.entity.Group">
     update group
     set group_name = #{groupName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
       order = #{order,jdbcType=INTEGER},
       is_del = #{isDel,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_user = #{createUser,jdbcType=VARCHAR},
       update_user = #{updateUser,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="delGroup" parameterType="java.lang.Integer">
+    update group
+    set is_del = 1
+    where id = #{id}
   </update>
 </mapper>

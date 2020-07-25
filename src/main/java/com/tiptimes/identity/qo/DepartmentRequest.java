@@ -7,4 +7,6 @@ import java.io.Serializable;
 @Data
 public class DepartmentRequest extends BaseReauest implements Serializable {
 
+    private String departmentName;
+
 }

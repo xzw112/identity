@@ -11,6 +11,8 @@ public class Group {
     @Id
     private Integer id;
 
+    private Integer parentId;
+
     private String groupName;
 
     private Integer order;
@@ -25,6 +27,6 @@ public class Group {
 
     private String createUser;
 
-    private Date updateUser;
+    private String updateUser;
 
 }

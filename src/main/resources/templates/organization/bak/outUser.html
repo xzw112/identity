@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="include :: header('外部用户')" />
+    </head>
+    <body>
+        <div class="outter" id="app">
+            <div class="row">
+                <div class="top-nav col-md-12">
+                    <span class="label_name">机构及组</span>
+                    <div class="crumbs">
+                        <span class="gray">主页</span> <i>&nbsp;/&nbsp;</i>
+                        <span>组件</span> <i>&nbsp;/&nbsp;</i>
+                        <span>导航</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row group-cont">
+                <div class="col-md-3">
+                    <div class="group-tree-cont">
+                        <div class="name">组织架构</div>
+                        <div class="group-tree"></div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="group-tl">
+                        <span class="tl">宣教部</span>
+                        <a class="btn">查看详情</a>
+                    </div>
+                    <div class="group-tabs">
+                        <el-tabs v-model="activeName" @tab-click="handleClick" type="card">
+                            <el-tab-pane label="组" name="first">
+                                <div class="group-tabs-cont">
+                                    <div class="tabs-operate">
+                                        <el-button type="primary" size="medium" class="fl newbtn">新增组</el-button>
+                                        <el-input placeholder="请输入内容" v-model="searchkey" class="input-with-btn">
+                                            <el-button slot="append">搜索</el-button>
+                                        </el-input>
+                                        <el-select v-model="exportvalue" placeholder="导出" class="export">
+                                            <el-option
+                                              v-for="item in exportList"
+                                              :key="item.value"
+                                              :label="item.label"
+                                              :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                        <el-select v-model="importvalue" placeholder="导入" class="import">
+                                            <el-option
+                                              v-for="item in importList"
+                                              :key="item.value"
+                                              :label="item.label"
+                                              :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                    <div class="group-table">
+                                        <el-table
+                                            :data="tableData"
+                                            header-align="center"
+                                            style="width: 100%"
+                                        >
+                                            <el-table-column
+                                                type="selection"
+                                                align="center"
+
+                                                width="50">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="name"
+                                                label="组名称"
+                                                fixed
+                                                align="center"
+                                            >
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="id"
+                                                label="组ID"
+                                                align="center"
+                                                width="100">
+                                            </el-table-column>
+
+                                            <!-- :sortable="true"
+                                            sort-by="index" -->
+                                            <el-table-column
+                                                prop="index"
+                                                label="排序号"
+                                                align="center"
+                                                
+                                                width="80">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="group"
+                                                label="父级分组"
+                                                align="center"
+                                                width="180">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="account"
+                                                label="关联账户数"
+                                                align="center"
+                                                width="180">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="state"
+                                                label="分组状态"
+                                                align="center"
+                                                width="100">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="operate"
+                                                label="操作"
+                                                align="center"
+                                                width="300"
+                                            >
+                                                <template slot-scope="scope">
+                                                    <a class="gbtn blue">关联账户</a>
+                                                    <a class="gbtn blue">修改</a>
+                                                    <a class="gbtn blue">启用/禁用</a>
+                                                    <a class="gbtn blue">详情</a>
+                                                    <a class="gbtn red">删除</a>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table>
+                                    </div>
+                                    
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="组织机构" name="second">
+                                <div class="group-tabs-cont">
+                                    <div class="tabs-operate">
+                                        <el-button type="primary" size="medium" class="fl newbtn">新增组织机构</el-button>
+                                        <el-input placeholder="请输入内容" v-model="searchkey" class="input-with-btn">
+                                            <el-button slot="append">搜索</el-button>
+                                        </el-input>
+                                        <el-select v-model="exportvalue" placeholder="导出" class="export">
+                                            <el-option
+                                              v-for="item in exportList"
+                                              :key="item.value"
+                                              :label="item.label"
+                                              :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                        <el-select v-model="importvalue" placeholder="导入" class="import">
+                                            <el-option
+                                              v-for="item in importList"
+                                              :key="item.value"
+                                              :label="item.label"
+                                              :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                    <div class="group-table">
+                                        <el-table
+                                            :data="tableData"
+                                            header-align="center"
+                                            style="width: 100%"
+                                        >
+                                            <el-table-column
+                                                type="selection"
+                                                align="center"
+                                                width="50">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="name"
+                                                label="组名称"
+                                                align="center"
+                                            >
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="id"
+                                                label="组ID"
+                                                align="center"
+                                                width="100">
+                                            </el-table-column>
+
+                                            <!-- :sortable="true"
+                                            sort-by="index" -->
+                                            <el-table-column
+                                                prop="index"
+                                                label="排序号"
+                                                align="center"
+                                                
+                                                width="80">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="group"
+                                                label="父级分组"
+                                                align="center"
+                                                width="180">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="account"
+                                                label="关联账户数"
+                                                align="center"
+                                                width="180">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="state"
+                                                label="分组状态"
+                                                align="center"
+                                                width="100">
+                                            </el-table-column>
+                                            <el-table-column
+                                                prop="operate"
+                                                label="操作"
+                                                align="center"
+                                                width="300"
+                                            >
+                                                <template slot-scope="scope">
+                                                    <a class="gbtn blue">关联账户</a>
+                                                    <a class="gbtn blue">修改</a>
+                                                    <a class="gbtn blue">启用/禁用</a>
+                                                    <a class="gbtn blue">详情</a>
+                                                    <a class="gbtn red">删除</a>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table>
+                                    </div>
+                                </div>
+                            </el-tab-pane>
+                        </el-tabs>
+                        
+                    </div>
+                    <div class="group-page">
+                        <el-pagination
+                            background
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="currentPage"
+                            :page-sizes="pageSizes"
+                            :page-size="pagesize"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="400">
+                        </el-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <th:block th:include="include :: footer" />
+
+        <script>
+            $(function () {  
+                $('.group-tree').jstree({
+                    'core' : {
+                        'data' : [
+                            { 
+                                "text" : "根节点",
+                                "children" : [
+                                    { "text" : "子节点1" },
+                                    { "text" : "字节点2" }
+                                ]
+                            }
+                        ],
+                        "themes":{
+                            "icons":false,
+                        },
+                        // "check_callback" : true
+                        },
+                        // "checkbox" : {
+                        //     "keep_selected_style" : false
+                        // },
+                        "contextmenu":{
+                            select_node:false,
+                            show_at_node:true,
+                            items:{
+                                "新建设备":{  
+                                    "label":"新建菜单",  
+                                    "icon"				: "glyphicon glyphicon-plus",
+                                    "action":function(data){
+                                        var inst = $.jstree.reference(data.reference),
+                                        obj = inst.get_node(data.reference);
+                                        inst.create_node(obj, {}, "last", function (new_node) {
+                                            try {
+                                                new_node.text="新建设备";
+                                                inst.edit(new_node);
+                                            } catch (ex) {
+                                                setTimeout(function () { inst.edit(new_node); },0);
+                                            }
+                                        });
+                                    }  
+                                },
+                                "修改设备":{
+                                    "separator_before"	: false,
+                                    "separator_after"	: false,
+                                    "_disabled"			: false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
+                                    "label"				: "修改菜单",
+                                    "shortcut_label"	: 'F2',
+                                    "icon"				: "glyphicon glyphicon-leaf",
+                                    "action"			: function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                        obj = inst.get_node(data.reference);
+                                        inst.edit(obj);
+                                    }
+                                },
+                                "删除设备":{
+                                    "separator_before"	: false,
+                                    "icon"				: false,
+                                    "separator_after"	: false,
+                                    "_disabled"			: false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
+                                    "label"				: "删除菜单",
+                                    "icon"				:"glyphicon glyphicon-remove",
+                                    "action"			: function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                            obj = inst.get_node(data.reference);
+                                        if(inst.is_selected(obj)) {
+                                            inst.delete_node(inst.get_selected());
+                                        }
+                                        else {
+                                            inst.delete_node(obj);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        // "plugins" : [ "checkbox","contextmenu" ],
+                        "plugins" : ["contextmenu" ],
+                        // 'types': {
+                        //     'default': {
+                        //         'icon': ''
+                        //     },
+                        //     'html': {
+                        //         'icon': 'fa fa-file-code-o'
+                        //     },
+                        //     'svg': {
+                        //         'icon': 'fa fa-file-picture-o'
+                        //     },
+                        //     'css': {
+                        //         'icon': 'fa fa-file-code-o'
+                        //     },
+                        //     'img': {
+                        //         'icon': 'fa fa-file-image-o'
+                        //     },
+                        //     'js': {
+                        //         'icon': 'fa fa-file-text-o'
+                        //     }
+                        // }
+                    });
+            });
+
+            var vm=new Vue({
+                el:'#app',
+                data(){
+                    return{
+                        activeName:'first',
+                        searchkey:'',
+                        importvalue:'',
+                        importList:[
+                            {
+                                value: '导入文件',
+                                label: '导入文件'
+                            },
+                            {
+                                value: '模板下载',
+                                label: '模板下载'
+                            }
+                        ],
+                        exportvalue:'',
+                        exportList:[
+                            {
+                                value: '勾选导出',
+                                label: '勾选导出'
+                            },
+                            {
+                                value: '全部导出',
+                                label: '全部导出'
+                            },
+                            {
+                                value: '分页导出',
+                                label: '分页导出'
+                            }
+                        ],
+                        tableData: [
+                            {
+                                id: '00018',
+                                name: '办公室1',
+                                index: '12',
+                                group:'天津博物馆',
+                                account:10,
+                                state:'启用',
+                                operate:''
+                            }, 
+                            {
+                                id: '00018',
+                                name: '办公室2',
+                                index: '99',
+                                group:'天津博物馆',
+                                account:10,
+                                state:'启用',
+                                operate:''
+                            },  
+                            {
+                                id: '00018',
+                                name: '办公室3',
+                                index: '55',
+                                group:'天津博物馆',
+                                account:10,
+                                state:'启用',
+                                operate:''
+                            },  
+                            {
+                                id: '00018',
+                                name: '办公室4',
+                                index: '33',
+                                group:'天津博物馆',
+                                account:10,
+                                state:'启用',
+                                operate:''
+                            }, 
+                        ],
+                        currentPage:1,
+                        pageSizes:[100, 200, 300, 400],
+                        pagesize:20
+                    }
+                },
+                methods: {
+                    handleClick(tab, event) {
+                        // console.log(tab, event);
+                    },
+                    handleSizeChange(val) {
+                        console.log(`每页 ${val} 条`);
+                    },
+                    handleCurrentChange(val) {
+                        console.log(`当前页: ${val}`);
+                    }
+                },
+            })
+
+        </script>
+    </body>
+</html>

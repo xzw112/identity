@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <th:block th:include="include :: header('机构及组')" />
+</head>
+
+<body>
+  <div class="container-m">
+    <div class="title">宣教部</div>
+    <ul class="tag">
+      <li class="active">组</li>
+      <li>组织架构</li>
+      <li>岗位</li>
+    </ul>
+    <div class="part">
+      <div class="item">
+        <div class="flex-between row">
+          <div class="flex-around col-md-6">
+            <button type="button" class="btn btn-primary mar16">新增组1</button>
+            <div class="input-group" style="width: 100%">
+              <input type="text" class="form-control" placeholder="请输入名称进行搜索" >
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button">搜索</button>
+              </span>
+            </div>
+          </div>
+          <div class="flex-around col-md-6 " style="display: flex; justify-content: flex-end">
+            <div class="btn-group mar16">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                导入 <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">导入文件</a></li>
+                <li><a href="#">模板下载</a></li>
+              </ul>
+            </div>
+            <div class="btn-group mar16">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                导出 <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">勾选导出</a></li>
+                <li><a href="#">全部导出</a></li>
+                <li><a href="#">分页导出</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th></th>
+              <th>操作类型</th>
+              <th>操作时间</th>
+              <th>日志内容</th>
+              <th>IP</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td><span class="fontcolor-blue" data-toggle="modal" data-target="#myModal">关联账户</span><span
+                  class="fontcolor-red">关联账户</span></td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>1</td>
+              <td>1</td>
+              <td>1</td>
+              <td>@1</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>1</td>
+              <td>1</td>
+              <td>1 1</td>
+              <td>@1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="item" style="display: none;">
+        <div class="flex-between">
+          <div class="flex-around">
+            <button type="button" class="btn btn-primary mar16">新增组2</button>
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="请输入名称进行搜索">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button">搜索</button>
+              </span>
+            </div>
+          </div>
+          <div class="flex-around">
+            <div class="btn-group mar16">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                导入 <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">导入文件</a></li>
+                <li><a href="#">模板下载</a></li>
+              </ul>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                导出 <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">勾选导出</a></li>
+                <li><a href="#">全部导出</a></li>
+                <li><a href="#">分页导出</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th></th>
+              <th>操作类型</th>
+              <th>操作时间</th>
+              <th>日志内容</th>
+              <th class="ipcon">IP<span class="glyphicon glyphicon-triangle-top arrow" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-triangle-bottom arrow" aria-hidden="true"></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>1</td>
+              <td>1</td>
+              <td>@1</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>1</td>
+              <td>1</td>
+              <td>@1</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>1</td>
+              <td>1 1</td>
+              <td>@1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="item" style="display: none;">
+        <div class="flex-between">
+          <div class="flex-around">
+            <button type="button" class="btn btn-primary mar16">新增组3</button>
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="请输入名称进行搜索">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button">搜索</button>
+              </span>
+            </div>
+          </div>
+          <div class="flex-around">
+            <div class="btn-group mar16">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                导入 <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">导入文件</a></li>
+                <li><a href="#">模板下载</a></li>
+              </ul>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                导出 <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#">勾选导出</a></li>
+                <li><a href="#">全部导出</a></li>
+                <li><a href="#">分页导出</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th></th>
+              <th>操作类型</th>
+              <th>操作时间</th>
+              <th>日志内容</th>
+              <th class="ipcon">IP<span class="glyphicon glyphicon-triangle-top arrow" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-triangle-bottom arrow" aria-hidden="true"></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>1</td>
+              <td>1</td>
+              <td>@1</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>1</td>
+              <td>1</td>
+              <td>@1</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>1</td>
+              <td>1 1</td>
+              <td>@1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <!-- 模态框（Modal） -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title" id="myModalLabel">
+            模态框（Modal）标题
+          </h4>
+        </div>
+        <div class="modal-body">
+          在这里添加一些文本
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+          </button>
+          <button type="button" class="btn btn-primary">
+            提交更改
+          </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+</body>
+
+<th:block th:include="include :: footer" />
+
+<!--自定义js-->
+<script th:src="@{/js/organization/department.js}"></script>
+<script>
+  $(".tag li").click(function () {
+    $(this).addClass("active").siblings().removeClass("active")
+    var tagactive = $(this).index()
+    $(".part .item").eq(tagactive).show().siblings().hide()
+  })
+  function show() {
+    console.log("sss")
+  }
+</script>
+
+</html>

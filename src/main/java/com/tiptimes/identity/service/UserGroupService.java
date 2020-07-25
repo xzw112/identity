@@ -1,19 +1,15 @@
-package com.tiptimes.identity.dao;
-
+package com.tiptimes.identity.service;
 
 import com.tiptimes.identity.entity.UserGroup;
 import com.tiptimes.identity.qo.GroupRequest;
 import com.tiptimes.identity.vo.UserVo;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface UserGroupMapper {
+
+public interface UserGroupService {
 
     List<UserVo> selectUserListByGroupId(GroupRequest groupRequest);
-
-    UserGroup selectDetail(Integer id);
 
     int insert(UserGroup userGroup);
 

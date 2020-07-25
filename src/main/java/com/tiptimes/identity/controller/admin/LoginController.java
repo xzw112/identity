@@ -69,6 +69,7 @@ public class LoginController {
         criteria.andEqualTo("loginName", username);
         List<TpMainAdminUser> list = tpMainAdminUserMapper.selectByExample(example);
         subject.getSession().setAttribute("userInfo", list.get(0));
+        request.getSession().setAttribute("userId", list.get(0).getId());
         map.put("code", 1);
         return map;
     }

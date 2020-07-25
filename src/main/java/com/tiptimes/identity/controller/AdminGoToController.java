@@ -49,6 +49,30 @@ public class AdminGoToController {
         return "application/add";
     }
 
+    /**
+     * 机构与组
+     */
+    @RequestMapping("/department")
+    public String department(HttpServletRequest request) {
+        return "organization/department";
+    }
+
+    /**
+     * 内部用户
+     */
+    @RequestMapping("/user")
+    public String user(HttpServletRequest request) {
+        return "organization/user";
+    }
+
+    /**
+     * 内部用户
+     */
+    @RequestMapping("/outUser")
+    public String outUser(HttpServletRequest request) {
+        return "organization/outUser";
+    }
+
 
 
     /**
