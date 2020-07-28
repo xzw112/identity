@@ -2,7 +2,8 @@ package com.tiptimes.identity.controller;
 
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.UserDepartment;
-import com.tiptimes.identity.service.UserDepartmentService;
+import com.tiptimes.identity.entity.UserPost;
+import com.tiptimes.identity.service.UserPostService;
 import com.tiptimes.identity.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,47 +14,48 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 用户部门
+ * 用户岗位
  */
 @RestController
-@RequestMapping("/userDepartment")
-public class UserDepartmentController {
+@RequestMapping("/userPost")
+public class UserPostController {
 
     @Autowired
-    private UserDepartmentService userDepartmentService;
+    private UserPostService userPostService;
+
 
     /**
-     * 根据部门id获取用户
-     * @param departmentId
+     * 根据岗位id获取用户
+     * @param postId
      * @return
      */
     @RequestMapping(value = "/getUserByDepartmentId", method = RequestMethod.POST)
-    public ResponseResult getUserByDepartmentId(Integer departmentId){
+    public ResponseResult getUserByDepartmentId(Integer postId){
         List<UserVo> list = null;
-        if (departmentId > 0) {
-            list = userDepartmentService.selectUserByDepartmentId(departmentId);
+        if (postId > 0) {
+            list = userPostService.selectUserByPostId(postId);
         }
         return ResponseResult.successWithData(list);
     }
 
     @RequestMapping(value = "/getDetail", method = RequestMethod.POST)
     public ResponseResult getDetail(Integer id){
-        UserDepartment userDepartment = null;
+        UserPost userPost = null;
         if (id > 0) {
-           userDepartment = userDepartmentService.selectDetail(id);
+            userPost = userPostService.selectDetail(id);
         }
-         return ResponseResult.successWithData(userDepartment);
+        return ResponseResult.successWithData(userPost);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public ResponseResult edit(@RequestBody UserDepartment userDepartment){
-        int num = userDepartmentService.updateById(userDepartment);
+    public ResponseResult edit(@RequestBody UserPost userPost){
+        int num = userPostService.updateById(userPost);
         return ResponseResult.successWithData(num);
     }
 
     @RequestMapping(value = "/del", method = RequestMethod.POST)
     public ResponseResult del(Integer id) {
-        int num = userDepartmentService.del(id);
+        int num = userPostService.del(id);
         return ResponseResult.successWithData(num);
     }
 }

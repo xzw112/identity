@@ -13,6 +13,7 @@ import lombok.Getter;
 @Getter
 public enum ResponseCodeEnums {
     FAILURE(0),//失败
+    LOGINFAIL(10), // 登录失败
     SUCCESS(1);//成功
     private Integer code;
 }

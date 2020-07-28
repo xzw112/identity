@@ -8,7 +8,7 @@
 <body>
   <div class="container-m">
     <div class="title">宣教部</div>
-    <ul class="tag">
+    <ul class="tag" id="tabChange">
       <li class="active">组</li>
       <li>组织架构</li>
       <li>岗位</li>
@@ -17,11 +17,11 @@
       <div class="item">
         <div class="flex-between row">
           <div class="flex-around col-md-6">
-            <button type="button" class="btn btn-primary mar16">新增组1</button>
+            <button type="button" id="addGroup" class="btn btn-primary mar16">新增组</button>
             <div class="input-group" style="width: 100%">
-              <input type="text" class="form-control" placeholder="请输入名称进行搜索" >
+              <input type="text" class="form-control" id="searchText" placeholder="请输入名称进行搜索" >
               <span class="input-group-btn">
-                <button class="btn btn-primary" type="button">搜索</button>
+                <button class="btn btn-primary" type="button" id="searchBtn">搜索</button>
               </span>
             </div>
           </div>
@@ -49,50 +49,18 @@
             </div>
           </div>
         </div>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th></th>
-              <th>操作类型</th>
-              <th>操作时间</th>
-              <th>日志内容</th>
-              <th>IP</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>1</td>
-              <td>1</td>
-              <td>1</td>
-              <td><span class="fontcolor-blue" data-toggle="modal" data-target="#myModal">关联账户</span><span
-                  class="fontcolor-red">关联账户</span></td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>1</td>
-              <td>1</td>
-              <td>1</td>
-              <td>@1</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>1</td>
-              <td>1</td>
-              <td>1 1</td>
-              <td>@1</td>
-            </tr>
-          </tbody>
+        <table class="table table-striped" id="examplePagination">
+
         </table>
       </div>
       <div class="item" style="display: none;">
         <div class="flex-between">
           <div class="flex-around">
-            <button type="button" class="btn btn-primary mar16">新增组2</button>
+            <button type="button" class="btn btn-primary mar16" id="addDepartment">新增部门</button>
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="请输入名称进行搜索">
+              <input type="text" class="form-control" id="departmentSearchTxt" placeholder="请输入名称进行搜索">
               <span class="input-group-btn">
-                <button class="btn btn-primary" type="button">搜索</button>
+                <button class="btn btn-primary" id="departmentSearch" type="button">搜索</button>
               </span>
             </div>
           </div>
@@ -120,47 +88,18 @@
             </div>
           </div>
         </div>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th></th>
-              <th>操作类型</th>
-              <th>操作时间</th>
-              <th>日志内容</th>
-              <th class="ipcon">IP<span class="glyphicon glyphicon-triangle-top arrow" aria-hidden="true"></span>
-                <span class="glyphicon glyphicon-triangle-bottom arrow" aria-hidden="true"></span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>1</td>
-              <td>1</td>
-              <td>@1</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>1</td>
-              <td>1</td>
-              <td>@1</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>1</td>
-              <td>1 1</td>
-              <td>@1</td>
-            </tr>
-          </tbody>
+        <table class="table table-striped" id="departmentTable">
+
         </table>
       </div>
       <div class="item" style="display: none;">
         <div class="flex-between">
           <div class="flex-around">
-            <button type="button" class="btn btn-primary mar16">新增组3</button>
+            <button type="button" id="addPost" class="btn btn-primary mar16">新增岗位</button>
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="请输入名称进行搜索">
+              <input type="text" class="form-control" id="postSearchText" placeholder="请输入名称进行搜索">
               <span class="input-group-btn">
-                <button class="btn btn-primary" type="button">搜索</button>
+                <button class="btn btn-primary" id="postSearch" type="button">搜索</button>
               </span>
             </div>
           </div>
@@ -188,44 +127,16 @@
             </div>
           </div>
         </div>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th></th>
-              <th>操作类型</th>
-              <th>操作时间</th>
-              <th>日志内容</th>
-              <th class="ipcon">IP<span class="glyphicon glyphicon-triangle-top arrow" aria-hidden="true"></span>
-                <span class="glyphicon glyphicon-triangle-bottom arrow" aria-hidden="true"></span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>1</td>
-              <td>1</td>
-              <td>@1</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>1</td>
-              <td>1</td>
-              <td>@1</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>1</td>
-              <td>1 1</td>
-              <td>@1</td>
-            </tr>
-          </tbody>
+        <table class="table table-striped" id="postTable">
+
         </table>
       </div>
     </div>
 
   </div>
-  <!-- 模态框（Modal） -->
+  <!-- 组模态框（Modal） -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <input type="hidden" id="groupId"/>
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -237,18 +148,147 @@
           </h4>
         </div>
         <div class="modal-body">
-          在这里添加一些文本
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="parentGroup">父组名称:</label>
+            <select id="parentGroup" class="form-control">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="groupName">组名称:</label>
+            <input id="groupName" type="text" class="form-control" maxlength="20" placeholder="请输入组名称">
+          </div>
+          <div class="form-group">
+            <label for="sort">序号:</label>
+            <input id="sort" type="text" class="form-control" maxlength="20" placeholder="请输入组序号">
+          </div>
+          <div class="form-group">
+            <label for="status">是否启用:</label>
+            <input type="checkbox" id="status" name="my-checkbox" data-on-text="启用" data-off-text="不启用">
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">关闭
           </button>
-          <button type="button" class="btn btn-primary">
-            提交更改
+          <button type="button" class="btn btn-primary" id="saveBtn">
+            提交
           </button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal -->
   </div>
+
+  <!-- 部门模态框（Modal） -->
+  <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <input type="hidden" id="departmentId"/>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title" id="departmentModalLabel">
+            模态框（Modal）标题
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="parentDepartment">父级部门:</label>
+            <select id="parentDepartment" class="form-control">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="departmentName">部门名称:</label>
+            <input id="departmentName" type="text" class="form-control" maxlength="20" placeholder="请输入部门名称">
+          </div>
+          <div class="form-group">
+            <label for="departmentSort">序号:</label>
+            <input id="departmentSort" type="text" class="form-control" maxlength="20" placeholder="请输入组序号">
+          </div>
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="header">部门主管:</label>
+            <select id="header" class="form-control">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="reduceHeader">部门分管领导:</label>
+            <select id="reduceHeader" class="form-control">
+
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="departmentStatus">是否启用:</label>
+            <input type="checkbox" id="departmentStatus" name="my-checkbox-department" data-on-text="启用" data-off-text="不启用">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+          </button>
+          <button type="button" class="btn btn-primary" id="saveDepartmentBtn">
+            提交
+          </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+
+  <!-- 岗位模态框（Modal） -->
+  <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <input type="hidden" id="postId"/>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+          </button>
+          <h4 class="modal-title" id="postModalLabel">
+            模态框（Modal）标题
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="postName">岗位名称:</label>
+            <input id="postName" type="text" class="form-control" maxlength="20" placeholder="请输入岗位名称">
+          </div>
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="postCode">岗位编码:</label>
+            <input id="postCode" type="text" class="form-control" maxlength="20" placeholder="请输入岗位编码">
+          </div>
+          <div class="form-group">
+            <label for="postSort">序号:</label>
+            <input id="postSort" type="text" class="form-control" maxlength="20" placeholder="请输入序号">
+          </div>
+          <div class="form-group">
+            <span class="text-danger">*</span>
+            <label for="postDec">岗位描述:</label>
+            <textarea id="postDec" type="text" class="form-control" placeholder="请输入岗位描述"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="departmentStatus">是否启用:</label>
+            <input type="checkbox" id="postStatus" name="my-checkbox-post" data-on-text="启用" data-off-text="不启用">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+          </button>
+          <button type="button" class="btn btn-primary" id="savePostBtn">
+            提交
+          </button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+
 </body>
 
 <th:block th:include="include :: footer" />
@@ -256,11 +296,41 @@
 <!--自定义js-->
 <script th:src="@{/js/organization/department.js}"></script>
 <script>
+  var stateVal = 0;
+  $("[name='my-checkbox']").bootstrapSwitch();
+  $("[name='my-checkbox']").on('switchChange.bootstrapSwitch', function (event,state) {
+    if (state) {
+      stateVal = 0;
+    }
+    if (!state) {
+      stateVal = 1;
+    }
+  });
+  var departmentStateVal = 0;
+  $("[name='my-checkbox-department']").bootstrapSwitch();
+  $("[name='my-checkbox-department']").on('switchChange.bootstrapSwitch', function (event,state) {
+    if (state) {
+      departmentStateVal = 0;
+    }
+    if (!state) {
+      departmentStateVal = 1;
+    }
+  });
+  var postStateVal = 0;
+  $("[name='my-checkbox-post']").bootstrapSwitch();
+  $("[name='my-checkbox-post']").on('switchChange.bootstrapSwitch', function (event,state) {
+    if (state) {
+      postStateVal = 0;
+    }
+    if (!state) {
+      postStateVal = 1;
+    }
+  });
   $(".tag li").click(function () {
-    $(this).addClass("active").siblings().removeClass("active")
-    var tagactive = $(this).index()
+    $(this).addClass("active").siblings().removeClass("active");
+    var tagactive = $(this).index();
     $(".part .item").eq(tagactive).show().siblings().hide()
-  })
+  });
   function show() {
     console.log("sss")
   }

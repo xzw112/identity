@@ -3,6 +3,7 @@ package com.tiptimes.identity.dao;
 
 import com.tiptimes.identity.entity.Group;
 import com.tiptimes.identity.qo.GroupRequest;
+import com.tiptimes.identity.vo.GroupVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @Repository
 public interface GroupMapper {
 
-    List<Group> selectGroupList(GroupRequest groupRequest);
+    List<GroupVo> selectGroupList(GroupRequest groupRequest);
 
     Group selectDetail(Integer id);
 

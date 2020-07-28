@@ -10,6 +10,7 @@ import com.tiptimes.identity.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,6 +43,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public int insert(Department department) {
+        department.setIsDel(0);
+        department.setCreateTime(new Date());
         int num = departmentMapper.insert(department);
         return num;
     }

@@ -40,8 +40,8 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ResponseResult exceptionHandler(Exception e) {
-        log.error(e.getMessage());
-        log.error(exceptionStackTrace2String(e));
+        //log.error(e.getMessage());
+        //.error(exceptionStackTrace2String(e));
         return ResponseResult.error("未知异常");
     }
 
@@ -81,7 +81,7 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ResponseResult requestNotReadable(HttpMessageNotReadableException e){
-        log.error(e.getMessage());
+        //log.error(e.getMessage());
         return ResponseResult.error("参数格式错误(缺少分隔符或结束标签)");
     }
 

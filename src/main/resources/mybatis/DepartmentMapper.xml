@@ -14,30 +14,37 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
-    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="sort" jdbcType="VARCHAR" property="sort" />
   </resultMap>
 
   <sql id="Base_Column_List">
     d.id id, d.parent_id parentId, d.name name, d.header header, d.reduce_header reduceHeader, d.is_del isDel, d.status status, d.create_time createTime, d.update_time updateTime,
-    d.create_user createUser, d.update_user updateUser, d.order order
+    d.create_user createUser, d.update_user updateUser, d.sort sort
   </sql>
 
-  <select id="selectDepartmentList" parameterType="com.tiptimes.identity.qo.DepartmentRequest" resultType="com.tiptimes.identity.entity.Department">
+  <select id="selectDepartmentList" parameterType="com.tiptimes.identity.qo.DepartmentRequest" resultType="com.tiptimes.identity.vo.DepartmentVo">
     SELECT
-      id id,
-      parent_id parentId,
-      name name,
-      header header,
-      reduce_header reduceHeader,
-      is_del isDel,
-      status status,
-      create_time createTime,
-      update_time updateTime
-    FROM department
-    WHERE is_del = 0
-    AND status = 0
+    d.id id,
+    d.parent_id parentId,
+    d.name name,
+    d.header header,
+    d.reduce_header reduceHeader,
+    d.is_del isDel,
+    d.status status,
+    d.create_time createTime,
+    d.update_time updateTime,
+    d.sort sort,
+    d1.name parentName,
+    au.user_name headerName,
+    au1.user_name reduceHeaderName
+    FROM department d
+    LEFT JOIN department d1 ON(d1.id = d.parent_id)
+    INNER JOIN tp_main_admin_user au ON(au.id = d.header)
+    INNER JOIN tp_main_admin_user au1 ON(au1.id = d.reduce_header)
+    WHERE d.is_del = 0
+    AND d.status = 0
     <if test="departmentName != null and departmentName != ''">
-      AND name LIKE CONCAT('%',#{departmentName},'%')
+      AND d.name LIKE CONCAT('%',#{departmentName},'%')
     </if>
   </select>
 
@@ -57,12 +64,12 @@
     insert into department (parent_id, name,
       header, reduce_header, is_del,
       status, create_time,
-      create_user, order
+      create_user, sort
       )
     values (#{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
       #{header,jdbcType=VARCHAR}, #{reduceHeader,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER},
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
-      #{createUser,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}
+      #{createUser,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}
       )
   </insert>
 
@@ -75,7 +82,7 @@
       status = #{status,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=VARCHAR},
-      order = #{order,jdbcType=INTEGER}
+      sort = #{sort,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

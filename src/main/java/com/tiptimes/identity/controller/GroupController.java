@@ -6,6 +6,7 @@ import com.tiptimes.identity.entity.Group;
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.qo.GroupRequest;
 import com.tiptimes.identity.service.GroupService;
+import com.tiptimes.identity.vo.GroupVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,7 @@ public class GroupController {
      */
     @RequestMapping("/getGroupList")
     public PageResult getClientList(@RequestBody GroupRequest groupRequest){
-        PageResult<Group> list = groupService.selectGroupList(groupRequest);
+        PageResult<GroupVo> list = groupService.selectGroupList(groupRequest);
         return list;
     }
 
@@ -44,7 +45,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseResult add(HttpServletRequest request, Group group){
+    public ResponseResult add(HttpServletRequest request,@RequestBody Group group){
         String userId = (String) request.getSession().getAttribute("userId");
         group.setCreateUser(userId);
         int num = groupService.insert(group);
@@ -52,7 +53,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public ResponseResult edit(HttpServletRequest request, Group group){
+    public ResponseResult edit(HttpServletRequest request, @RequestBody Group group){
         String userId = (String) request.getSession().getAttribute("userId");
         group.setCreateUser(userId);
         group.setUpdateUser(userId);

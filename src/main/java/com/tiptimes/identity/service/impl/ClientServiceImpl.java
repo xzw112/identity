@@ -9,6 +9,7 @@ import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.qo.ClientRequest;
 import com.tiptimes.identity.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -40,7 +41,7 @@ public class ClientServiceImpl implements ClientService {
     public int insert(OauthClientDetails oauthClientDetails) {
         oauthClientDetails.setClientId(String.valueOf(UUID.randomUUID()));
         oauthClientDetails.setResourceIds(Constants.RESOURCE_ID);
-        oauthClientDetails.setClientSecret(Constants.CLIENT_SECRET);
+        oauthClientDetails.setClientSecret(BCrypt.hashpw(Constants.CLIENT_SECRET, BCrypt.gensalt()));
         oauthClientDetails.setScope(Constants.SCOPE);
         oauthClientDetails.setAuthorizedGrantTypes(Constants.AUTHORIZED_GRANT_TYPES);
         oauthClientDetails.setWebServerRedirectUri(Constants.WEB_SERVER_REDIRECT_URI);

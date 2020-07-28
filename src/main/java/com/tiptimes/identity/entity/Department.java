@@ -30,6 +30,6 @@ public class Department {
 
     private String updateUser;
 
-    private Integer order;
+    private String sort;
 
 }

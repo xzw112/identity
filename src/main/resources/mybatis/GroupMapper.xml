@@ -6,7 +6,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
-    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="is_del" jdbcType="INTEGER" property="isDel" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -17,16 +17,18 @@
 
   <sql id="Base_Column_List">
     g.id id, g.parent_id parentId,
-    g.group_name groupName, g.order order,
+    g.group_name groupName, g.sort sort,
     g.is_del isDel, g.status status,
     g.create_time createTime, g.update_time updateTime,
     g.create_user createUser, g.update_user updateUser
   </sql>
 
-  <select id="selectGroupList" parameterType="com.tiptimes.identity.qo.GroupRequest" resultType="com.tiptimes.identity.entity.Group">
+  <select id="selectGroupList" parameterType="com.tiptimes.identity.qo.GroupRequest" resultType="com.tiptimes.identity.vo.GroupVo">
     SELECT
-    <include refid="Base_Column_List"/>
-    FROM group g
+    <include refid="Base_Column_List"/>,
+    h.group_name groupParentName
+    FROM tp_group g
+    LEFT JOIN tp_group h on(h.id = g.parent_id)
     WHERE g.is_del = 0
     <if test="groupName != null and groupName != ''">
       AND g.group_name LIKE CONCAT('%',#{groupName},'%')
@@ -36,16 +38,16 @@
   <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from group
+    from tp_group
     where id = #{id,jdbcType=INTEGER}
   </select>
 
   <insert id="insert" parameterType="com.tiptimes.identity.entity.Group">
-    insert into group (id, parent_id, group_name, order,
+    insert into tp_group (id, parent_id, group_name, sort,
       is_del, status, create_time, 
       update_time, create_user, update_user
       )
-    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER},
+    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
       #{isDel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=TIMESTAMP}
       )
@@ -53,11 +55,10 @@
 
 
   <update id="updateById" parameterType="com.tiptimes.identity.entity.Group">
-    update group
+    update tp_group
     set group_name = #{groupName,jdbcType=VARCHAR},
       parent_id = #{parentId,jdbcType=INTEGER},
-      order = #{order,jdbcType=INTEGER},
-      is_del = #{isDel,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=TIMESTAMP}
@@ -65,7 +66,7 @@
   </update>
 
   <update id="delGroup" parameterType="java.lang.Integer">
-    update group
+    update tp_group
     set is_del = 1
     where id = #{id}
   </update>

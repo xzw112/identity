@@ -3,11 +3,12 @@ package com.tiptimes.identity.service;
 import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.entity.Group;
 import com.tiptimes.identity.qo.GroupRequest;
+import com.tiptimes.identity.vo.GroupVo;
 
 
 public interface GroupService {
 
-    PageResult<Group> selectGroupList(GroupRequest groupRequest);
+    PageResult<GroupVo> selectGroupList(GroupRequest groupRequest);
 
     Group selectDetail(Integer id);
 

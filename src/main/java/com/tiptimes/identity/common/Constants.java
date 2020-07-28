@@ -2,6 +2,8 @@ package com.tiptimes.identity.common;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 常量类
  */
@@ -30,10 +32,14 @@ public class Constants {
     // jwt 秘钥
     public static final String SIGNING_KEY = "xzw";
     // token 有效时间
-    public static final Integer ACCESS_TOKEN_VALIDITY = 7200;
+    public static final Integer ACCESS_TOKEN_VALIDITY = -1; // -1设置为永不过期
     // refresh_token 有效时间
-    public static final Integer REFRESH_TOKEN_VALIDITY = 2592000;
+    public static final Integer REFRESH_TOKEN_VALIDITY = -1; // -1设置为永不过期
     // oauth2 认证配置 =================
+
+    // token 存储配置
+    public static final TimeUnit UNIT = TimeUnit.DAYS;
+    public static final Integer TIME_COUNT = 2;
 
 
 

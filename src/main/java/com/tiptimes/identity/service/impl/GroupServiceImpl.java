@@ -7,6 +7,7 @@ import com.tiptimes.identity.dao.GroupMapper;
 import com.tiptimes.identity.entity.Group;
 import com.tiptimes.identity.qo.GroupRequest;
 import com.tiptimes.identity.service.GroupService;
+import com.tiptimes.identity.vo.GroupVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,10 @@ public class GroupServiceImpl implements GroupService {
 
 
     @Override
-    public PageResult<Group> selectGroupList(GroupRequest groupRequest) {
+    public PageResult<GroupVo> selectGroupList(GroupRequest groupRequest) {
         PageHelper.startPage(groupRequest.getPageNumber(), groupRequest.getPageSize());
-        List<Group> list = groupMapper.selectGroupList(groupRequest);
-        PageInfo<Group> pageInfo = new PageInfo<>(list);
+        List<GroupVo> list = groupMapper.selectGroupList(groupRequest);
+        PageInfo<GroupVo> pageInfo = new PageInfo<>(list);
         PageResult result = new PageResult();
         result.setRows(list);
         result.setTotal(pageInfo.getTotal());

@@ -2,24 +2,25 @@ package com.tiptimes.identity.entity;
 
 import lombok.Data;
 
-import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class Group {
+public class Post implements Serializable {
 
-    @Id
     private Integer id;
 
-    private Integer parentId;
+    private String postName;
 
-    private String groupName;
+    private String postCode;
 
-    private Integer sort;
-
-    private Integer isDel;
+    private String postDec;
 
     private Integer status;
+
+    private String sort;
+
+    private Integer isDel;
 
     private Date createTime;
 
