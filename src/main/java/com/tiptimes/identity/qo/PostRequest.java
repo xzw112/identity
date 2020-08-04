@@ -10,4 +10,6 @@ public class PostRequest extends BaseReauest implements Serializable {
     private String postName;
 
     private Integer postId;
+
+    private Integer departmentId;
 }

@@ -4,11 +4,10 @@
     <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.UserPost">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="post_id" jdbcType="INTEGER" property="postId"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
-        <result column="post_type" jdbcType="INTEGER" property="postType"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, post_id, user_id, post_type
+    id, post_id, user_id
   </sql>
 
     <select id="selectUserByPostId" parameterType="java.lang.Integer" resultType="com.tiptimes.identity.vo.UserVo">
@@ -33,19 +32,22 @@
     delete from user_post
     where id = #{id,jdbcType=INTEGER}
   </delete>
+    <delete id="delByUserId" parameterType="java.lang.String">
+        delete from user_post
+    where user_id = #{userId,jdbcType=VARCHAR}
+    </delete>
 
     <insert id="insert" parameterType="com.tiptimes.identity.entity.UserPost">
-    insert into user_post (id, post_id, user_id, post_type
+    insert into user_post (post_id, user_id
       )
-    values (#{id,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{postType,jdbcType=INTEGER}
+    values (#{postId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
       )
   </insert>
 
     <update id="updateById" parameterType="com.tiptimes.identity.entity.UserPost">
     update user_post
     set post_id = #{postId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER},
-      post_type = #{postType,jdbcType=INTEGER}
+      user_id = #{userId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

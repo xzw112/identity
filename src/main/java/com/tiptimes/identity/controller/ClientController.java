@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 应用管理
  */
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/customer/client")
 public class ClientController {
 
     @Autowired

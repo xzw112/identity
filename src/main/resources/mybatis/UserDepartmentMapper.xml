@@ -22,6 +22,15 @@
         WHERE ud.department_id = #{departmentId}
   </select>
 
+  <select id="selectUserDepartmentListByUserId" parameterType="java.lang.String" resultType="com.tiptimes.identity.entity.UserDepartment">
+    SELECT
+    id id,
+    user_id userId,
+    department_id departmentId
+    FROM user_department
+    WHERE user_id = #{userId}
+  </select>
+
   <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -30,9 +39,9 @@
   </select>
 
   <insert id="insert" parameterType="com.tiptimes.identity.entity.UserDepartment">
-    insert into user_department (id, department_id, user_id
+    insert into user_department (department_id, user_id
       )
-    values (#{id,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
+    values (#{departmentId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
       )
   </insert>
 
@@ -45,5 +54,8 @@
 
   <delete id="del" parameterType="java.lang.Integer">
     DELETE FROM user_department WHERE id = #{id}
+  </delete>
+  <delete id="delByUserId" parameterType="java.lang.String">
+    DELETE FROM user_department WHERE user_id = #{userId}
   </delete>
 </mapper>

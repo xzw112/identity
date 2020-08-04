@@ -29,4 +29,6 @@ public class Group {
 
     private String updateUser;
 
+    private Integer departmentId;
+
 }

@@ -9,4 +9,6 @@ import java.io.Serializable;
 public class GroupVo extends Group implements Serializable {
 
     private String groupParentName;
+
+    private String departmentName;
 }

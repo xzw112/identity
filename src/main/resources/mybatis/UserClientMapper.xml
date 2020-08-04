@@ -41,9 +41,9 @@
   </delete>
 
   <insert id="insert" parameterType="com.tiptimes.identity.entity.UserClient">
-    insert into user_client (id, client_id, user_id
+    insert into user_client (client_id, user_id
       )
-    values (#{id,jdbcType=INTEGER}, #{clientId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}
+    values (#{clientId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}
       )
   </insert>
 

@@ -21,19 +21,22 @@
         <result column="is_leave" property="isLeave" jdbcType="INTEGER"/>
         <result column="nature" property="nature" jdbcType="INTEGER"/>
         <result column="post" property="post" jdbcType="VARCHAR"/>
-        <result column="sort" property="sort" jdbcType="INTEGER"/>
+        <result column="deputy_post" property="deputyPost" jdbcType="VARCHAR"/>
+        <result column="sort" property="sort" jdbcType="VARCHAR"/>
         <result column="department" property="department" jdbcType="VARCHAR"/>
         <result column="header_url" property="headerUrl" jdbcType="VARCHAR"/>
+        <result column="user_type" property="userType" jdbcType="INTEGER"/>
+        <result column="group_id" property="groupId" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, user_name, login_name, login_password, user_contact, user_address, mail, role_id, 
     create_user, create_time, update_user, update_time, status, is_delete,remark, is_admin,
-    is_leave, nature, post, sort, department, header_url
+    is_leave, nature, post, deputy_post, sort, department, header_url, user_type, group_id
   </sql>
 
     <select id="selectList" parameterType="com.tiptimes.identity.bo.AdminUserParam"
             resultType="com.tiptimes.identity.vo.TpMainAdminUserVO">
-    SELECT
+        SELECT
         u.id AS id,
         u.user_name AS userName,
         u.login_name AS loginName,
@@ -43,20 +46,44 @@
         u.create_time AS createTime,
         u.update_time AS updateTime,
         u.status AS status,
+        u.role_id AS roleId,
+        u.remark AS remark,
         u.is_admin AS isAdmin,
         u.is_leave AS isLeave,
         u.nature AS nature,
         u.post AS post,
         u.sort AS sort,
-        u.department AS department,
-        u.header_url AS headerUrl
-    FROM
+        p.post_name postName,
+        u.header_url AS headerUrl,
+        GROUP_CONCAT(DISTINCT d.id ) AS departmentId,
+        GROUP_CONCAT(DISTINCT d.NAME ) AS departmentName,
+        GROUP_CONCAT(DISTINCT up.post_id) AS deputyPostId,
+        GROUP_CONCAT(DISTINCT p.post_name ORDER BY p.id) AS deputyPost,
+        GROUP_CONCAT(DISTINCT ug.group_id) AS groupId,
+        GROUP_CONCAT(DISTINCT g.group_name) AS groupName
+        FROM
         tp_main_admin_user u
-    WHERE
+        LEFT JOIN user_post up ON(up.user_id = u.id)
+        LEFT JOIN post p ON(p.id = up.post_id)
+        LEFT JOIN user_department ud ON ( ud.user_id = u.id )
+        LEFT JOIN department d ON ( d.id = ud.department_id )
+        LEFT JOIN user_group ug ON (ug.user_id = u.id)
+        LEFT JOIN tp_group g ON (g.id = ug.group_id)
+        WHERE
         u.is_delete = 0
-    ORDER BY
-        u.create_time DESC
-  </select>
+        AND
+        u.user_type = #{userType}
+        AND
+        u.is_leave = #{isLeave}
+        <if test="id != null and id != ''">
+            AND u.id = #{id}
+        </if>
+        <if test="departmentId != null and departmentId != ''">
+            AND d.id = #{departmentId}
+        </if>
+        GROUP BY u.id
+        ORDER BY u.create_time DESC
+    </select>
 
     <select id="selectUserByName" resultType="com.tiptimes.identity.vo.UserDetailsVo"
             parameterType="java.lang.String">
@@ -76,6 +103,7 @@
             u.nature AS nature,
             u.post AS post,
             u.sort AS sort,
+            u.group_id AS groupId,
             u.department AS department,
             u.header_url AS headerUrl
         FROM tp_main_admin_user u
@@ -102,6 +130,7 @@
             u.nature AS nature,
             u.post AS post,
             u.sort AS sort,
+            u.group_id AS groupId,
             u.department AS department,
             u.header_url AS headerUrl
         FROM tp_main_admin_user u
@@ -109,5 +138,25 @@
         AND status = 0
         AND is_delete = 0
     </select>
+
+    <update id="updateUserLeave" parameterType="java.lang.String">
+        UPDATE
+        tp_main_admin_user
+        SET is_leave = 1
+        WHERE id IN
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateUserUnLeave" parameterType="java.lang.String">
+        UPDATE
+        tp_main_admin_user
+        SET is_leave = 0
+        WHERE id IN
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
 </mapper>

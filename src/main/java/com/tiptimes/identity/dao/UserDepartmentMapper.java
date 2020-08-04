@@ -13,9 +13,13 @@ public interface UserDepartmentMapper {
     // 根据部门id， 获取用户
     List<UserVo> selectUserByDepartmentId(Integer departmentId);
 
+    List<UserDepartment> selectUserDepartmentListByUserId(String userId);
+
     UserDepartment selectDetail(Integer id);
 
     int del(Integer id);
+
+    int delByUserId(String userId);
 
     int insert(UserDepartment userDepartment);
 

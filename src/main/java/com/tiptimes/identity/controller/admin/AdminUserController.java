@@ -6,17 +6,18 @@ import com.tiptimes.identity.common.*;
 import com.tiptimes.identity.dao.TpMainAdminUserMapper;
 import com.tiptimes.identity.entity.TpMainAdminUser;
 import com.tiptimes.identity.enums.DataStatus;
+import com.tiptimes.identity.qo.UserRequest;
 import com.tiptimes.identity.service.TpMainAdminUserService;
 import com.tiptimes.identity.utils.*;
 import com.tiptimes.identity.vo.TpMainAdminUserVO;
 import com.tiptimes.identity.vo.UserDetailsVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +61,7 @@ public class AdminUserController {
             return ResponseResult.error("人员用户名已存在，请确认");
         }
         tpMainAdminUser.setId(UUIDUtil.getUUID());
-        tpMainAdminUser.setLoginPassword(MD5Util.encryptByMD5(BASE64Util.getFromBase64(tpMainAdminUser.getLoginPassword())));
+        tpMainAdminUser.setLoginPassword(BCrypt.hashpw(BASE64Util.getFromBase64(tpMainAdminUser.getLoginPassword()), BCrypt.gensalt()));
         tpMainAdminUser.setCreateUser(CurrentUserUtil.getCurrentUserId());
         tpMainAdminUser.setCreateTime(new Date());
         tpMainAdminUser.setStatus(DataStatus.ENABLED.getCode());
@@ -102,14 +103,22 @@ public class AdminUserController {
     /**
      * 查询详细信息
      * @param request
-     * @param id
+     * @param userRequest
      * @return
      */
     @PostMapping(path = "/showDetail")
-    public ResponseResult showDetail(HttpServletRequest request, @RequestBody String id) {
-        TpMainAdminUser tpMainAdminUser = tpMainAdminUserMapper.selectByPrimaryKey(id);
-        // 因密码加密规则不可逆，所以回显到前台的为后台内置的虚拟密码
-        tpMainAdminUser.setLoginPassword(Constants.VIRTUAL_PASSWORD);
+    public ResponseResult showDetail(HttpServletRequest request, @RequestBody UserRequest userRequest) {
+        //TpMainAdminUser tpMainAdminUser = tpMainAdminUserMapper.selectByPrimaryKey(id);
+        AdminUserParam adminUserParam = new AdminUserParam();
+        adminUserParam.setId(userRequest.getUserId());
+        adminUserParam.setUserType(userRequest.getUserType());
+        List<TpMainAdminUserVO> list = tpMainAdminUserMapper.selectList(adminUserParam);
+        TpMainAdminUserVO tpMainAdminUser = null;
+        if (list.size() > 0) {
+            tpMainAdminUser = list.get(0);
+            // 因密码加密规则不可逆，所以回显到前台的为后台内置的虚拟密码
+            tpMainAdminUser.setLoginPassword(Constants.VIRTUAL_PASSWORD);
+        }
         return ResponseResult.successWithData(tpMainAdminUser);
     }
 
@@ -247,4 +256,25 @@ public class AdminUserController {
             return ResponseResult.error(ErrorConstants.UPDATE_ERROR);
         }
     }
+
+    // 批量离职
+    @RequestMapping(value = "/updateUserLeave", method = RequestMethod.POST)
+    public ResponseResult updateUserLeave(@RequestBody String[] id){
+        int num = 0;
+        if (id.length > 0) {
+            num = tpMainAdminUserService.updateUserLeave(id);
+        }
+        return ResponseResult.successWithData(num);
+    }
+
+    // 批量还原
+    @RequestMapping(value = "/updateUserUnLeave", method = RequestMethod.POST)
+    public ResponseResult updateUserUnLeave(@RequestBody String[] id){
+        int num = 0;
+        if (id.length > 0) {
+            num = tpMainAdminUserService.updateUserUnLeave(id);
+        }
+        return ResponseResult.successWithData(num);
+    }
+
 }

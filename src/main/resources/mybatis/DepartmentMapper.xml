@@ -46,6 +46,9 @@
     <if test="departmentName != null and departmentName != ''">
       AND d.name LIKE CONCAT('%',#{departmentName},'%')
     </if>
+    <if test="departmentId != null and departmentId != ''">
+      AND d.parent_id = #{departmentId}
+    </if>
   </select>
 
   <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">

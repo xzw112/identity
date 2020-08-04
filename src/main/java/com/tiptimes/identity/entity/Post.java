@@ -30,4 +30,6 @@ public class Post implements Serializable {
 
     private String updateUser;
 
+    private Integer departmentId;
+
 }

@@ -61,6 +61,8 @@ public class UserDetailsVo implements UserDetails, Serializable {
 
     private String headerUrl; // 头像
 
+    private String groupId;
+
 //    private List<String> authorities; // 权限
 //
 //    private List<OauthClientDetails> clientList; //客户端信息

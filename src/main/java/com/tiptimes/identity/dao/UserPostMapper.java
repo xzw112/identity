@@ -20,4 +20,6 @@ public interface UserPostMapper {
     int updateById(UserPost userPost);
 
     int del(Integer id);
+
+    int delByUserId(String userId);
 }

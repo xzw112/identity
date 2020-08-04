@@ -9,7 +9,7 @@ $(function () {
     if (clientId != null && clientId != '') {
         $("#appDiv").show();
         $.ajax({
-            url: baseUrl + '/client/getClientDetail?clientId=' + clientId,
+            url: baseUrl + '/customer/client/getClientDetail?clientId=' + clientId,
             async: false,
             type: 'POST',
             contentType: "application/json",
@@ -51,11 +51,11 @@ $("#save_btn").click(function () {
     data['status'] = status;
     var url = '';
     if (clientId == '' || clientId == null) {
-        url = '/client/add'
+        url = '/customer/client/add'
     }
     if (clientId != null && clientId != '') {
         data['clientId'] = clientId;
-        url = '/client/edit'
+        url = '/customer/client/edit'
     }
     $.ajax({
         url: baseUrl + url,

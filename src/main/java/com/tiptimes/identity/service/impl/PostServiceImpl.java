@@ -7,6 +7,7 @@ import com.tiptimes.identity.dao.PostMapper;
 import com.tiptimes.identity.entity.Post;
 import com.tiptimes.identity.qo.PostRequest;
 import com.tiptimes.identity.service.PostService;
+import com.tiptimes.identity.vo.PostVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,11 @@ public class PostServiceImpl implements PostService {
     private PostMapper postMapper;
 
     @Override
-    public PageResult<Post> selectPostList(PostRequest postRequest) {
+    public PageResult<PostVo> selectPostList(PostRequest postRequest) {
         PageHelper.startPage(postRequest.getPageNumber(), postRequest.getPageSize());
-        List<Post> list = postMapper.selectPostList(postRequest);
-        PageInfo<Post> pageInfo = new PageInfo<>(list);
-        PageResult<Post> result = new PageResult<>();
+        List<PostVo> list = postMapper.selectPostList(postRequest);
+        PageInfo<PostVo> pageInfo = new PageInfo<>(list);
+        PageResult<PostVo> result = new PageResult<>();
         result.setTotal(pageInfo.getTotal());
         result.setRows(list);
         return result;

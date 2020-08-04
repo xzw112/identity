@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
 
-    <th:block th:include="include :: header('人员管理')" />
+    <th:block th:include="include :: header('人员管理')"/>
 
     <style>
         .example-modal .modal {
@@ -22,6 +22,18 @@
         .modal {
             overflow: auto !important;
         }
+
+        .search-in {
+            width: 200px !important;
+        }
+
+        .search-btn {
+            width: auto !important;
+        }
+
+        .fl {
+            float: left;
+        }
     </style>
 </head>
 <body class="modal-open" style="overflow: hidden">
@@ -29,53 +41,186 @@
     <div class="content-wrapper">
         <section class="content">
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-3">
                     <div class="box">
+                        <div class="box-header">
+                            <form id="search">
+                                <input type="search" placeholder="搜索（回车搜索）" class="form-control" id="enter"/>
+                            </form>
+                        </div>
                         <div class="box-body">
-                            <div class="margin">
-                                <div class="btn-group" shiro:hasPermission="adminUser_add">
-                                    <button type="button" class="btn btn-sm btn-primary pull-left m-t-n-xs"
-                                            style="margin-left:10px" onclick="addAdminUser();">新建
-                                    </button>
-                                </div>
-                                <div class="btn-group" shiro:hasPermission="adminUser_edit">
-                                    <button type="button" class="btn btn-sm btn-info pull-left m-t-n-xs"
-                                            style="margin-left:10px" onclick="editAdminUser();">编辑
-                                    </button>
-                                </div>
-                                <div class="btn-group" shiro:hasPermission="adminUser_del">
-                                    <button type="button" id="del" class="btn btn-sm btn-danger pull-left m-t-n-xs"
-                                            style="margin-left:10px" onclick="delAdminUser();">删除
-                                    </button>
-                                </div>
-                                <div class="btn-group" shiro:hasPermission="adminUser_enable">
-                                    <button type="button" id="enable" class="btn btn-sm btn-success pull-left m-t-n-xs"
-                                            style="margin-left:10px" onclick="enableAdminUser();">启用
-                                    </button>
-                                </div>
-                                <div class="btn-group" shiro:hasPermission="adminUser_disable">
-                                    <button type="button" id="disable" class="btn btn-sm btn-warning pull-left m-t-n-xs"
-                                            style="margin-left:10px" onclick="disableAdminUser();">禁用
-                                    </button>
-                                </div>
+                            <div class="ibox-content">
+                                <ul id='treeDemo' style="padding-left: 0"></ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-body">
-                            <div class="example-wrap" style="position: relative;">
-                                <div class="example">
-                                    <div class="hidden-xs" id="exampleToolbar" role="group">
-                                        <form id="search_form">
 
-                                        </form>
+                <div class="col-xs-9">
+                    <ul class="tag" id="tabChange">
+                        <li class="active">人员账户</li>
+                        <li>离职账户</li>
+                    </ul>
+                    <div class="part">
+                        <div class="item">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="box">
+                                        <div class="box-body">
+                                            <div class="margin">
+                                                <div class="btn-group" shiro:hasPermission="adminUser_add">
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-primary pull-left m-t-n-xs"
+                                                            style="margin-left:10px" onclick="addAdminUser();">新建
+                                                    </button>
+                                                </div>
+                                                <div class="btn-group" shiro:hasPermission="adminUser_edit">
+                                                    <button type="button" class="btn btn-sm btn-info pull-left m-t-n-xs"
+                                                            style="margin-left:10px" onclick="editAdminUser();">编辑
+                                                    </button>
+                                                </div>
+                                                <div class="btn-group" shiro:hasPermission="adminUser_del">
+                                                    <button type="button" id="del"
+                                                            class="btn btn-sm btn-danger pull-left m-t-n-xs"
+                                                            style="margin-left:10px" onclick="delAdminUser();">删除
+                                                    </button>
+                                                </div>
+                                                <div class="btn-group" shiro:hasPermission="adminUser_enable">
+                                                    <button type="button" id="enable"
+                                                            class="btn btn-sm btn-success pull-left m-t-n-xs"
+                                                            style="margin-left:10px" onclick="enableAdminUser();">启用
+                                                    </button>
+                                                </div>
+                                                <div class="btn-group" shiro:hasPermission="adminUser_disable">
+                                                    <button type="button" id="disable"
+                                                            class="btn btn-sm btn-warning pull-left m-t-n-xs"
+                                                            style="margin-left:10px" onclick="disableAdminUser();">禁用
+                                                    </button>
+                                                </div>
+                                                <div class="btn-group">
+                                                    <button type="button" id="leave"
+                                                            class="btn btn-sm btn-warning pull-left m-t-n-xs"
+                                                            style="margin-left:10px" onclick="leaveUser();">离职
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="margin">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control search-in mar16"
+                                                           id="searchUserName"
+                                                           placeholder="请输入名称进行搜索">
+                                                    <select id="searchUserType" class="form-control search-in mar16">
+                                                        <option value="">请选择人员性质</option>
+                                                        <option value="0">正式编</option>
+                                                        <option value="1">社会化</option>
+                                                    </select>
+                                                    <select id="searchUserPost" class="form-control search-in mar16">
+                                                        <option value="">请选择岗位</option>
+                                                    </select>
+                                                    <span class="input-group-btn fl search-btn mar16">
+                                                        <button class="btn btn-primary" type="button"
+                                                                id="searchBtn">搜索</button>
+                                                    </span>
+                                                    <div class="btn-group mar16 fl">
+                                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                            导入 <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#">导入文件</a></li>
+                                                            <li><a href="#">模板下载</a></li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="btn-group mar16 fl">
+                                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                            导出 <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#">勾选导出</a></li>
+                                                            <li><a href="#">全部导出</a></li>
+                                                            <li><a href="#">分页导出</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <table id="examplePagination" data-mobile-responsive="true"
-                                           data-icon-size="outline"></table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item" style="display: none">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="box">
+                                        <div class="box-body">
+                                            <div class="margin">
+                                                <div class="btn-group">
+                                                    <button type="button" id="unLeave"
+                                                            class="btn btn-sm btn-success pull-left m-t-n-xs"
+                                                            style="margin-left:10px" onclick="unLeaveUser();">还原
+                                                    </button>
+                                                </div>
+                                                <div class="btn-group">
+                                                    <button type="button" id="delLeaveUser"
+                                                            class="btn btn-sm btn-warning pull-left m-t-n-xs"
+                                                            style="margin-left:10px" onclick="delAdminUser();">删除
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="margin">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control search-in mar16"
+                                                           id="searchLeaveUserName"
+                                                           placeholder="请输入名称进行搜索">
+                                                    <select id="searchLeaveUserType" class="form-control search-in mar16">
+                                                        <option value="">请选择人员性质</option>
+                                                        <option value="0">正式编</option>
+                                                        <option value="1">社会化</option>
+                                                    </select>
+                                                    <span class="input-group-btn fl search-btn mar16">
+                                                        <button class="btn btn-primary" type="button"
+                                                                id="searchLeaveUserBtn">搜索</button>
+                                                    </span>
+                                                    <div class="btn-group mar16 fl">
+                                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                            导出 <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li><a href="#">勾选导出</a></li>
+                                                            <li><a href="#">全部导出</a></li>
+                                                            <li><a href="#">分页导出</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box">
+                                <div class="box-body">
+                                    <div class="example-wrap" style="position: relative;">
+                                        <div class="example">
+                                            <div class="hidden-xs" id="exampleToolbar" role="group">
+                                                <form id="search_form">
+
+                                                </form>
+                                            </div>
+                                            <table id="examplePagination" data-mobile-responsive="true"
+                                                   data-icon-size="outline"></table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -85,9 +230,12 @@
         </section>
     </div>
 </div>
+<input type="hidden" value="0" id="userType"/>
 
 <!--新增/修改modal-->
-<div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static">
+<div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     data-backdrop="static">
+    <input type="hidden" id="id"/>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -105,7 +253,24 @@
                     <div class="form-group">
                         <span class="text-danger">*</span>
                         <label for="loginPassword">登录密码:</label>
-                        <input id="loginPassword" type="password" class="form-control" maxlength="16" placeholder="请输入登录密码">
+                        <input id="loginPassword" type="password" class="form-control" maxlength="16"
+                               placeholder="请输入登录密码">
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="nature">人员性质:</label>
+                        <select id="nature" class="form-control">
+                            <option value="0">正式编</option>
+                            <option value="1">社会化</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="isLeave">在职状态:</label>
+                        <select id="isLeave" class="form-control">
+                            <option value="0">在职</option>
+                            <option value="1">离职</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <span class="text-danger">*</span>
@@ -118,6 +283,40 @@
                         <span class="text-danger">*</span>
                         <label for="userName">姓名:</label>
                         <input id="userName" type="text" class="form-control" maxlength="20" placeholder="请输入姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="selectDept">归属部门</label>
+                        <div>
+                            <input type="hidden" id="selectDeptIds">
+                            <input type="text" class="form-control" id="selectDept" onclick="toShowDepartment()"
+                                   readonly placeholder="请选择部门">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="selectDept">所属分组</label>
+                        <div>
+                            <input type="hidden" id="selectGroupIds">
+                            <input type="text" class="form-control" id="selectGroup" onclick="toShowGroupModal()"
+                                   readonly placeholder="请选择分组">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="postId">主岗:</label>
+                        <select id="postId" class="form-control">
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="deputyPostId">副岗:</label>
+                        <select id="deputyPostId" class="in selectpicker form-control" multiple>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sort">排序:</label>
+                        <input id="sort" type="text" class="form-control" maxlength="12" placeholder="请输入排序">
                     </div>
                     <div class="form-group">
                         <label for="userContact">联系方式:</label>
@@ -133,7 +332,8 @@
                     </div>
                     <div class="form-group">
                         <label for="remark">备注:</label>
-                        <textarea id="remark" class="form-control" rows="3" placeholder="请输入备注" maxlength="500"></textarea>
+                        <textarea id="remark" class="form-control" rows="3" placeholder="请输入备注"
+                                  maxlength="500"></textarea>
                     </div>
                 </form>
             </div>
@@ -145,8 +345,118 @@
     </div>
 </div>
 
-<th:block th:include="include :: del" />
-<th:block th:include="include :: footer" />
+<!--部门modal-->
+<div class="modal fade" id="modal-department-select">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">选择部门</h4>
+            </div>
+
+            <div class="modal-body">
+                <ul class="tag">
+                    <li class="active">部门分组</li>
+                </ul>
+                <div class="container">
+                    <div class="tag-item clf">
+                        <div class="tree-left fl">
+                            <div class="tree-bg">
+                                <input type="search" id="searchDepartment" placeholder="请输入">
+                            </div>
+
+                            <ul class="tree-box tree-box-ul" id="treePeople" style="height: 490px">
+                                <div class="row" id="departmentTree"></div>
+                                <li data-id="" onclick="selectPeople(event,this)">
+                                    <span class="people-name"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="fl transfer">
+                            <div class="transfer-but transfer-right">>></div>
+                            <div class="transfer-but transfer-left"><<</div>
+                        </div>
+                        <div class="fl tree-box ul-big" style="width: calc(100% - 780px)">
+                            <ul class="tree-box-ul" id="treeSelected">
+
+                            </ul>
+                        </div>
+                        <div class="fl transfer">
+                            <div class="transfer-but transfer-up">上</div>
+                            <div class="transfer-but transfer-down">下</div>
+                        </div>
+                    </div>
+                    <div class="tag-item">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="gain">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--组modal-->
+<div class="modal fade" id="modal-group-select">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">选择分组</h4>
+            </div>
+
+            <div class="modal-body">
+                <ul class="tag">
+                    <li class="active">部门分组</li>
+                </ul>
+                <div class="container">
+                    <div class="tag-item clf">
+                        <div class="tree-left fl">
+                            <div class="tree-bg">
+                                <input type="search" id="searchGroup" placeholder="请输入">
+                            </div>
+
+                            <ul class="tree-box tree-box-ul" id="treeGroup" style="height: 490px">
+                                <div class="row" id="groupTree"></div>
+                                <li data-id="" onclick="selectPeople(event,this)">
+                                    <span class="people-name"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="fl transfer">
+                            <div class="transfer-but transfer-right-group">>></div>
+                            <div class="transfer-but transfer-left-group"><<</div>
+                        </div>
+                        <div class="fl tree-box ul-big" style="width: calc(100% - 780px)">
+                            <ul class="tree-box-ul" id="treeGroupSelected">
+
+                            </ul>
+                        </div>
+                        <div class="fl transfer">
+                            <div class="transfer-but transfer-up">上</div>
+                            <div class="transfer-but transfer-down">下</div>
+                        </div>
+                    </div>
+                    <div class="tag-item">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="gainGroup">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: del"/>
+<th:block th:include="include :: footer"/>
 <!--自定义js-->
 <script th:src="@{/js/adminUser/adminUser_index.js}"></script>
 </body>

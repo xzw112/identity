@@ -10,5 +10,6 @@ public class UserPost implements Serializable {
 
     private Integer postId;
 
-    private Integer userId;
+    private String userId;
+
 }

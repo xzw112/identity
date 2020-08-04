@@ -1,10 +1,15 @@
+var departmentId = '';
+var selectArr = new Array();
+
 $(function () {
-    initSelect();
-    initDepartmentSelect();
-    initUser();
+    // 初始化分组数据
     initGroupData();
+    // 初始化部门数据
     initDepartmentData();
+    // 初始化岗位数据
     initPostData();
+    // 初始部门树
+    initTree();
 });
 // 初始化组数据
 function initGroupData() {
@@ -13,7 +18,7 @@ function initGroupData() {
     $("#examplePagination").bootstrapTable({
         method: "POST", // 使用get请求到服务器获取数据
         contentType: "application/json;charset=UTF-8",
-        url: "group/getGroupList", // 获取数据的地址
+        url: baseUrl + "/customer/group/getGroupList", // 获取数据的地址
         pagination: true, // 启动分页
         cache: true,
         maintainSelected: true,
@@ -37,6 +42,13 @@ function initGroupData() {
             formatter: function (value, row, index) {
                 return index + 1;
             }
+        },{
+            field: 'departmentId',
+            title: 'departmentId',
+            visible: false
+        },{
+            field: 'departmentName',
+            title: '所属部门',
         },{
             field: 'groupName',
             title: '组名称'
@@ -84,30 +96,62 @@ function initGroupData() {
             data['pageNumber'] = params.pageNumber;
             data['pageSize'] = params.pageSize;
             data['groupName'] = $("#searchText").val();
+            data['departmentId'] = departmentId;
             return JSON.stringify(data);
         }
     });
 }
 
-function initSelect() {
+/**
+ * 加载单位树
+ * @returns
+ */
+function initTree() {
     var data = {};
-    data['pageSize'] = '1000000';
-    data['pageNumber'] = 1;
+    data['status'] = 0;
     $.ajax({
-        url: baseUrl + '/group/getGroupList',
-        async: false,
-        type: 'POST',
+        url: baseUrl + '/customer/department/getDepartmentTreeList',
+        async: true,
+        type: "POST",
         data: JSON.stringify(data),
         contentType: "application/json",
-        success: function (result) {
-            var str = '<option value="">--请选择--</option>';
-            for (var i = 0; i < result.rows.length; i++) {
-                var entity = result.rows[i];
-                str += '<option value="'+entity.id+'">'+entity.groupName+'</option>';
+        success: function (res) {
+            var data = res.data;
+            if (data.length > 0) {
+                $('#treeDemo').data('jstree', false).empty();
+                $("#treeDemo").jstree({
+                    'core': {
+                        "check_callback": true,
+                        'data': data
+                    },
+                    "plugins": ["search"],
+                    "checkbox": {
+                        "whole_node": true,
+                        "tie_selection": true
+                    }
+                });
+                // 展开节点
+                $("#treeDemo").on("loaded.jstree", function (event, data) {
+                    data.instance.open_all(); //opens all nodes in the container
+                });
+                $('#treeDemo').on("changed.jstree", function (e, data) {
+                    jsTreeOnClick(data);
+                });
             }
-            $("#parentGroup").html(str);
         }
     });
+}
+
+/**
+ * 树点击事件
+ * @param data
+ */
+function jsTreeOnClick(data) {
+    var node = data.node.original;
+    departmentId = node.id;
+    initGroupData();
+    initDepartmentData();
+    initPostData();
 }
 
 // 自定义方法，添加操作按钮
@@ -150,6 +194,10 @@ $("#saveBtn").click(function () {
 
 // 编辑
 function edit(row) {
+    $("#selectParentsGroupIds").val(row.parentId);
+    $("#selectParentsGroups").val(row.groupParentName);
+    $("#selectDeptIds1").val(row.departmentId);
+    $("#selectDept1").val(row.departmentName);
     $("#groupId").val(row.id);
     $("#parentGroup").val(row.parentId);
     $("#groupName").val(row.groupName);
@@ -165,6 +213,10 @@ function edit(row) {
 
 // 详情
 function detail(row) {
+    $("#selectParentsGroupIds").val(row.parentId);
+    $("#selectParentsGroups").val(row.groupParentName);
+    $("#selectDeptIds1").val(row.departmentId);
+    $("#selectDept1").val(row.departmentName);
     $("#groupId").val(row.id);
     $("#parentGroup").val(row.parentId);
     $("#groupName").val(row.groupName);
@@ -181,7 +233,7 @@ function detail(row) {
 // 添加、编辑组
 function addGroup() {
     var id = $("#groupId").val();
-    var parentVal = $("#parentGroup").val();
+    var parentVal = $("#selectParentsGroupIds").val();
     if (parentVal == null || parentVal == '') {
         parentVal = 0;
     }
@@ -189,16 +241,18 @@ function addGroup() {
     var groupName = $("#groupName").val();
     var sort = $("#sort").val();
     var status = stateVal;
+    var departmentId = $("#selectParentsGroupIds").val();
     var data = {};
+    data['departmentId'] = departmentId;
     data['parentId'] = parentId;
     data['groupName'] = groupName;
     data['sort'] = sort;
     data['status'] = status;
     var url = '';
     if (id == null || id == '') {
-        url = "/group/add";
+        url = "/customer/group/add";
     } else {
-        url = "/group/edit";
+        url = "/customer/group/edit";
         data['id'] = id;
     }
     $.ajax({
@@ -217,11 +271,9 @@ function addGroup() {
 
 // 删除组
 function delGroup(id) {
-    alert(111)
-    alert(id);
     if (id != null && id != '') {
         $.ajax({
-            url: baseUrl + "/group/del?id=" + id,
+            url: baseUrl + "/customer/group/del?id=" + id,
             async: false,
             type: 'POST',
             contentType: "application/json",
@@ -233,6 +285,68 @@ function delGroup(id) {
     }
 }
 
+/**
+ * 组展示
+ */
+var selectGroupArr = [];
+function toShowGroupModal() {
+    selectGroupArr = [];
+    var selectDeptIds = $("#selectParentsGroupIds").val();
+    var selectDeptName = $("#selectParentsGroups").val();
+
+    if (selectDeptIds != '' && selectDeptName != '') {
+        var ids = selectDeptIds.split(',');
+        var names = selectDeptName.split(',');
+        selectArr = [];
+        for (var i = 0; i < ids.length; i++) {
+            selectGroupArr.push({
+                name: names[i],
+                id: ids[i]
+            });
+        }
+    }
+    rewriteGroupSelect(selectGroupArr);
+    $("#treeGroup li").removeClass("active");
+    loadGroupSelectData();
+    $("#modal-group-select").modal("show");
+}
+
+var fistSelectGroupArr = new Array();
+$("#groupTree").on("changed.jstree", function (e, data) {
+    if (data.selected.length > 0) {
+        fistSelectGroupArr = [];
+        fistSelectGroupArr.push({
+            name: data.node.text,
+            id: data.selected
+        })
+    }
+});
+
+//添加选中人员
+$(".transfer-right-group").click(function () {
+    selectGroupArr = [];
+    selectGroupArr.push(fistSelectGroupArr[0]);
+    selectGroupArr = unique(selectGroupArr);
+    rewriteGroupSelect(selectGroupArr);
+    $("#treeGroup li").removeClass("active")
+});
+
+//获取选中人员name, id
+$("#gainGroup").click(function () {
+    var ids = [];
+    var name = [];
+    $.each($("#treeGroupSelected li"), function (index, item) {
+        ids.push($(item).attr('data-id'));
+        name.push($(item).text());
+    });
+    ids = ids.join(',');
+    name = name.join(',');
+    $("#selectParentsGroups").val(name);
+    $("#selectParentsGroupIds").val(ids);
+    $("#modal-group-select").modal("hide");
+});
+// =====================================组 结束============================================
+
 // =====================================部门 开始============================================
 // 初始化部门数据
 function initDepartmentData() {
@@ -241,7 +355,7 @@ function initDepartmentData() {
     $("#departmentTable").bootstrapTable({
         method: "POST", // 使用get请求到服务器获取数据
         contentType: "application/json;charset=UTF-8",
-        url: "department/getDepartmentList", // 获取数据的地址
+        url: baseUrl + "/customer/department/getDepartmentList", // 获取数据的地址
         pagination: true, // 启动分页
         cache: true,
         maintainSelected: true,
@@ -317,6 +431,7 @@ function initDepartmentData() {
             data['pageNumber'] = params.pageNumber;
             data['pageSize'] = params.pageSize;
             data['departmentName'] = $("#departmentSearchTxt").val();
+            data['departmentId'] = departmentId;
             return JSON.stringify(data);
         }
     });
@@ -337,28 +452,9 @@ function btnDepartment () {
     return html
 };
 
-function initDepartmentSelect() {
-    var data = {};
-    data['pageSize'] = '1000000';
-    data['pageNumber'] = 1;
-    $.ajax({
-        url: baseUrl + '/department/getDepartmentList',
-        async: false,
-        type: 'POST',
-        data: JSON.stringify(data),
-        contentType: "application/json",
-        success: function (result) {
-            var str = '<option value="">--请选择--</option>';
-            for (var i = 0; i < result.rows.length; i++) {
-                var entity = result.rows[i];
-                str += '<option value="'+entity.id+'">'+entity.name+'</option>';
-            }
-            $("#parentDepartment").html(str);
-        }
-    });
-}
   // 部门详情
 function departmentDetail(row,type) {
+    console.log(row)
     if (type == 'detail') {
         $("#saveDepartmentBtn").hide();
     }
@@ -366,6 +462,12 @@ function departmentDetail(row,type) {
         $("#saveDepartmentBtn").show();
         $("#departmentId").val(row.id)
     }
+    $("#selectDeptIds2").val(row.parentId);
+    $("#selectDept2").val(row.parentName);
+    $("#protectUserId").val(row.header);
+    $("#protectUser").val(row.headerName);
+    $("#protectUserId1").val(row.reduceHeader);
+    $("#protectUser1").val(row.reduceHeaderName);
     $("#parentDepartment").val(row.parentId);
     $("#departmentName").val(row.name);
     $("#departmentSort").val(row.sort);
@@ -377,29 +479,6 @@ function departmentDetail(row,type) {
         $("#departmentStatus").bootstrapSwitch('state', false);
     }
     $("#departmentModal").modal('show');
-}
-
-// 初始化人员数据
-function initUser(){
-    var data = {};
-    data['pageNumber'] = 1;
-    data['pageSize'] = 100000;
-    $.ajax({
-        url: baseUrl + "/admin/adminUser/getList",
-        async: false,
-        type: 'POST',
-        data: JSON.stringify(data),
-        contentType: "application/json",
-        success: function (result) {
-            var str = '<option value="">--请选择--</option>';
-            for (var i = 0; i < result.rows.length; i++) {
-                var entity = result.rows[i];
-                str += '<option value="'+entity.id+'">'+entity.userName+'</option>';
-            }
-            $("#header").html(str);
-            $("#reduceHeader").html(str);
-        }
-    });
 }
 
 // 打开部门模态框
@@ -418,7 +497,10 @@ $("#addDepartment").click(function () {
 // 保存部门
 $("#saveDepartmentBtn").click(function () {
     var id = $("#departmentId").val();
-    var parentDepartmentVal = $("#parentDepartment").val();
+    var parentDepartmentVal = '';
+    if (selectArr.length > 0) {
+        parentDepartmentVal = selectArr[0].id[0];
+    }
     if (parentDepartmentVal == null || parentDepartmentVal == '') {
         parentDepartmentVal = 0;
     }
@@ -426,8 +508,8 @@ $("#saveDepartmentBtn").click(function () {
     var departmentName = $("#departmentName").val();
     var departmentSort = $("#departmentSort").val();
     var status = departmentStateVal;
-    var header = $("#header").val();
-    var reduceHeader = $("#reduceHeader").val();
+    var header = $("#protectUserId").val(); // 主管
+    var reduceHeader = $("#protectUserId1").val(); // 分管
     var data = {};
     data['parentId'] = parentDepartment;
     data['name'] = departmentName;
@@ -437,9 +519,9 @@ $("#saveDepartmentBtn").click(function () {
     data['reduceHeader'] = reduceHeader;
     var url = '';
     if (id == null || id == '') {
-        url = "/department/add";
+        url = "/customer/department/add";
     } else {
-        url = "/department/edit";
+        url = "/customer/department/edit";
         data['id'] = id;
     }
     $.ajax({
@@ -451,6 +533,7 @@ $("#saveDepartmentBtn").click(function () {
         success: function (result) {
             narn('success', result.message);
             initDepartmentData();
+            initTree();
             $("#departmentModal").modal('hide');
         }
     });
@@ -463,7 +546,7 @@ $("#departmentSearch").click(function () {
 // 删除部门
 function delDepartment(id) {
     $.ajax({
-        url: baseUrl + '/department/del?id=' + id,
+        url: baseUrl + '/customer/department/del?id=' + id,
         async: false,
         type: 'POST',
         contentType: "application/json",
@@ -472,9 +555,207 @@ function delDepartment(id) {
             narn('success', result.message);
         }
     });
-
 }
 
+/**
+ * 部门展示
+ */
+var tabType = '';
+function toShowDepartmentModal(type) {
+    selectArr = [];
+    tabType = type;
+    var selectDeptIds = '';
+    var selectDeptName = '';
+    if (type == 1) {
+        selectDeptIds = $("#selectDeptIds1").val();
+        selectDeptName = $("#selectDept1").val();
+    }
+    if (type == 2) {
+        selectDeptIds = $("#selectDeptIds2").val();
+        selectDeptName = $("#selectDept2").val();
+    }
+    if (type == 3) {
+        selectDeptIds = $("#selectDeptIds3").val();
+        selectDeptName = $("#selectDept3").val();
+    }
+    if (selectDeptIds != '' && selectDeptName != '') {
+        var ids = selectDeptIds.split(',');
+        var names = selectDeptName.split(',');
+        selectArr = [];
+        for (var i = 0; i < ids.length; i++) {
+            selectArr.push({
+                name: names[i],
+                id: ids[i]
+            });
+        }
+    }
+    rewriteSelect(selectArr);
+    $("#treePeople li").removeClass("active");
+    if (type == 4) {
+        // 分组树状
+        loadGroupSelectData();
+    } else {
+        loadDepartmentSelectData();
+    }
+    $("#modal-department-select").modal("show");
+}
+
+var fistSelectArr = new Array();
+$("#departmentTree").on("changed.jstree", function (e, data) {
+    if (data.selected.length > 0) {
+        fistSelectArr = [];
+        fistSelectArr.push({
+            name: data.node.text,
+            id: data.selected
+        })
+    }
+});
+//添加选中人员
+$(".transfer-right").click(function () {
+    selectArr = [];
+    selectArr.push(fistSelectArr[0]);
+    selectArr = unique(selectArr);
+    rewriteSelect(selectArr);
+    $("#treePeople li").removeClass("active")
+});
+
+//获取选中人员name, id
+$("#gain").click(function () {
+    var ids = [];
+    var name = [];
+    $.each($("#treeSelected li"), function (index, item) {
+        ids.push($(item).attr('data-id'));
+        name.push($(item).text());
+    });
+    ids = ids.join(',');
+    name = name.join(',');
+    if (tabType == 1) {
+        $("#selectDept1").val(name);
+        $("#selectDeptIds1").val(ids);
+    }
+    if (tabType == 2) {
+        $("#selectDept2").val(name);
+        $("#selectDeptIds2").val(ids);
+    }
+    if (tabType == 3) {
+        $("#selectDept3").val(name);
+        $("#selectDeptIds3").val(ids);
+    }
+    if (tabType == 4) {
+        $("#selectParentsGroups").val(name);
+        $("#selectParentsGroupIds").val(ids);
+    }
+    $("#modal-department-select").modal("hide");
+});
+
+//添加选中人员
+var surePeopleArr = new Array(); // 保存选择的人员
+
+/**
+ * 显示人员选择模态框
+ *
+ */
+var headerType = '';
+function toShowPeople(type) {
+    headerType = type;
+    loadDepartmentPeopleData();
+    $("#sureSelected").html("");
+    surePeopleArr = [];
+    $("#modal-people-select").modal("show");
+}
+
+// 人员选择的时候
+var departmentSelectArr = new Array(); // 保存选择的部门信息
+var peopleArr = new Array(); // 保存部门下的人员
+$("#peopleSelect").on("changed.jstree", function (e, data) {
+    var str = "";
+    if (data.selected.length > 0) {
+        departmentSelectArr = [];
+        departmentSelectArr.push({
+            name: data.node.text,
+            id: data.selected
+        })
+    }
+    if (departmentSelectArr.length > 0) {
+        $.ajax({
+            url: baseUrl + '/customer/userDepartment/getUserByDepartmentId?departmentId=' + departmentSelectArr[0].id,
+            async: true,
+            method: 'POST',
+            contentType: 'application/json',
+            success: function (result) {
+                var users = result.data;
+                if (users.length > 0) {
+                    peopleArr = [];
+                    for (var i = 0; i < users.length; i++) {
+                        peopleArr.push({
+                            id: users[i].userId,
+                            name: users[i].userName
+                        });
+                    }
+                    peopleArr = unique(peopleArr);
+                    for (var i = 0; i < peopleArr.length; i++) {
+                        str += "<li data-id = '"+peopleArr[i].id+"' onclick='selectPeople(event, this)'><span class='people-name'>"+peopleArr[i].name+"</span></li>";
+                    }
+                }
+                $("#departmentTreePeople").html("");
+                $("#departmentTreePeople").append(str);
+            }
+        });
+    }
+});
+
+$(".transfer-right1").click(function () {
+    var liObj = $("#departmentTreePeople li");
+    var liObjPost = $("#postTreePeople li");
+    for (var i = 0; i < liObj.length; i++) {
+        if ($(liObj[i]).hasClass("active")) {
+            surePeopleArr.push({
+                name: $(liObj[i]).find(".people-name").text(),
+                id: $(liObj[i]).attr("data-id")
+            })
+        }
+    }
+    for (var i = 0; i < liObjPost.length; i++) {
+        if ($(liObjPost[i]).hasClass("active")) {
+            surePeopleArr.push({
+                name: $(liObjPost[i]).find(".people-name").text(),
+                id: $(liObjPost[i]).attr("data-id")
+            })
+        }
+    }
+    surePeopleArr = unique(surePeopleArr);
+    rewriteSelect1(surePeopleArr);
+    $("#departmentTreePeople li").removeClass("active");
+    $("#postTreePeople li").removeClass("active");
+});
+
+//重写选中列表
+function rewriteSelect1(arr) {
+    $("#sureSelected").empty();
+    $.each(arr, function (index, item) {
+        $("#sureSelected").append("<li data-id='" + item.id + "' onclick='selectPeople(event,this)' ><span class='people-name'>" + item.name + "</span></li>")
+    })
+}
+
+$("#surePeopleSelect").click(function () {
+    var ids = [];
+    var name = [];
+    $.each($("#sureSelected li"), function (index, item) {
+        ids.push($(item).attr('data-id'));
+        name.push($(item).text());
+    });
+    ids = ids.join(',');
+    name = name.join(',');
+    if (headerType == 1) {
+        $("#protectUser").val(name);
+        $("#protectUserId").val(ids);
+    }
+    if (headerType == 2) {
+        $("#protectUser1").val(name);
+        $("#protectUserId1").val(ids);
+    }
+    $("#modal-people-select").modal("hide");
+});
 
 // =====================================部门 结束============================================
 
@@ -487,7 +768,7 @@ function initPostData() {
     $("#postTable").bootstrapTable({
         method: "POST", // 使用get请求到服务器获取数据
         contentType: "application/json;charset=UTF-8",
-        url: "post/getPostList", // 获取数据的地址
+        url: baseUrl + "/customer/post/getPostList", // 获取数据的地址
         pagination: true, // 启动分页
         cache: true,
         maintainSelected: true,
@@ -511,6 +792,13 @@ function initPostData() {
             formatter: function (value, row, index) {
                 return index + 1;
             }
+        },{
+            field: 'departmentId',
+            title: 'departmentId',
+            visible: false
+        },{
+            field: 'departmentName',
+            title: '归属部门',
         },{
             field: 'postName',
             title: '岗位名称'
@@ -560,6 +848,7 @@ function initPostData() {
             data['pageNumber'] = params.pageNumber;
             data['pageSize'] = params.pageSize;
             data['postName'] = $("#postSearchText").val();
+            data['departmentId'] = departmentId;
             return JSON.stringify(data);
         }
     });
@@ -598,19 +887,21 @@ $("#savePostBtn").click(function () {
     var postCode = $("#postCode").val();
     var postSort = $("#postSort").val();
     var postDec = $("#postDec").val();
+    var departmentId = $("#selectDeptIds3").val();
     var data = {};
     data['postName'] = postName;
     data['postCode'] = postCode;
     data['postDec'] = postDec;
     data['status'] = postStateVal;
     data['sort'] = postSort;
+    data['departmentId'] = departmentId;
     var url = '';
     if (postId == null || postId == '') {
-        url = '/post/add';
+        url = '/customer/post/add';
     }
     if (postId != null && postId != '') {
         data['id'] = postId;
-        url = '/post/edit';
+        url = '/customer/post/edit';
     }
     $.ajax({
         url: baseUrl + url,
@@ -634,6 +925,8 @@ function postDetail(row, type) {
     if (type == 'detail') {
         $("#savePostBtn").hide();
     }
+    $("#selectDeptIds3").val(row.departmentId);
+    $("#selectDept3").val(row.departmentName);
     $("#postId").val(row.id);
     $("#postName").val(row.postName);
     $("#postCode").val(row.postCode);
@@ -650,7 +943,7 @@ function postDetail(row, type) {
 function postDel(id) {
     if (id != null && id != '') {
         $.ajax({
-            url: baseUrl + '/post/del?id=' + id,
+            url: baseUrl + '/customer/post/del?id=' + id,
             async: false,
             type: 'POST',
             contentType: "application/json",
@@ -668,3 +961,135 @@ $("#postSearch").click(function () {
 });
 
 // =====================================岗位 结束============================================
+
+/**
+ * 加载部门数据 getGroupTreeList
+ */
+
+function loadDepartmentSelectData() {
+    $.ajax({
+        url: baseUrl + '/customer/department/getDepartmentTreeList',
+        method: 'POST',
+        contentType: 'application/json',
+        async: false,
+        success: function (result) {
+            var departments = result.data;
+            if (departments.length > 0) {
+                $("#departmentTree").jstree({
+                    'plugins': ["search", "themes", "types", "line"],
+                    'types': {
+                        'default': {
+                            'icon': true
+                        },
+                    },
+                    "checkbox": {
+                        tie_selection: true,
+                        keep_selected_style: true,
+                        whole_node: true
+                    },
+                    'core': {
+                        'data': departments,
+                        'themes': {
+                            "icons": true,	//默认图标
+                            "theme": "classic",
+                            "dots": true,
+                            "stripes": true,	//增加条纹
+                        },	//关闭文件夹样式
+                        'dblclick_toggle': true,   //允许tree的双击展开,默认是true
+                        "multiple": false, // 单选
+                        "check_callback": true
+                    }
+                });
+                $('#departmentTree').jstree(true).refresh();
+            }
+        }
+    });
+}
+
+/**
+ * 加载分组数据 getGroupTreeList
+ */
+
+function loadGroupSelectData() {
+    $.ajax({
+        url: baseUrl + '/customer/group/getGroupTreeList',
+        method: 'POST',
+        contentType: 'application/json',
+        async: false,
+        success: function (result) {
+            var groups = result.data;
+            if (groups.length > 0) {
+                $("#groupTree").jstree({
+                    'plugins': ["search", "themes", "types", "line"],
+                    'types': {
+                        'default': {
+                            'icon': true
+                        },
+                    },
+                    "checkbox": {
+                        tie_selection: true,
+                        keep_selected_style: true,
+                        whole_node: true
+                    },
+                    'core': {
+                        'data': groups,
+                        'themes': {
+                            "icons": true,	//默认图标
+                            "theme": "classic",
+                            "dots": true,
+                            "stripes": true,	//增加条纹
+                        },	//关闭文件夹样式
+                        'dblclick_toggle': true,   //允许tree的双击展开,默认是true
+                        "multiple": false, // 单选
+                        "check_callback": true
+                    }
+                });
+                $('#groupTree').jstree(true).refresh();
+            }
+        }
+    });
+}
+
+/**
+ * 加载部门---选择人
+ */
+function loadDepartmentPeopleData() {
+    $.ajax({
+        url: baseUrl + '/customer/department/getDepartmentTreeList',
+        method: 'POST',
+        contentType: 'application/json',
+        async: false,
+        success: function (result) {
+            var departments = result.data;
+            if (departments.length > 0) {
+                $("#peopleSelect").jstree({
+                    'plugins':["search","themes","types","line"],
+                    'types':{
+                        'default':{
+                            'icon': true
+                        },
+                    },
+                    "checkbox":{
+                        tie_selection:true,
+                        keep_selected_style: true,
+                        whole_node: true
+                    },
+                    'core': {
+                        'data': departments,
+                        'themes':{
+                            "icons":true,	//默认图标
+                            "theme": "classic",
+                            "dots": true,
+                            "stripes" : true,	//增加条纹
+                        },	//关闭文件夹样式
+                        'dblclick_toggle': true,   //允许tree的双击展开,默认是true
+                        "multiple" : false, // 单选
+                        "check_callback" : true
+                    }
+                })
+            }
+        }
+    });
+}
+
+

@@ -16,7 +16,7 @@ import java.util.List;
  * 用户部门
  */
 @RestController
-@RequestMapping("/userDepartment")
+@RequestMapping("/customer/userDepartment")
 public class UserDepartmentController {
 
     @Autowired

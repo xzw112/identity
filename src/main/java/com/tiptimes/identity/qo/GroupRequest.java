@@ -10,4 +10,6 @@ public class GroupRequest extends BaseReauest implements Serializable {
     private String groupName;
 
     private Integer groupId;
+
+    private Integer departmentId; // 部门id
 }

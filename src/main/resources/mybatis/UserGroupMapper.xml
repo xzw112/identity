@@ -32,9 +32,9 @@
     </select>
 
     <insert id="insert" parameterType="com.tiptimes.identity.entity.UserGroup">
-    insert into user_group (id, group_id, user_id
+    insert into user_group (group_id, user_id
       )
-    values (#{id,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
+    values (#{groupId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
       )
   </insert>
 
@@ -47,6 +47,11 @@
 
     <delete id="del" parameterType="java.lang.Integer">
         delete from user_group where id = #{id}
+    </delete>
+
+    <delete id="delByUserId" parameterType="java.lang.String">
+        delete from user_group
+    where user_id = #{userId,jdbcType=VARCHAR}
     </delete>
 
 </mapper>

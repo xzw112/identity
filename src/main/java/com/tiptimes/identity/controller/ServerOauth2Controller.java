@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @RestController
-@RequestMapping(value = "/server")
+@RequestMapping(value = "/customer/server")
 public class ServerOauth2Controller {
 
     @Autowired

@@ -20,4 +20,6 @@ public interface UserGroupMapper {
     int updateById(UserGroup userGroup);
 
     int del(Integer id);
+
+    int delByUserId(String userId);
 }

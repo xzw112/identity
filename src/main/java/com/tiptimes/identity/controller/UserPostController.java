@@ -17,7 +17,7 @@ import java.util.List;
  * 用户岗位
  */
 @RestController
-@RequestMapping("/userPost")
+@RequestMapping("/customer/userPost")
 public class UserPostController {
 
     @Autowired

@@ -53,4 +53,6 @@ public class ClientUserVo implements Serializable {
     private String department; // 部门
 
     private String headerUrl; // 头像
+
+    private String groupId;
 }

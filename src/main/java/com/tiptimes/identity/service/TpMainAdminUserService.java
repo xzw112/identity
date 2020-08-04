@@ -47,4 +47,11 @@ public interface TpMainAdminUserService {
      */
     int batchDel(String[] idArr);
 
+
+    // 批量离职
+    int updateUserLeave(String[] id);
+
+    // 批量还原
+    int updateUserUnLeave(String[] id);
+
 }

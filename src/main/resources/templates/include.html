@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="../static/css/bootstrap-select1.10.0.min.css">
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="header(title)">
     <meta charset="utf-8"/>
@@ -40,10 +41,10 @@
     <!-- select2 -->
     <link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}"/>
 
-    <link rel="stylesheet" th:href="@{/css/new.css}">
+    <link rel="stylesheet" th:href="@{/css/new.css}"/>
 
-    <link rel="stylesheet" th:href="@{/css/tab.css}">
-
+    <link rel="stylesheet" th:href="@{/css/tab.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select1.10.0.min.css}"/>
 
 </head>
 <body>
@@ -193,9 +194,13 @@
 
     <!--公共js-->
     <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/select.js}"></script>
 
     <!--公共业务相关js-->
     <script th:src="@{/js/public.js}"></script>
+
+    <script th:src="@{/js/bootstrap-select1.10.0.min.js}"></script>
+    <script th:src="@{/js/defaults-zh_CN.1.10.0.min.js}"></script>
 
     <!-- Page script -->
     <script>

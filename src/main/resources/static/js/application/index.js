@@ -10,7 +10,7 @@ function loadData() {
     $("#examplePagination").bootstrapTable({
         method: "POST", // 使用get请求到服务器获取数据
         contentType: "application/json;charset=UTF-8",
-        url: "client/getClientList", // 获取数据的地址
+        url: "/customer/client/getClientList", // 获取数据的地址
         pagination: true, // 启动分页
         cache: true,
         maintainSelected: true,
@@ -153,7 +153,7 @@ function del(id) {
         data['clientId'] = clientId;
         if (clientId.length > 0) {
             $.ajax({
-                url: baseUrl + "/client/del?clientId=" + clientId,
+                url: baseUrl + "/customer/client/del?clientId=" + clientId,
                 method: 'POST',
                 async: true,
                 contentType: 'application/json',

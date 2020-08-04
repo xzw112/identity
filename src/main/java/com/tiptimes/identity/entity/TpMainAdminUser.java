@@ -40,6 +40,20 @@ public class TpMainAdminUser {
 
     private Integer isAdmin;
 
-    private Integer sort;
+    private Integer isLeave; // 是否离职(0未离职 1已离职)
+
+    private Integer nature; // 人员性质(0正式编 1社会化)
+
+    private String post; // 岗位(主岗)
+
+    private String deputyPost; // 副岗
+
+    private Integer sort; // 排序
+
+    private String department; // 部门
+
+    private String headerUrl; // 头像
+
+    private String groupId; // 分组id
 
 }

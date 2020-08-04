@@ -7,6 +7,7 @@ import com.tiptimes.identity.entity.Post;
 import com.tiptimes.identity.qo.DepartmentRequest;
 import com.tiptimes.identity.qo.PostRequest;
 import com.tiptimes.identity.service.PostService;
+import com.tiptimes.identity.vo.PostVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * 岗位
  */
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/customer/post")
 public class PostController {
 
     @Autowired
@@ -31,7 +32,7 @@ public class PostController {
      */
     @RequestMapping(value = "/getPostList", method = RequestMethod.POST)
     public PageResult getPostList(@RequestBody PostRequest postRequest) {
-        PageResult<Post> list = postService.selectPostList(postRequest);
+        PageResult<PostVo> list = postService.selectPostList(postRequest);
         return list;
     }
 

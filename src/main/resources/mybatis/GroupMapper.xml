@@ -13,6 +13,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="update_user" jdbcType="TIMESTAMP" property="updateUser" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -20,18 +21,24 @@
     g.group_name groupName, g.sort sort,
     g.is_del isDel, g.status status,
     g.create_time createTime, g.update_time updateTime,
-    g.create_user createUser, g.update_user updateUser
+    g.create_user createUser, g.update_user updateUser,
+    g.department_id departmentId
   </sql>
 
   <select id="selectGroupList" parameterType="com.tiptimes.identity.qo.GroupRequest" resultType="com.tiptimes.identity.vo.GroupVo">
     SELECT
     <include refid="Base_Column_List"/>,
-    h.group_name groupParentName
+    h.group_name groupParentName,
+    d.name departmentName
     FROM tp_group g
     LEFT JOIN tp_group h on(h.id = g.parent_id)
+    LEFT JOIN department d ON(d.id = g.department_id)
     WHERE g.is_del = 0
     <if test="groupName != null and groupName != ''">
       AND g.group_name LIKE CONCAT('%',#{groupName},'%')
+    </if>
+    <if test="departmentId != null and departmentId != ''">
+      And g.department_id = #{departmentId}
     </if>
   </select>
 
@@ -45,11 +52,11 @@
   <insert id="insert" parameterType="com.tiptimes.identity.entity.Group">
     insert into tp_group (id, parent_id, group_name, sort,
       is_del, status, create_time, 
-      update_time, create_user, update_user
+      update_time, create_user, update_user, department_id
       )
     values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
       #{isDel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=TIMESTAMP}
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=TIMESTAMP}, #{departmentId}
       )
   </insert>
 
@@ -61,7 +68,8 @@
       sort = #{sort,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=TIMESTAMP}
+      update_user = #{updateUser,jdbcType=TIMESTAMP},
+      department_id = #{departmentId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
