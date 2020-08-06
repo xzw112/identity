@@ -1,9 +1,11 @@
-package com.tiptimes.identity.controller;
+package com.tiptimes.identity.controller.client;
 
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.UserDepartment;
 import com.tiptimes.identity.service.UserDepartmentService;
 import com.tiptimes.identity.vo.UserVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/customer/userDepartment")
+@Api(description = "用户部门")
 public class UserDepartmentController {
 
     @Autowired
@@ -28,6 +31,7 @@ public class UserDepartmentController {
      * @return
      */
     @RequestMapping(value = "/getUserByDepartmentId", method = RequestMethod.POST)
+    @ApiOperation(value = "根据部门id获取用户")
     public ResponseResult getUserByDepartmentId(Integer departmentId){
         List<UserVo> list = null;
         if (departmentId > 0) {
@@ -37,6 +41,7 @@ public class UserDepartmentController {
     }
 
     @RequestMapping(value = "/getDetail", method = RequestMethod.POST)
+    @ApiOperation(value = "详情", hidden = true)
     public ResponseResult getDetail(Integer id){
         UserDepartment userDepartment = null;
         if (id > 0) {
@@ -46,12 +51,14 @@ public class UserDepartmentController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @ApiOperation(value = "编辑", hidden = true)
     public ResponseResult edit(@RequestBody UserDepartment userDepartment){
         int num = userDepartmentService.updateById(userDepartment);
         return ResponseResult.successWithData(num);
     }
 
     @RequestMapping(value = "/del", method = RequestMethod.POST)
+    @ApiOperation(value = "删除", hidden = true)
     public ResponseResult del(Integer id) {
         int num = userDepartmentService.del(id);
         return ResponseResult.successWithData(num);

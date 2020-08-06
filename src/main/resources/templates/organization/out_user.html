@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('外部用户')"/>
+</head>
+<body>
+<div class="outter">
+    <div class="row">
+        <div class="top-nav col-md-12">
+            <span class="label_name">外部用户</span>
+            <div class="crumbs">
+                <span class="gray">主页</span> <i>&nbsp;/&nbsp;</i>
+                <span>组件</span> <i>&nbsp;/&nbsp;</i>
+                <span>导航</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="ap-search row">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" id="searchText" class="form-control" placeholder="请输入"
+                       aria-describedby="basic-addon2">
+                <span class="input-group-addon" id="basic-addon2">搜 索</span>&nbsp;
+                <span class="input-group-addon" id="clearSearch">清 空</span>
+            </div>
+        </div>
+        <div class="col-md-1 pull-right">
+            <button type="button" id="addOutUser" class="btn btn-default blue-btn">添加用户</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="examplePagination" data-mobile-responsive="true"
+                   data-icon-size="outline"></table>
+        </div>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <input type="hidden" id="groupId"/>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    模态框（Modal）标题
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <span class="text-danger">*</span>
+                    <label for="loginName">用户账号:</label>
+                    <input id="loginName" type="text" class="form-control" maxlength="20" placeholder="请输入用户账号">
+                </div>
+                <div class="form-group">
+                    <span class="text-danger">*</span>
+                    <label for="loginPassword">登录密码:</label>
+                    <input id="loginPassword" type="password" class="form-control" maxlength="16"
+                           placeholder="请输入登录密码">
+                </div>
+                <div class="form-group">
+                    <label for="nickName">昵称:</label>
+                    <input id="nickName" type="text" class="form-control" maxlength="20" placeholder="请输入昵称">
+                </div>
+                <div class="form-group">
+                    <span class="text-danger">*</span>
+                    <label for="sex">性别:</label>
+                    <select id="sex" class="form-control">
+                        <option value="1">男</option>
+                        <option value="0">女</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span class="text-danger">*</span>
+                    <label for="userOutType">用户类型:</label>
+                    <select id="userOutType" class="form-control">
+                        <option value="1">普通</option>
+                        <option value="2">学生</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="status">是否启用:</label>
+                    <input type="checkbox" id="status" name="my-checkbox" data-on-text="启用" data-off-text="不启用">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary" id="saveBtn">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<input type="hidden" id="sw_value" value="0"/>
+<input type="hidden" id="userId"/>
+
+<th:block th:include="include :: footer"/>
+<!--自定义js-->
+<script th:src="@{/js/organization/out_user.js}"></script>
+
+<script>
+    $("[name='my-checkbox']").bootstrapSwitch();
+    $("[name='my-checkbox']").on('switchChange.bootstrapSwitch', function (event, state) {
+        if (state) {
+            $("#sw_value").val(1)
+        }
+        if (!state) {
+            $("#sw_value").val(0)
+        }
+
+    });
+</script>
+</body>
+</html>

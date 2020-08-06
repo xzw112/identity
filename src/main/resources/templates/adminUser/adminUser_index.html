@@ -121,6 +121,10 @@
                                                         <button class="btn btn-primary" type="button"
                                                                 id="searchBtn">搜索</button>
                                                     </span>
+                                                    <span class="input-group-btn fl search-btn mar16">
+                                                        <button class="btn btn-primary" type="button"
+                                                                id="clearBtn">清空</button>
+                                                    </span>
                                                     <div class="btn-group mar16 fl">
                                                         <button type="button" class="btn btn-default dropdown-toggle"
                                                                 data-toggle="dropdown" aria-haspopup="true"
@@ -166,7 +170,7 @@
                                                 </div>
                                                 <div class="btn-group">
                                                     <button type="button" id="delLeaveUser"
-                                                            class="btn btn-sm btn-warning pull-left m-t-n-xs"
+                                                            class="btn btn-sm btn-danger pull-left m-t-n-xs"
                                                             style="margin-left:10px" onclick="delAdminUser();">删除
                                                     </button>
                                                 </div>
@@ -184,6 +188,10 @@
                                                     <span class="input-group-btn fl search-btn mar16">
                                                         <button class="btn btn-primary" type="button"
                                                                 id="searchLeaveUserBtn">搜索</button>
+                                                    </span>
+                                                    <span class="input-group-btn fl search-btn mar16">
+                                                        <button class="btn btn-primary" type="button"
+                                                                id="clearLeaveBtn">清空</button>
                                                     </span>
                                                     <div class="btn-group mar16 fl">
                                                         <button type="button" class="btn btn-default dropdown-toggle"
@@ -230,7 +238,7 @@
         </section>
     </div>
 </div>
-<input type="hidden" value="0" id="userType"/>
+<input type="hidden" value="0" id="userTabLeave"/>
 
 <!--新增/修改modal-->
 <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

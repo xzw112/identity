@@ -7,17 +7,22 @@ import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.dao.*;
 import com.tiptimes.identity.entity.*;
 import com.tiptimes.identity.enums.DataStatus;
+import com.tiptimes.identity.qo.OutUserRequest;
 import com.tiptimes.identity.service.TpMainAdminUserService;
-import com.tiptimes.identity.utils.DateUtil;
+import com.tiptimes.identity.utils.*;
 import com.tiptimes.identity.vo.ClientUserVo;
+import com.tiptimes.identity.vo.OutUserVo;
 import com.tiptimes.identity.vo.TpMainAdminUserVO;
 import com.tiptimes.identity.vo.UserDetailsVo;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 后台人员信息模块 Service层
@@ -53,6 +58,17 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
             }
         }
         PageResult<TpMainAdminUserVO> pageResult = new PageResult<>();
+        pageResult.setTotal(pageInfo.getTotal());
+        pageResult.setRows(list);
+        return pageResult;
+    }
+
+    @Override
+    public PageResult<OutUserVo> selectOutUserList(OutUserRequest outUserRequest) {
+        PageHelper.startPage(outUserRequest.getPageNumber(), outUserRequest.getPageSize());
+        List<OutUserVo> list = tpMainAdminUserMapper.selectOutUserList(outUserRequest);
+        PageInfo<OutUserVo> pageInfo = new PageInfo<>(list);
+        PageResult<OutUserVo> pageResult = new PageResult<>();
         pageResult.setTotal(pageInfo.getTotal());
         pageResult.setRows(list);
         return pageResult;
@@ -170,5 +186,38 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
     public int updateUserUnLeave(String[] id) {
         int num = tpMainAdminUserMapper.updateUserUnLeave(id);
         return num;
+    }
+
+    @Override
+    public int updateOutUser(OutUser outUser) {
+        if (StringUtils.isNotEmpty(outUser.getLoginPassword())) {
+            outUser.setLoginPassword(BCrypt.hashpw(BASE64Util.getFromBase64(outUser.getLoginPassword()), BCrypt.gensalt()));
+        }
+        outUser.setUpdateTime(new Date());
+        outUser.setUpdateUser(CurrentUserUtil.getCurrentUserId());
+        int num = tpMainAdminUserMapper.updateOutUser(outUser);
+        return num;
+    }
+
+    @Override
+    public int insertOutUser(OutUser outUser) {
+        outUser.setId(UUIDUtil.getUUID());
+        outUser.setLoginPassword(BCrypt.hashpw(BASE64Util.getFromBase64(outUser.getLoginPassword()), BCrypt.gensalt()));
+        outUser.setCreateTime(new Date());
+        outUser.setCreateUser(CurrentUserUtil.getCurrentUserId());
+        outUser.setIsDelete(0);
+        outUser.setStatus(0);
+        int num = tpMainAdminUserMapper.insertOutUser(outUser);
+        return num;
+    }
+
+    @Override
+    public int updateUserUse(String id) {
+        return tpMainAdminUserMapper.updateUserUse(id);
+    }
+
+    @Override
+    public int updateUserUnUse(String id) {
+        return tpMainAdminUserMapper.updateUserUnUse(id);
     }
 }

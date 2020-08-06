@@ -55,4 +55,6 @@ public class ClientUserVo implements Serializable {
     private String headerUrl; // 头像
 
     private String groupId;
+
+    private Integer userOutType; // 外部用户类型（1普通 2学生）--外部用户专用
 }

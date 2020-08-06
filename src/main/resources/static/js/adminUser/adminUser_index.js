@@ -18,10 +18,10 @@ $(".tag li").click(function () {
     $(this).addClass("active").siblings().removeClass("active");
     var tagactive = $(this).index();
     if (tagactive == 0) {
-        $("#userType").val(0);
+        $("#userTabLeave").val(0); // 设置未离职
     }
     if (tagactive == 1) {
-        $("#userType").val(1);
+        $("#userTabLeave").val(1); // 离职用户
     }
     $(".part .item").eq(tagactive).show().siblings().hide();
     initData();
@@ -246,12 +246,54 @@ function initData() {
             data['pageNumber'] = params.pageNumber;
             data['pageSize'] = params.pageSize;
             data['departmentId'] = departmentId;
-            data['userType'] = 1;
-            data['isLeave'] = $("#userType").val();
+            data['userType'] = 1; //用户类型（1.内部用户 2外部用户）
+            var isLeave = $("#userTabLeave").val(); // 是否离职
+            data['isLeave'] = isLeave;
+            if (isLeave == 1) { // tab为离职
+                var userName = $("#searchLeaveUserName").val();
+                var nature = $("#searchLeaveUserType").val();  // 人员性质
+                data['userName'] = userName;
+                data['nature'] = nature;
+            }
+            if (isLeave == 0) { // tab为未离职
+                var userName = $("#searchUserName").val();
+                var nature = $("#searchUserType").val(); // 人员性质
+                var post = $("#searchUserPost").val(); // 岗位(主岗)
+                data['userName'] = userName;
+                data['nature'] = nature;
+                data['post'] = post;
+            }
             return JSON.stringify(data);
         }
     });
 }
+
+// 搜索--未离职账户
+$("#searchBtn").click(function () {
+    initData();
+
+});
+
+// 搜索--未离职账户
+$("#searchLeaveUserBtn").click(function () {
+    initData();
+
+});
+
+// 清空--未离职账户
+$("#clearBtn").click(function () {
+    $("#searchUserName").val('');
+    $("#searchUserType").val(''); // 人员性质
+    $("#searchUserPost").val('');
+    initData();
+});
+
+// 清空--离职账户
+$("#clearLeaveBtn").click(function () {
+    $("#searchLeaveUserName").val('');
+    $("#searchLeaveUserType").val(''); // 人员性质
+    initData();
+});
 
 /**
  * 新建
@@ -282,8 +324,10 @@ function editAdminUser() {
     }
     var data = {};
     var id = selectIds[0].id;
+    var isLeave = $("#userTabLeave").val();
     data['userId'] = id;
     data['userType'] = 1;
+    data['isLeave'] = isLeave;
     $.ajax({
         type: "POST",
         url: baseUrl + "/admin/adminUser/showDetail",

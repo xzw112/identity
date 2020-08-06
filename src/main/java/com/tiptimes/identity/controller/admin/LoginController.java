@@ -6,6 +6,7 @@ import com.tiptimes.identity.dao.TpMainAdminUserMapper;
 import com.tiptimes.identity.entity.TpMainAdminUser;
 import com.tiptimes.identity.enums.DataStatus;
 import com.tiptimes.identity.utils.BASE64Util;
+import com.tiptimes.identity.vo.UserDetailsVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -67,10 +68,22 @@ public class LoginController {
         criteria.andEqualTo("status", DataStatus.ENABLED.getCode());
         criteria.andEqualTo("isDelete", DataStatus.NOT_DELETE.getCode());
         criteria.andEqualTo("loginName", username);
+        criteria.andEqualTo("userType", 1);
         List<TpMainAdminUser> list = tpMainAdminUserMapper.selectByExample(example);
-        subject.getSession().setAttribute("userInfo", list.get(0));
-        request.getSession().setAttribute("userId", list.get(0).getId());
-        map.put("code", 1);
+        if (list.size() > 0) {
+            subject.getSession().setAttribute("userInfo", list.get(0));
+            request.getSession().setAttribute("userId", list.get(0).getId());
+            map.put("code", 1);
+        } else {
+            UserDetailsVo  user = tpMainAdminUserMapper.selectUserByName(username);
+            if (user.getUserType() == 2) {
+                map.put("code", 0);
+                map.put("message", "该账号无权限登录");
+            } else {
+                map.put("code", 0);
+                map.put("message", "用户名密码错误");
+            }
+        }
         return map;
     }
 

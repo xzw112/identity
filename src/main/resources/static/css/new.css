@@ -152,6 +152,10 @@ html, body {
   margin-top: 3px;
 }
 
+.outter .new-form .form-item .form-cont .form-in .radio-inline {
+  padding-left: 0;
+}
+
 .outter .new-form .form-item .tip {
   color: #ccc;
 }
@@ -241,6 +245,150 @@ html, body {
 .outter .group-cont .group-page {
   margin-top: 10px;
   text-align: right;
+}
+
+.auth .auth-tl {
+  line-height: 40px;
+  border-bottom: 1px solid #eee;
+  font-size: 17px;
+}
+
+.auth .auth-cont {
+  background: #fff;
+}
+
+.auth .auth-tree-cont {
+  padding: 10px 10px 40px;
+}
+
+.auth .auth-tree-cont .new-table {
+  margin-top: 10px;
+}
+
+.auth .auth-tabs {
+  height: 40px;
+  line-height: 40px;
+  margin-top: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.auth .auth-tabs .auth-tab {
+  float: left;
+  padding: 0 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.auth .auth-tabs .auth-tab.active {
+  border-top: 1px solid #eee;
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+  border-radius: 3px;
+}
+
+.auth .auth-tabs .auth-tab.active::before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background-color: #fff;
+  position: absolute;
+  border-bottom: 1px solid #fff;
+  bottom: 1px;
+  left: 0;
+  z-index: 2;
+}
+
+.auth .auth-cont-cont {
+  margin-top: 20px;
+}
+
+.auth .auth-cont-cont .auth-account {
+  border: 1px solid #eee;
+  border-radius: 3px;
+}
+
+.auth .auth-cont-cont .auth-account .auth-tl {
+  padding: 0 10px;
+}
+
+.auth .auth-cont-cont .auth-account .auth-tl .num {
+  color: #1890FF;
+}
+
+.auth .auth-cont-cont .auth-account .search-tree {
+  border: 1px solid #eee;
+  border-radius: 3px;
+  height: 50px;
+  position: relative;
+  padding-right: 30px;
+  margin-top: 10px;
+}
+
+.auth .auth-cont-cont .auth-account .search-tree input {
+  border: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  outline: none;
+}
+
+.auth .auth-cont-cont .auth-account .search-tree .icon {
+  position: absolute;
+  top: 13px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.auth .auth-cont-cont .auth-account .auth-tree {
+  margin-top: 10px;
+}
+
+.auth .auth-cont-cont .auth-account .search-apply {
+  border: 1px solid #eee;
+  border-radius: 3px;
+  height: 50px;
+}
+
+.auth .auth-cont-cont .auth-account .search-apply input {
+  border: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  outline: none;
+}
+
+.auth .auth-cont-cont .auth-account .auth-apply {
+  padding: 10px 10px 40px;
+}
+
+.auth .checkbox-custom {
+  margin-bottom: 0;
+}
+
+.auth .checkbox-custom input[type="checkbox"]:checked + label:before {
+  background: #368FFE;
+  border: 1px solid #368FFE;
+}
+
+.auth .btns .btn {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 20px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  color: #666;
+  margin-top: 20px;
+  margin-right: 10px;
+}
+
+.auth .btns .btn.on {
+  background: #368FFE;
+  border: 1px solid #368FFE;
+  color: #fff;
 }
 
 .blue {
@@ -487,4 +635,7 @@ html, body {
   background-color: #007bff;
   color: #fff;
   border-radius: 0;
+}
+.jstree-default .jstree-closed>.jstree-ocl,.jstree-default .jstree-open>.jstree-ocl{
+  background-position:center center !important;
 }

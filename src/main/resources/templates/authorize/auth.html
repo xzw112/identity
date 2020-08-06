@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="include :: header('授权')"/>
+    </head>
+    <body>
+        <div class="outter auth" id="app">
+            <div class="row">
+                <div class="top-nav col-md-12">
+                    <span class="label_name">内部应用授权</span>
+                    <div class="crumbs">
+                        <span class="gray">主页</span> <i>&nbsp;/&nbsp;</i>
+                        <span>组件</span> <i>&nbsp;/&nbsp;</i>
+                        <span>导航</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row auth-cont">
+                <div class="col-md-12 auth-tl">应用授权</div>
+                <div class="auth-tabs col-md-12">
+                    <div class="auth-tab active" name="aa">按账户授权应用</div>
+                    <div class="auth-tab" name="ab">按应用授权账户</div>
+                </div>
+                <div class="auth-cont-cont col-md-12">
+                    <div class="row auth-part" forname="aa" >
+                        <div class="col-md-5">
+                            <div class="auth-account">
+                                <div class="auth-tl">账户 <span class="num">(262)</span></div>
+                                <div class="row auth-tree-cont">
+                                    <div class="col-md-6">
+                                        <div class="search-tree">
+                                            <input placeholder="请输入账户名或姓名进行搜索"/>
+                                            <img th:src="@{/images/search.png}" class="icon">
+                                        </div>
+                                        <div class="auth-tree" id="departmentTree1"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="new-table" id="exTable1">
+                                            <tr>
+                                                <th>账户名称</th>
+                                                <th>姓名</th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="auth-account">
+                                <div class="auth-tl">内部应用数 <span class="num">(7个)</span></div>
+                                <div class="row auth-apply">
+                                    <div class="col-md-12">
+                                        <div class="search-apply">
+                                            <input placeholder="请输入账户名或姓名进行搜索"/>
+                                        </div>
+                                        <table class="new-table" id="appTable1">
+
+                                        </table>
+                                        <div class="btns">
+                                            <a class="btn on">保存</a>
+                                            <a class="btn">重置</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row auth-part" forname="ab" style="display:none;">
+                        <div class="col-md-6">
+                            <div class="auth-account">
+                                <div class="auth-tl">内部应用数 <span class="num">(7个)</span></div>
+                                <div class="row auth-apply">
+                                    <div class="col-md-12">
+                                        <div class="search-apply">
+                                            <input placeholder="请输入账户名或姓名进行搜索"/>
+                                        </div>
+                                        <table class="new-table">
+                                            <tr>
+                                                <th>应用名称</th>
+                                                <th>应用ID</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="blue">协同办公系统</td>
+                                                <td class="blue">sanhisnkadugdadsalasdm</td>
+                                            </tr>
+                                            <tr>
+                                                <td>协同办公系统</td>
+                                                <td>sanhisnkadugdadsalasdm</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="auth-account">
+                                <div class="auth-tl">账户 <span class="num">(262)</span></div>
+                                <div class="row auth-tree-cont">
+                                    <div class="col-md-6">
+                                        <div class="search-tree">
+                                            <input placeholder="请输入账户名或姓名进行搜索"/>
+                                            <img th:src="@{/images/search.png}" class="icon">
+                                        </div>
+                                        <div class="auth-tree" id="departmentTree2"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="new-table">
+                                            <tr>
+                                                <th>
+                                                    <div class="form-check-all checkbox-inline checkbox-custom">
+                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option2">
+                                                        <label class="form-check-label" for="inlineCheckbox"></label>
+                                                    </div>
+                                                </th>
+                                                <th>账户名称</th>
+                                                <th>姓名</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check-item checkbox-inline checkbox-custom">
+                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2">
+                                                        <label class="form-check-label" for="inlineCheckbox1"></label>
+                                                    </div>
+                                                </td>
+                                                <td class="blue">TradeCode21</td>
+                                                <td class="blue">马欣伟</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-check-item checkbox-inline checkbox-custom">
+                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option2">
+                                                        <label class="form-check-label" for="inlineCheckbox1"></label>
+                                                    </div>
+                                                </td>
+                                                <td>TradeCode21</td>
+                                                <td>马欣伟</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="btns col-md-6">
+                                        <a class="btn on">保存</a>
+                                        <a class="btn">重置</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <th:block th:include="include :: footer"/>
+        <!--自定义js-->
+        <script th:src="@{/js/authorize/auth.js}"></script>
+
+        <script>
+            $(function () {  
+                $('.auth-tree').jstree({
+                    'core' : {
+                        'data' : [
+                            { 
+                                "text" : "根节点",
+                                "children" : [
+                                    { "text" : "子节点1" },
+                                    { "text" : "字节点2" }
+                                ]
+                            }
+                        ],
+                        "themes":{
+                            "icons":false,
+                        },
+                        // "check_callback" : true
+                        },
+                        // "checkbox" : {
+                        //     "keep_selected_style" : false
+                        // },
+                        "contextmenu":{
+                            select_node:false,
+                            show_at_node:true,
+                            items:{
+                                "新建设备":{  
+                                    "label":"新建菜单",  
+                                    "icon"				: "glyphicon glyphicon-plus",
+                                    "action":function(data){
+                                        var inst = $.jstree.reference(data.reference),
+                                        obj = inst.get_node(data.reference);
+                                        inst.create_node(obj, {}, "last", function (new_node) {
+                                            try {
+                                                new_node.text="新建设备";
+                                                inst.edit(new_node);
+                                            } catch (ex) {
+                                                setTimeout(function () { inst.edit(new_node); },0);
+                                            }
+                                        });
+                                    }  
+                                },
+                                "修改设备":{
+                                    "separator_before"	: false,
+                                    "separator_after"	: false,
+                                    "_disabled"			: false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
+                                    "label"				: "修改菜单",
+                                    "shortcut_label"	: 'F2',
+                                    "icon"				: "glyphicon glyphicon-leaf",
+                                    "action"			: function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                        obj = inst.get_node(data.reference);
+                                        inst.edit(obj);
+                                    }
+                                },
+                                "删除设备":{
+                                    "separator_before"	: false,
+                                    "icon"				: false,
+                                    "separator_after"	: false,
+                                    "_disabled"			: false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
+                                    "label"				: "删除菜单",
+                                    "icon"				:"glyphicon glyphicon-remove",
+                                    "action"			: function (data) {
+                                        var inst = $.jstree.reference(data.reference),
+                                            obj = inst.get_node(data.reference);
+                                        if(inst.is_selected(obj)) {
+                                            inst.delete_node(inst.get_selected());
+                                        }
+                                        else {
+                                            inst.delete_node(obj);
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        // "plugins" : [ "checkbox","contextmenu" ],
+                        "plugins" : ["contextmenu","search" ],
+                        // 'types': {
+                        //     'default': {
+                        //         'icon': ''
+                        //     },
+                        //     'html': {
+                        //         'icon': 'fa fa-file-code-o'
+                        //     },
+                        //     'svg': {
+                        //         'icon': 'fa fa-file-picture-o'
+                        //     },
+                        //     'css': {
+                        //         'icon': 'fa fa-file-code-o'
+                        //     },
+                        //     'img': {
+                        //         'icon': 'fa fa-file-image-o'
+                        //     },
+                        //     'js': {
+                        //         'icon': 'fa fa-file-text-o'
+                        //     }
+                        // }
+                    });
+                
+                //单个
+                $('.form-check-item input').change(function(){
+                    var lenth=$('.form-check-item').length;
+                    var len=$('.form-check-item input:checked').length;
+                    // console.log(lenth)
+                    // console.log(len)
+                    // console.log($(this).is(':checked'));
+                    if(lenth==len){
+                        console.log("==")
+                        $('.form-check-all input').prop("checked",true);
+                    }else{
+                        console.log("1=")
+                        $('.form-check-all input').prop("checked",false);
+                    }
+                })
+
+                //全选
+                $('.form-check-all input').change(function(){
+                    let boolean=$(this).is(':checked');
+                    // console.log(boolean)
+                    if(boolean){
+                        $('.form-check-item input').prop("checked",true);
+                    }else{
+                        $('.form-check-item input').prop("checked",false);
+                    }
+                })
+
+
+                //tab切换
+                $('.auth-tab').click(function(){
+                    var self=$(this);
+                    self.addClass('active').siblings().removeClass('active');
+                    var name=self.attr('name');
+                    var target=$('.auth-part[forname='+name+']');
+                    target.show().siblings().hide()
+                })
+            });
+        </script>
+    </body>
+</html>

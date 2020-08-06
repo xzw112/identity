@@ -23,6 +23,11 @@ public class UserClientController {
     @Autowired
     private RedisUtil redisUtil;
 
+    /**
+     * 获取登录人员的应用列表
+     * @param clientRequest
+     * @return
+     */
     @RequestMapping(value = "/getUserClientList", method = RequestMethod.POST)
     public ResponseResult getUserClientList(@RequestBody ClientRequest clientRequest){
         // 重置redis token的有效时间

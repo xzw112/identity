@@ -23,4 +23,13 @@ public class AdminUserParam extends BaseParam{
 
     @ApiModelProperty(value = "是否离职 0未离职 1已离职")
     private Integer isLeave; // 是否离职
+
+    @ApiModelProperty(value = "姓名")
+    private String userName;
+
+    @ApiModelProperty(value = "人员性质(0正式编 1社会化)")
+    private Integer nature;
+
+    @ApiModelProperty(value = "岗位（主岗）")
+    private Integer post;
 }

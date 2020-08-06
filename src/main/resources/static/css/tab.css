@@ -14,12 +14,12 @@
   margin-bottom: 20px;
 }
 
-.tag {
+.tag2 {
   display      : flex;
   border-bottom: 1px solid #ddd;
 }
 
-.tag li {
+.tag2 li {
   padding                : 10px 20px;
   list-style             : none;
   border-top-left-radius : 8px;
@@ -27,13 +27,13 @@
   cursor                 : pointer;
 }
 
-.tag li.active {
+.tag2 li.active {
   border          : 1px solid #ddd;
   border-bottom   : none;
   background-color: #f0f0f0;
 }
 
-.tag li:hover {
+.tag2 li:hover {
   background-color: #f0f0f0;
 
 }

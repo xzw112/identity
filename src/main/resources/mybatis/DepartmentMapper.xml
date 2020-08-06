@@ -62,7 +62,6 @@
     update department set is_del = 1 where id = #{id}
   </update>
 
-
   <insert id="insert" parameterType="com.tiptimes.identity.entity.Department">
     insert into department (parent_id, name,
       header, reduce_header, is_del,

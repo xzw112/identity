@@ -1,4 +1,4 @@
-package com.tiptimes.identity.controller;
+package com.tiptimes.identity.controller.client;
 
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.qo.SignOutRequest;

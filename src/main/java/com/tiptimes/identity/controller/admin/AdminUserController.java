@@ -4,11 +4,14 @@ import com.tiptimes.identity.annotation.SystemLog;
 import com.tiptimes.identity.bo.AdminUserParam;
 import com.tiptimes.identity.common.*;
 import com.tiptimes.identity.dao.TpMainAdminUserMapper;
+import com.tiptimes.identity.entity.OutUser;
 import com.tiptimes.identity.entity.TpMainAdminUser;
 import com.tiptimes.identity.enums.DataStatus;
+import com.tiptimes.identity.qo.OutUserRequest;
 import com.tiptimes.identity.qo.UserRequest;
 import com.tiptimes.identity.service.TpMainAdminUserService;
 import com.tiptimes.identity.utils.*;
+import com.tiptimes.identity.vo.OutUserVo;
 import com.tiptimes.identity.vo.TpMainAdminUserVO;
 import com.tiptimes.identity.vo.UserDetailsVo;
 import io.swagger.annotations.Api;
@@ -18,6 +21,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import tk.mybatis.mapper.entity.Example;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +50,16 @@ public class AdminUserController {
     @PostMapping("/getList")
     public PageResult<TpMainAdminUserVO> getList(@RequestBody AdminUserParam adminUserParam) {
         return tpMainAdminUserService.selectPageList(adminUserParam);
+    }
+
+    /**
+     * 获取外部用户列表
+     * @param outUserRequest
+     * @return
+     */
+    @PostMapping("/getOutUserList")
+    public PageResult<OutUserVo> getOutUserList(@RequestBody OutUserRequest outUserRequest) {
+        return tpMainAdminUserService.selectOutUserList(outUserRequest);
     }
 
     /**
@@ -112,6 +127,7 @@ public class AdminUserController {
         AdminUserParam adminUserParam = new AdminUserParam();
         adminUserParam.setId(userRequest.getUserId());
         adminUserParam.setUserType(userRequest.getUserType());
+        adminUserParam.setIsLeave(userRequest.getIsLeave());
         List<TpMainAdminUserVO> list = tpMainAdminUserMapper.selectList(adminUserParam);
         TpMainAdminUserVO tpMainAdminUser = null;
         if (list.size() > 0) {
@@ -173,6 +189,39 @@ public class AdminUserController {
         tpMainAdminUser.setId(id);
         tpMainAdminUser.setStatus(DataStatus.DISABLED.getCode());
         int result = tpMainAdminUserService.update(tpMainAdminUser);
+        if(result > 0){
+            return ResponseResult.success(ErrorConstants.DISABLE_OK);
+        }else{
+            return ResponseResult.error(ErrorConstants.DISABLE_ERROR);
+        }
+    }
+    /**
+     * 启用
+     * @param
+     * @param id
+     * @return
+     */
+    @PostMapping(path = "/updateUserUse")
+    @SystemLog(operateType = OperateTypeConstant.ENABLE, operateDetail = "启用人员", moduleName = "组织架构-人员管理")
+    public ResponseResult updateUserUse(@RequestParam String id) {
+        int result = tpMainAdminUserService.updateUserUse(id);
+        if(result > 0){
+            return ResponseResult.success(ErrorConstants.ENABLE_OK);
+        }else{
+            return ResponseResult.error(ErrorConstants.ENABLE_ERROR);
+        }
+    }
+
+    /**
+     * 禁用
+     * @param
+     * @param id
+     * @return
+     */
+    @PostMapping(path = "/updateUserUnUse")
+    @SystemLog(operateType = OperateTypeConstant.ENABLE, operateDetail = "禁用人员", moduleName = "组织架构-人员管理")
+    public ResponseResult updateUserUnUse(@RequestParam String id) {
+        int result = tpMainAdminUserService.updateUserUnUse(id);
         if(result > 0){
             return ResponseResult.success(ErrorConstants.DISABLE_OK);
         }else{
@@ -277,4 +326,34 @@ public class AdminUserController {
         return ResponseResult.successWithData(num);
     }
 
+    @RequestMapping(value = "/insertOutUser", method = RequestMethod.POST)
+    public ResponseResult insertOutUser(@RequestBody OutUser outUser){
+        TpMainAdminUser adminUser = new TpMainAdminUser();
+        adminUser.setLoginName(outUser.getLoginName());
+        boolean flag = checkAdminUserData(adminUser);
+        // 获取http请求
+        if (flag) {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            String ipAddr = IPUtil.getRealClientIpAddr(request);
+            outUser.setIpAddr(ipAddr);
+            int num = tpMainAdminUserService.insertOutUser(outUser);
+            return ResponseResult.successWithData(num);
+        } else {
+            return ResponseResult.error(0, "保存失败！账号已存在");
+        }
+    }
+
+    @RequestMapping(value = "/updateOutUser", method = RequestMethod.POST)
+    public ResponseResult updateOutUser(@RequestBody OutUser outUser){
+        TpMainAdminUser adminUser = new TpMainAdminUser();
+        adminUser.setId(outUser.getId());
+        adminUser.setLoginName(outUser.getLoginName());
+        boolean flag = checkAdminUserData(adminUser);
+        if (flag) {
+            int num = tpMainAdminUserService.updateOutUser(outUser);
+            return ResponseResult.successWithData(num);
+        } else {
+            return ResponseResult.error(0, "保存失败！账号已存在！");
+        }
+    }
 }

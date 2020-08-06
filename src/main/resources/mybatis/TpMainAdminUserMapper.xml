@@ -64,7 +64,7 @@
         FROM
         tp_main_admin_user u
         LEFT JOIN user_post up ON(up.user_id = u.id)
-        LEFT JOIN post p ON(p.id = up.post_id)
+        LEFT JOIN post p ON(p.id = u.post)
         LEFT JOIN user_department ud ON ( ud.user_id = u.id )
         LEFT JOIN department d ON ( d.id = ud.department_id )
         LEFT JOIN user_group ug ON (ug.user_id = u.id)
@@ -81,8 +81,49 @@
         <if test="departmentId != null and departmentId != ''">
             AND d.id = #{departmentId}
         </if>
+        <if test="userName != null and userName !=''">
+            AND u.user_name LIKE CONCAT('%',#{userName},'%')
+        </if>
+        <if test="nature != null and nature != ''">
+            AND u.nature = #{nature}
+        </if>
+        <if test="post != null and post != ''">
+            AND u.post = #{post}
+        </if>
         GROUP BY u.id
-        ORDER BY u.create_time DESC
+        ORDER BY u.sort DESC, u.create_time DESC
+    </select>
+
+    <!--查询外部用户-->
+    <select id="selectOutUserList" parameterType="com.tiptimes.identity.qo.OutUserRequest"
+            resultType="com.tiptimes.identity.vo.OutUserVo">
+        SELECT
+        u.id userId,
+        u.login_name loginName,
+        u.nick_name nickName,
+        u.sex sex,
+        u.create_time createTime,
+        u.ip_addr ipAddr,
+        u.status status,
+        u.user_out_type userOutType
+        FROM
+        tp_main_admin_user u
+        WHERE
+        u.is_delete = 0
+        AND
+        u.user_type = 2
+        <if test="userId != null and userId != ''">
+            AND u.id = #{userId}
+        </if>
+        <if test="searchText != null and searchText != ''">
+            AND
+            (
+            u.login_name LIKE CONCAT('%',#{searchText},'%')
+            OR
+            u.nick_name LIKE CONCAT('%',#{searchText},'%')
+            )
+        </if>
+        ORDER BY u.sort DESC, u.create_time DESC
     </select>
 
     <select id="selectUserByName" resultType="com.tiptimes.identity.vo.UserDetailsVo"
@@ -105,7 +146,8 @@
             u.sort AS sort,
             u.group_id AS groupId,
             u.department AS department,
-            u.header_url AS headerUrl
+            u.header_url AS headerUrl,
+            u.user_type AS userType
         FROM tp_main_admin_user u
         WHERE u.login_name = #{userName}
         AND status = 0
@@ -132,7 +174,8 @@
             u.sort AS sort,
             u.group_id AS groupId,
             u.department AS department,
-            u.header_url AS headerUrl
+            u.header_url AS headerUrl,
+            u.user_out_type AS userOutType
         FROM tp_main_admin_user u
         WHERE u.id = #{id}
         AND status = 0
@@ -158,5 +201,59 @@
             #{item}
         </foreach>
     </update>
+    <update id="updateUserUse" parameterType="java.lang.String">
+         UPDATE
+        tp_main_admin_user
+        SET status = 0
+        where id = #{id}
+    </update>
+    <update id="updateUserUnUse" parameterType="java.lang.String">
+         UPDATE
+        tp_main_admin_user
+        SET status = 1
+        where id = #{id}
+    </update>
+    <!--更新外部用户-->
+    <update id="updateOutUser" parameterType="com.tiptimes.identity.entity.OutUser">
+        update
+        tp_main_admin_user
+        set
+        login_name = #{loginName},
+        <if test="loginPassword != null and loginPassword != ''">
+            login_password = #{loginPassword},
+        </if>
+        user_name = #{userName},
+        nick_name = #{nickName},
+        sex = #{sex},
+        status = #{status},
+        update_time = #{updateTime},
+        update_user = #{updateUser},
+        user_out_type = #{userOutType}
+        where id = #{id}
+    </update>
+
+    <!--新增外部用户-->
+    <insert id="insertOutUser" parameterType="com.tiptimes.identity.entity.OutUser">
+        insert into tp_main_admin_user
+        (
+            id, login_name,
+            login_password, user_name,
+            nick_name, sex,
+            ip_addr, status,
+            is_delete, create_time,
+            create_user, user_out_type,
+            user_type
+        )
+        values
+        (
+            #{id}, #{loginName},
+            #{loginPassword}, #{userName},
+            #{nickName}, #{sex},
+            #{ipAddr}, #{status},
+            #{isDelete}, #{createTime},
+            #{createUser}, #{userOutType},
+            2
+        )
+    </insert>
 
 </mapper>

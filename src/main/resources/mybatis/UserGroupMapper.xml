@@ -18,7 +18,7 @@
             au.user_name userName
         FROM
             user_group ug
-        INNER JOIN GROUP g ON ( g.id = ug.group_id )
+        INNER JOIN tp_group g ON ( g.id = ug.group_id )
         INNER JOIN tp_main_admin_user au ON ( au.id = ug.user_id )
         WHERE ug.group_id = #{groupId}
     </select>

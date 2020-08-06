@@ -11,6 +11,7 @@ $(function () {
     // 初始部门树
     initTree();
 });
+
 // 初始化组数据
 function initGroupData() {
     $('#examplePagination').bootstrapTable('destroy');
@@ -32,46 +33,46 @@ function initGroupData() {
         sidePagination: "server", // 表示服务端分页
         // 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
         // 设置为limit可以获取limit, offset, search, sort, order
-        queryParamsType : "undefined",
-        idField: "clientId",
+        queryParamsType: "undefined",
+        idField: "id",
         columns: [{
             field: 'state',
             checkbox: true
-        },{
+        }, {
             title: '序号',
             formatter: function (value, row, index) {
                 return index + 1;
             }
-        },{
+        }, {
             field: 'departmentId',
             title: 'departmentId',
             visible: false
-        },{
+        }, {
             field: 'departmentName',
             title: '所属部门',
-        },{
+        }, {
             field: 'groupName',
             title: '组名称'
-        },{
+        }, {
             field: 'id',
             title: '组ID'
-        },{
+        }, {
             field: 'groupParentName',
             title: '父级分组'
-        },{
+        }, {
             field: 'parentId',
             title: '关联账户数'
-        },{
+        }, {
             field: 'status',
             title: '状态',
-            formatter:function (value) {
-                if(value == 0){
+            formatter: function (value) {
+                if (value == 0) {
                     return "启用";
-                }else{
+                } else {
                     return "禁用";
                 }
             }
-        },{
+        }, {
             field: 'operate',
             title: '操作',
             formatter: btnGroup,
@@ -155,7 +156,7 @@ function jsTreeOnClick(data) {
 }
 
 // 自定义方法，添加操作按钮
-function btnGroup () {
+function btnGroup() {
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
         '<a href="####"  id="relationUser" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="关联用户">关联用户' +
@@ -178,11 +179,15 @@ $("#searchBtn").click(function () {
 
 // 添加组
 $("#addGroup").click(function () {
+    $("#selectDept1").val('');
+    $("#selectDeptIds1").val('');
+    $("#selectParentsGroups").val('');
+    $("#selectParentsGroupIds").val('');
     $("#groupId").val('');
     $("#parentGroup").val('');
     $("#groupName").val('');
     $("#sort").val('');
-    $("[name='my-checkbox']").bootstrapSwitch('state', false);
+    $("[name='my-checkbox']").bootstrapSwitch('state', false);
     $("#saveBtn").show();
     $("#myModal").modal('show');
 });
@@ -204,9 +209,9 @@ function edit(row) {
     $("#sort").val(row.sort);
     $("#saveBtn").show();
     if (row.status == 0) {
-        $("[name='my-checkbox']").bootstrapSwitch('state', true);
+        $("[name='my-checkbox']").bootstrapSwitch('state', true);
     } else {
-        $("[name='my-checkbox']").bootstrapSwitch('state', false);
+        $("[name='my-checkbox']").bootstrapSwitch('state', false);
     }
     $("#myModal").modal('show');
 }
@@ -222,9 +227,9 @@ function detail(row) {
     $("#groupName").val(row.groupName);
     $("#sort").val(row.sort);
     if (row.status == 0) {
-        $("[name='my-checkbox']").bootstrapSwitch('state', true);
+        $("[name='my-checkbox']").bootstrapSwitch('state', true);
     } else {
-        $("[name='my-checkbox']").bootstrapSwitch('state', false);
+        $("[name='my-checkbox']").bootstrapSwitch('state', false);
     }
     $("#saveBtn").hide();
     $("#myModal").modal('show');
@@ -289,6 +294,7 @@ function delGroup(id) {
  * 组展示
  */
 var selectGroupArr = [];
+
 function toShowGroupModal() {
     selectGroupArr = [];
     var selectDeptIds = $("#selectParentsGroupIds").val();
@@ -369,56 +375,56 @@ function initDepartmentData() {
         sidePagination: "server", // 表示服务端分页
         // 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
         // 设置为limit可以获取limit, offset, search, sort, order
-        queryParamsType : "undefined",
+        queryParamsType: "undefined",
         idField: "clientId",
         columns: [{
             field: 'state',
             checkbox: true
-        },{
+        }, {
             title: '序号',
             formatter: function (value, row, index) {
                 return index + 1;
             }
-        },{
+        }, {
             field: 'name',
             title: '部门名称'
-        },{
+        }, {
             field: 'id',
             title: '部门ID'
-        },{
+        }, {
             field: 'sort',
             title: '排序'
-        },{
+        }, {
             field: 'parentName',
             title: '上级部门'
-        },{
+        }, {
             field: 'headerName',
             title: '部门主管'
-        },{
+        }, {
             field: 'reduceHeaderName',
             title: '部门分管领导'
-        },{
+        }, {
             field: 'status',
             title: '状态',
-            formatter:function (value) {
-                if(value == 0){
+            formatter: function (value) {
+                if (value == 0) {
                     return "启用";
-                }else{
+                } else {
                     return "禁用";
                 }
             }
-        },{
+        }, {
             field: 'operate',
             title: '操作',
             formatter: btnDepartment,
             events: {
                 'click #departmentDetail': function (event, value, row, index) {
                     var type = 'detail';
-                    departmentDetail(row,type);
+                    departmentDetail(row, type);
                 },
                 'click #departmentEdit': function (event, value, row, index) {
                     var type = 'edit';
-                    departmentDetail(row,type);
+                    departmentDetail(row, type);
                 },
                 'click #departmentDel': function (event, value, row, index) {
                     delDepartment(row.id);
@@ -438,7 +444,7 @@ function initDepartmentData() {
 }
 
 // 自定义方法，添加操作按钮
-function btnDepartment () {
+function btnDepartment() {
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
         '<a href="####"  id="departmentDetail" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="详情">详情' +
@@ -452,13 +458,13 @@ function btnDepartment () {
     return html
 };
 
-  // 部门详情
-function departmentDetail(row,type) {
+// 部门详情
+function departmentDetail(row, type) {
     console.log(row)
     if (type == 'detail') {
         $("#saveDepartmentBtn").hide();
     }
-    if(type == 'edit') {
+    if (type == 'edit') {
         $("#saveDepartmentBtn").show();
         $("#departmentId").val(row.id)
     }
@@ -474,16 +480,23 @@ function departmentDetail(row,type) {
     $("#header").val(row.header);
     $("#reduceHeader").val(row.reduceHeader);
     if (row.status == 0) {
-        $("#departmentStatus").bootstrapSwitch('state', true);
+        $("#departmentStatus").bootstrapSwitch('state', true);
     } else {
-        $("#departmentStatus").bootstrapSwitch('state', false);
+        $("#departmentStatus").bootstrapSwitch('state', false);
     }
+
     $("#departmentModal").modal('show');
 }
 
 // 打开部门模态框
 $("#addDepartment").click(function () {
     $("#saveDepartmentBtn").show();
+    $("#protectUser").val('');
+    $("#protectUserId").val('');
+    $("#protectUser1").val('');
+    $("#protectUserId1").val('');
+    $("#selectDept2").val('');
+    $("#selectDeptIds2").val('');
     $("#departmentId").val('');
     $("#parentDepartment").val('');
     $("#departmentName").val('');
@@ -561,6 +574,7 @@ function delDepartment(id) {
  * 部门展示
  */
 var tabType = '';
+
 function toShowDepartmentModal(type) {
     selectArr = [];
     tabType = type;
@@ -656,15 +670,38 @@ var surePeopleArr = new Array(); // 保存选择的人员
  *
  */
 var headerType = '';
+
 function toShowPeople(type) {
     headerType = type;
-    loadDepartmentPeopleData();
-    $("#sureSelected").html("");
+    var selectPeopleIds = '';
+    var selectPeopleName = '';
+    if (type == 1) {
+        selectPeopleIds = $("#protectUserId").val();
+        selectPeopleName = $("#protectUser").val();
+    }
+    if (type == 2) {
+        selectPeopleIds = $("#protectUserId1").val();
+        selectPeopleName = $("#protectUser1").val();
+    }
     surePeopleArr = [];
+    if (selectPeopleIds != '' && selectPeopleName != '') {
+        var ids = selectPeopleIds.split(',');
+        var names = selectPeopleName.split(',');
+
+        for (var i = 0; i < ids.length; i++) {
+            surePeopleArr.push({
+                name: names[i],
+                id: ids[i]
+            });
+        }
+    }
+    $("#sureSelected").html("");
+    rewriteSelect1(surePeopleArr);
+    loadDepartmentPeopleData();
     $("#modal-people-select").modal("show");
 }
 
-// 人员选择的时候
+// 部门--人员选择的时候
 var departmentSelectArr = new Array(); // 保存选择的部门信息
 var peopleArr = new Array(); // 保存部门下的人员
 $("#peopleSelect").on("changed.jstree", function (e, data) {
@@ -694,7 +731,7 @@ $("#peopleSelect").on("changed.jstree", function (e, data) {
                     }
                     peopleArr = unique(peopleArr);
                     for (var i = 0; i < peopleArr.length; i++) {
-                        str += "<li data-id = '"+peopleArr[i].id+"' onclick='selectPeople(event, this)'><span class='people-name'>"+peopleArr[i].name+"</span></li>";
+                        str += "<li data-id = '" + peopleArr[i].id + "' onclick='selectPeople(event, this)'><span class='people-name'>" + peopleArr[i].name + "</span></li>";
                     }
                 }
                 $("#departmentTreePeople").html("");
@@ -703,15 +740,69 @@ $("#peopleSelect").on("changed.jstree", function (e, data) {
         });
     }
 });
+// 组--人员选择的时候
+var zuSelectArr = new Array(); // 保存选择的部门信息
+var zuPeopleArr = new Array(); // 保存部门下的人员
+$("#zuSelect").on("changed.jstree", function (e, data) {
+    var str = "";
+    if (data.selected.length > 0) {
+        zuSelectArr = [];
+        zuSelectArr.push({
+            name: data.node.text,
+            id: data.selected
+        })
+    }
+    if (zuSelectArr.length > 0) {
+        var data = {};
+        var groupId = zuSelectArr[0].id[0];
+        console.log(groupId)
+        data['groupId'] = groupId;
+
+        $.ajax({
+            url: baseUrl + '/customer/userGroup/getUserByGroupId',
+            async: true,
+            method: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (result) {
+                var users = result.data;
+                if (users.length > 0) {
+                    zuPeopleArr = [];
+                    for (var i = 0; i < users.length; i++) {
+                        zuPeopleArr.push({
+                            id: users[i].userId,
+                            name: users[i].userName
+                        });
+                    }
+                    zuPeopleArr = unique(zuPeopleArr);
+                    for (var i = 0; i < zuPeopleArr.length; i++) {
+                        str += "<li data-id = '" + zuPeopleArr[i].id + "' onclick='selectPeople(event, this)'><span class='people-name'>" + zuPeopleArr[i].name + "</span></li>";
+                    }
+                }
+                $("#zuTreePeople").html("");
+                $("#zuTreePeople").append(str);
+            }
+        });
+    }
+});
 
 $(".transfer-right1").click(function () {
     var liObj = $("#departmentTreePeople li");
-    var liObjPost = $("#postTreePeople li");
+    var liObjPost = $("#gangTreePeople li");
+    var liObjZu = $("#zuTreePeople li");
     for (var i = 0; i < liObj.length; i++) {
         if ($(liObj[i]).hasClass("active")) {
             surePeopleArr.push({
                 name: $(liObj[i]).find(".people-name").text(),
                 id: $(liObj[i]).attr("data-id")
+            })
+        }
+    }
+    for (var i = 0; i < liObjZu.length; i++) {
+        if ($(liObjZu[i]).hasClass("active")) {
+            surePeopleArr.push({
+                name: $(liObjZu[i]).find(".people-name").text(),
+                id: $(liObjZu[i]).attr("data-id")
             })
         }
     }
@@ -726,8 +817,10 @@ $(".transfer-right1").click(function () {
     surePeopleArr = unique(surePeopleArr);
     rewriteSelect1(surePeopleArr);
     $("#departmentTreePeople li").removeClass("active");
-    $("#postTreePeople li").removeClass("active");
+    $("#gangTreePeople li").removeClass("active");
+    $("#zuTreePeople li").removeClass("active");
 });
+
 
 //重写选中列表
 function rewriteSelect1(arr) {
@@ -782,46 +875,46 @@ function initPostData() {
         sidePagination: "server", // 表示服务端分页
         // 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
         // 设置为limit可以获取limit, offset, search, sort, order
-        queryParamsType : "undefined",
+        queryParamsType: "undefined",
         idField: "clientId",
         columns: [{
             field: 'state',
             checkbox: true
-        },{
+        }, {
             title: '序号',
             formatter: function (value, row, index) {
                 return index + 1;
             }
-        },{
+        }, {
             field: 'departmentId',
             title: 'departmentId',
             visible: false
-        },{
+        }, {
             field: 'departmentName',
             title: '归属部门',
-        },{
+        }, {
             field: 'postName',
             title: '岗位名称'
-        },{
+        }, {
             field: 'postCode',
             title: '岗位编码'
-        },{
+        }, {
             field: 'postDec',
             title: '岗位描述'
-        },{
+        }, {
             field: 'sort',
             title: '排序'
-        },{
+        }, {
             field: 'status',
             title: '状态',
-            formatter:function (value) {
-                if(value == 0){
+            formatter: function (value) {
+                if (value == 0) {
                     return "启用";
-                }else{
+                } else {
                     return "禁用";
                 }
             }
-        },{
+        }, {
             field: 'operate',
             title: '操作',
             formatter: btnPost,
@@ -831,11 +924,11 @@ function initPostData() {
                 },
                 'click #postDetail': function (event, value, row, index) {
                     var type = 'detail';
-                    postDetail(row,type);
+                    postDetail(row, type);
                 },
                 'click #postEdit': function (event, value, row, index) {
                     var type = 'edit';
-                    postDetail(row,type);
+                    postDetail(row, type);
                 },
                 'click #postDel': function (event, value, row, index) {
                     postDel(row.id);
@@ -855,7 +948,7 @@ function initPostData() {
 }
 
 // 自定义方法，添加操作按钮
-function btnPost () {
+function btnPost() {
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
         '<a href="####"  id="postDetail" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="详情">详情' +
@@ -871,6 +964,8 @@ function btnPost () {
 
 // 新增岗位
 $("#addPost").click(function () {
+    $("#selectDept3").val('');
+    $("#selectDeptIds3").val('');
     $("#postId").val('');
     $("#postName").val('');
     $("#postCode").val('');
@@ -933,12 +1028,13 @@ function postDetail(row, type) {
     $("#postSort").val(row.sort);
     $("#postDec").val(row.postDec);
     if (row.status == 0) {
-        $("#postStatus").bootstrapSwitch('state', true);
+        $("#postStatus").bootstrapSwitch('state', true);
     } else {
-        $("#postStatus").bootstrapSwitch('state', false);
+        $("#postStatus").bootstrapSwitch('state', false);
     }
     $("#postModal").modal('show');
 }
+
 // 删除
 function postDel(id) {
     if (id != null && id != '') {
@@ -1063,33 +1159,106 @@ function loadDepartmentPeopleData() {
             var departments = result.data;
             if (departments.length > 0) {
                 $("#peopleSelect").jstree({
-                    'plugins':["search","themes","types","line"],
-                    'types':{
-                        'default':{
+                    'plugins': ["search", "themes", "types", "line"],
+                    'types': {
+                        'default': {
                             'icon': true
                         },
                     },
-                    "checkbox":{
-                        tie_selection:true,
+                    "checkbox": {
+                        tie_selection: true,
                         keep_selected_style: true,
                         whole_node: true
                     },
                     'core': {
                         'data': departments,
-                        'themes':{
-                            "icons":true,	//默认图标
+                        'themes': {
+                            "icons": true,	//默认图标
                             "theme": "classic",
                             "dots": true,
-                            "stripes" : true,	//增加条纹
+                            "stripes": true,	//增加条纹
                         },	//关闭文件夹样式
                         'dblclick_toggle': true,   //允许tree的双击展开,默认是true
-                        "multiple" : false, // 单选
-                        "check_callback" : true
+                        "multiple": false, // 单选
+                        "check_callback": true
                     }
                 })
             }
         }
     });
+}
+
+/**
+ * 加载组
+ */
+function loadGroupList() {
+    $.ajax({
+        url: baseUrl + '/customer/group/getGroupTreeList',
+        method: 'POST',
+        contentType: 'application/json',
+        async: false,
+        success: function (result) {
+            var groups = result.data;
+            if (groups.length > 0) {
+                $("#zuSelect").jstree({
+                    'plugins': ["search", "themes", "types", "line"],
+                    'types': {
+                        'default': {
+                            'icon': true
+                        },
+                    },
+                    "checkbox": {
+                        tie_selection: true,
+                        keep_selected_style: true,
+                        whole_node: true
+                    },
+                    'core': {
+                        'data': groups,
+                        'themes': {
+                            "icons": true,	//默认图标
+                            "theme": "classic",
+                            "dots": true,
+                            "stripes": true,	//增加条纹
+                        },	//关闭文件夹样式
+                        'dblclick_toggle': true,   //允许tree的双击展开,默认是true
+                        "multiple": false, // 单选
+                        "check_callback": true
+                    }
+                })
+            }
+        }
+    });
+}
+
+// 加载岗位信息
+function loadPostList() {
+    $("#gangSelect").html("");
+    var data = {};
+    data['pageSize'] = 10000;
+    data['pageNumber'] = 1;
+    $.ajax({
+        url: baseUrl + '/customer/post/getPostList',
+        async: true,
+        method: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function (result) {
+            var positionList = result.rows;
+            if (positionList.length > 0) {
+                var str = "";
+                $("#gangTreePeople").html("");
+                for (var i = 0; i < positionList.length; i++) {
+                    str += "<li data-id='" + positionList[i].id + "' onclick='getUserByPostId(event, this)'><span class='people-name'>" + positionList[i].postName + "</span></li>"
+                }
+                $("#gangSelect").append(str);
+            }
+        }
+    });
+}
+
+// 岗位下，确定岗位人员
+function selectSurePosition (e, obj){
+    $(obj).addClass("active").siblings().removeClass("active");
 }
 
 

@@ -1,15 +1,15 @@
 $(document).ready(function () {
-  $(".tag li").click(function () {
-    var index = $(this).index();
-    $(this).addClass("active").siblings().removeClass("active");
-    if (index==0){
-      $(".ren").show();
-      $(".gang").hide();
-    } else if (index==1){
-      $(".ren").hide();
-      $(".gang").show();
-    }
-  })
+  // $("#tag1 li").click(function () {
+  //   var index = $(this).index();
+  //   $(this).addClass("active").siblings().removeClass("active");
+  //   // if (index==0){
+  //     $(".ren").show();
+  //   //   $(".gang").hide();
+  //   // } else if (index==1){
+  //   //   $(".ren").hide();
+  //   //   $(".gang").show();
+  //   // }
+  // })
 })
 
 $(".transfer-up").click(function () {
@@ -110,25 +110,26 @@ function selectPeople(e, obj) {
 }
 
 //岗位选择
-function selectPosition(e, obj) {
+function getUserByPostId(e, obj) {
   $(obj).addClass("active").siblings().removeClass("active");
   var positionId = $(obj).attr('data-id');
   $.ajax({
-      url: baseUrl + '/chapterDic/getUserByPositionId?positionId=' + positionId,
-      method: 'POST',
-      contentType: 'application/json',
-      async: true,
-      success: function (result) {
-        var userList = result.result.rows;
-        var str = "";
-        $("#postTreePeople").html("");
-          if (userList.length > 0) {
-            for (var i = 0; i < userList.length; i++) {
-              str += "<li data-id='"+userList[i].id+"' onclick='selectSurePosition(event, this)'><span class='people-name'>"+userList[i].userName+"</span></li>"
-            }
-            $("#postTreePeople").append(str);
-          }
+    url: baseUrl + '/customer/userPost/getUserByPostId?postId='+positionId,
+    method: 'POST',
+    contentType: 'application/json',
+    async: true,
+    success: function (result) {
+      console.log(result)
+      var userList = result.data;
+      var str = "";
+      $("#gangTreePeople").html("");
+      if (userList.length > 0) {
+        for (var i = 0; i < userList.length; i++) {
+          str += "<li data-id='"+userList[i].userId+"' onclick='selectSurePosition(event, this)'><span class='people-name'>"+userList[i].userName+"</span></li>"
+        }
+        $("#gangTreePeople").append(str);
       }
+    }
   });
 }
 //部门--重写选中列表

@@ -1,4 +1,4 @@
-package com.tiptimes.identity.controller;
+package com.tiptimes.identity.controller.client;
 
 import com.alibaba.fastjson.JSON;
 import com.tiptimes.identity.common.Constants;
@@ -10,6 +10,8 @@ import com.tiptimes.identity.entity.OauthCheck;
 import com.tiptimes.identity.entity.TpMainAdminUser;
 import com.tiptimes.identity.qo.RedirectRequest;
 import com.tiptimes.identity.utils.RedisUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(value = "/customer/server")
+@Api(description = "登录相关")
 public class ServerOauth2Controller {
 
     @Autowired
@@ -62,7 +65,8 @@ public class ServerOauth2Controller {
      * @param response
      * @throws IOException
      */
-    @RequestMapping("/getCode")
+    @RequestMapping(value = "/getCode", method = RequestMethod.POST)
+    @ApiOperation(value = "获取授权码", hidden = true)
     public void getCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //获取code的URI
         String CODE_REQUEST_URI = localIp + PORT + "/oauth/authorize?client_id=" + client_id + "&response_type=code&scope=ALL&redirect_uri=" + redirect_uri;
@@ -76,6 +80,7 @@ public class ServerOauth2Controller {
      * @return
      */
     @RequestMapping(value = "/getAccessToken", method = RequestMethod.GET)
+    @ApiOperation(value = "客户端获取token", hidden = true)
     public ResponseResult getAccessToken(String code) {
         ResponseResult result = new ResponseResult();
 
@@ -107,6 +112,7 @@ public class ServerOauth2Controller {
      * @return
      */
     @RequestMapping(value = "/clientLogin", method = RequestMethod.POST)
+    @ApiOperation(value = "登录")
     public ResponseResult clientLogin(@RequestBody Login login) {
         ResponseResult result = new ResponseResult();
         String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/token?grant_type=password&username=" + login.getUsername() + "&password=" + login.getPassword();
@@ -148,6 +154,7 @@ public class ServerOauth2Controller {
      * @return
      */
     @RequestMapping(value = "/checkToken", method = RequestMethod.POST)
+    @ApiOperation(value = "token校验")
     public ResponseResult checkToken(@RequestParam("token") String token, @RequestParam("userId") String userId) {
         ResponseResult result = new ResponseResult();
         String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/check_token";
@@ -186,6 +193,7 @@ public class ServerOauth2Controller {
      * 跳转至客户端
      */
     @RequestMapping(value = "/toClientIndex", method = RequestMethod.GET)
+    @ApiOperation(value = "跳转至客户端", hidden = true)
     public void toClientIndex(RedirectRequest redirectRequest, HttpServletResponse response) throws IOException {
         response.sendRedirect(redirectRequest.getRedirectUri() + "?token=" + redirectRequest.getToken()+"&userId=" + redirectRequest.getUserId());
     }

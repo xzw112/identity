@@ -1,4 +1,4 @@
-package com.tiptimes.identity.controller;
+package com.tiptimes.identity.controller.client;
 
 import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.common.ResponseResult;
@@ -10,6 +10,8 @@ import com.tiptimes.identity.service.GroupService;
 import com.tiptimes.identity.vo.DepartmentTreeVo;
 import com.tiptimes.identity.vo.GroupTreeVo;
 import com.tiptimes.identity.vo.GroupVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/customer/group")
+@Api(description = "组")
 public class GroupController {
 
     @Autowired
@@ -34,7 +37,8 @@ public class GroupController {
      * @param groupRequest
      * @return
      */
-    @RequestMapping("/getGroupList")
+    @RequestMapping(value = "/getGroupList", method = RequestMethod.POST)
+    @ApiOperation(value = "获取组列表--分页")
     public PageResult getClientList(@RequestBody GroupRequest groupRequest){
         PageResult<GroupVo> list = groupService.selectGroupList(groupRequest);
         return list;
@@ -44,7 +48,8 @@ public class GroupController {
      * @param
      * @return
      */
-    @RequestMapping("/getGroupTreeList")
+    @RequestMapping(value = "/getGroupTreeList", method = RequestMethod.POST)
+    @ApiOperation(value = "获取组列表--树状")
     public ResponseResult getGroupTreeList(){
         GroupRequest groupRequest = new GroupRequest();
         groupRequest.setPageNumber(1);
@@ -68,6 +73,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/getDetail", method = RequestMethod.POST)
+    @ApiOperation(value = "组详情", hidden = true)
     public ResponseResult getDetail(String id){
         Group group = null;
         if (StringUtils.isNotEmpty(id)) {
@@ -77,6 +83,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ApiOperation(value = "添加", hidden = true)
     public ResponseResult add(HttpServletRequest request,@RequestBody Group group){
         String userId = (String) request.getSession().getAttribute("userId");
         group.setCreateUser(userId);
@@ -85,6 +92,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @ApiOperation(value = "编辑", hidden = true)
     public ResponseResult edit(HttpServletRequest request, @RequestBody Group group){
         String userId = (String) request.getSession().getAttribute("userId");
         group.setCreateUser(userId);
@@ -95,6 +103,7 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/del", method = RequestMethod.POST)
+    @ApiOperation(value = "删除", hidden = true)
     public ResponseResult del(String id){
         int num = groupService.del(Integer.valueOf(id));
         return ResponseResult.successWithData(num);

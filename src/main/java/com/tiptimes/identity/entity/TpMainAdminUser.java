@@ -56,4 +56,6 @@ public class TpMainAdminUser {
 
     private String groupId; // 分组id
 
+    private Integer userType; // 用户类型（1.内部用户 2外部用户）
+
 }

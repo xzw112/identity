@@ -14,7 +14,8 @@
   <select id="selectUserByDepartmentId" parameterType="java.lang.Integer" resultType="com.tiptimes.identity.vo.UserVo">
     SELECT
             au.id userId,
-            au.user_name userName
+            au.user_name userName,
+            au.login_name loginName
         FROM
             user_department ud
         INNER JOIN department d ON ( d.id = ud.department_id)

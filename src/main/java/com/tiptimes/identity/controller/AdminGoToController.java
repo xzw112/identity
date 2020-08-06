@@ -70,7 +70,16 @@ public class AdminGoToController {
      */
     @RequestMapping("/outUser")
     public String outUser(HttpServletRequest request) {
-        return "organization/outUser";
+        return "organization/out_user";
+    }
+
+    /**
+     * 内部应用授权
+     * @return
+     */
+    @RequestMapping("/authorizeApp")
+    public String authorizeApp(){
+        return "authorize/auth";
     }
 
 
