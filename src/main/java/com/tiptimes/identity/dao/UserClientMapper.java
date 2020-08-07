@@ -15,6 +15,8 @@ public interface UserClientMapper {
 
     int del(Integer id);
 
+    int delByUserId(String userId);
+
     int insert(UserClient userClient);
 
     int updateById(UserClient userClient);

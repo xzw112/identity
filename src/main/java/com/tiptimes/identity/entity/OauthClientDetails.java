@@ -29,6 +29,8 @@ public class OauthClientDetails implements Serializable {
 
     private Date createTime;
 
+    private String createTimeStr;
+
     private Byte archived;
 
     private Byte trusted;

@@ -7,10 +7,13 @@ import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.qo.ClientRequest;
 import com.tiptimes.identity.service.ClientService;
+import com.tiptimes.identity.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 /**
@@ -31,6 +34,13 @@ public class ClientController {
     @RequestMapping("/getClientList")
     public PageResult getClientList(@RequestBody ClientRequest clientRequest){
         PageResult<OauthClientDetails> list = clientService.selectClientList(clientRequest);
+        if (list.getRows() != null && list.getRows().size() > 0) {
+            List<OauthClientDetails> rowList = list.getRows();
+            for (int i = 0; i < rowList.size(); i++) {
+                rowList.get(i).setCreateTimeStr(DateUtil.dateMinuteToStr(rowList.get(i).getCreateTime()));
+            }
+            list.setRows(rowList);
+        }
         return list;
     }
 

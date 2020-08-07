@@ -2,6 +2,7 @@ package com.tiptimes.identity.service;
 
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.entity.UserClient;
+import com.tiptimes.identity.qo.UserClientRequest;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface UserClientService {
 
     int del(Integer id);
 
-    int insert(UserClient userClient);
+    int insert(UserClientRequest userClientRequest);
 
     int updateById(UserClient userClient);
 

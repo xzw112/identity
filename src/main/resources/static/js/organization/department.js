@@ -460,7 +460,6 @@ function btnDepartment() {
 
 // 部门详情
 function departmentDetail(row, type) {
-    console.log(row)
     if (type == 'detail') {
         $("#saveDepartmentBtn").hide();
     }

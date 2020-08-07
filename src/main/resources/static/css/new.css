@@ -54,6 +54,13 @@ html, body {
   border: 1px solid #eee;
   margin-top: 30px;
 }
+.new-table1 td{
+  cursor:pointer;
+}
+.new-table1 tr.onn{
+  background: #368FFE;
+  color:#fff;
+}
 
 .outter .new-table th {
   text-align: center;

@@ -40,6 +40,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
+  <delete id="delByUserId" parameterType="java.lang.String">
+    delete from user_client
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+
   <insert id="insert" parameterType="com.tiptimes.identity.entity.UserClient">
     insert into user_client (client_id, user_id
       )
