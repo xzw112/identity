@@ -1,7 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('首页')" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <base th:href="${#request.getContextPath()}+'/'">
+    <!--/*@thymesVar id="title" type=""*/-->
+    <title th:text="${title}"></title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">
+    <!--table-->
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap-table.min.css}"/>
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css}">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" th:href="@{/plugins/iCheck/minimal/_all.css}">
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap-switch/bootstrap-switch.css}">
+    <link rel="stylesheet" th:href="@{/plugins/jstree/style.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/res/css/style.css}">
+
+    <link rel="stylesheet" th:href="@{/res/modal/css/demo.css}">
+    <link rel="stylesheet" th:href="@{/res/modal/css/naranja.min.css}">
+
+    <!-- element-ui -->
+    <link rel="stylesheet" th:href="@{/plugins/element-ui/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{/plugins/element-ui/css/icon.css}"/>
+    <link rel="stylesheet" th:href="@{/plugins/element-ui/css/date-picker.css}"/>
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-daterangepicker/daterangepicker.css}"/>
+
+    <!-- select2 -->
+    <link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}"/>
+
+    <link rel="stylesheet" th:href="@{/css/new.css}"/>
+
+    <link rel="stylesheet" th:href="@{/css/tab.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select1.10.0.min.css}"/>
 
     <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
@@ -9,7 +46,64 @@
     <div class="home">
         首页
     </div>
-<th:block th:include="include :: footer" />
+    <!-- jQuery 3 -->
+    <script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <!--table-->
+    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap-table.min.js}"></script>
+    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap-table-zh-CN.min.js}"></script>
+    <script th:src="@{/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js}"></script>
+    <script th:src="@{/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+    <!-- iCheck 1.0.1 -->
+    <script th:src="@{/plugins/iCheck/icheck.min.js}"></script>
+
+    <script th:src="@{/plugins/bootstrap-switch/bootstrap-switch.js}"></script>
+    <!--jsTree-->
+    <script th:src="@{/res/js/plugins/jsTree/jstree.js}"></script>
+    <!-- 弹框 -->
+    <script th:src="@{/res/modal/js/naranja.js}"></script>
+    <!--base 64加密-->
+    <script th:src="@{/res/js/Base64.js}"></script>
+
+    <!-- 设置dialog可拖拽 -->
+    <script th:src="@{/plugins/jquery-ui/jquery-ui.js}"></script>
+
+    <!-- element-ui -->
+    <script th:src="@{/plugins/element-ui/vue.2.6.11.js}"></script>
+    <script th:src="@{/plugins/element-ui/element-ui.js}"></script>
+
+
+    <!-- bootstrap datepicker -->
+    <script th:src="@{/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
+
+    <!-- date-range-picker -->
+    <script th:src="@{/bower_components/moment/min/moment.min.js}"></script>
+    <script th:src="@{/bower_components/bootstrap-daterangepicker/daterangepicker.js}"></script>
+
+    <!-- ueditor -->
+    <script th:src="@{/plugins/ueditor/ueditor.config.js}"></script>
+    <script th:src="@{/plugins/ueditor/ueditor.all.js}"> </script>
+    <script th:src="@{/plugins/ueditor/lang/zh-cn/zh-cn.js}"></script>
+
+    <!-- ajaxfileupload -->
+    <script th:src="@{/plugins/ajaxfileupload/ajaxfileupload.js}"></script>
+
+    <!-- echarts -->
+    <script th:src="@{/plugins/echarts/echarts.min.js}"></script>
+
+    <!-- select2 -->
+    <script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
+
+    <!--公共js-->
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/select.js}"></script>
+
+    <!--公共业务相关js-->
+    <script th:src="@{/js/public.js}"></script>
+
+    <script th:src="@{/js/bootstrap-select1.10.0.min.js}"></script>
+    <script th:src="@{/js/defaults-zh_CN.1.10.0.min.js}"></script>
 <!--自定义js-->
 <script th:src="@{/js/home.js}"></script>
 </body>

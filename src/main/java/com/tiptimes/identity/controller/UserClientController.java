@@ -7,10 +7,12 @@ import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.entity.UserClient;
 import com.tiptimes.identity.qo.ClientRequest;
+import com.tiptimes.identity.qo.ClientUserRequest;
 import com.tiptimes.identity.qo.UserClientRequest;
 import com.tiptimes.identity.service.UserClientService;
 import com.tiptimes.identity.utils.DateUtil;
 import com.tiptimes.identity.utils.RedisUtil;
+import com.tiptimes.identity.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -65,9 +67,30 @@ public class UserClientController {
         }
     }
 
+    /**
+     * 根据应用id获取用户
+     * @param clientId
+     * @return
+     */
+    @RequestMapping(value = "/getUserByClientId", method = RequestMethod.POST)
+    public ResponseResult getUserByClientId(String clientId){
+        if (StringUtils.isNotEmpty(clientId)) {
+            List<UserVo> list = userClientService.selectUserByClientId(clientId);
+            return ResponseResult.successWithData(list);
+        } else {
+            return ResponseResult.error("参数有误");
+        }
+    }
+
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public ResponseResult insert(@RequestBody UserClientRequest userClientRequest){
         int num = userClientService.insert(userClientRequest);
+        return ResponseResult.successWithData(num);
+    }
+
+    @RequestMapping(value = "/insertByClientId", method = RequestMethod.POST)
+    public ResponseResult insertByClientId(@RequestBody ClientUserRequest clientUserRequest){
+        int num = userClientService.insertByClientId(clientUserRequest);
         return ResponseResult.successWithData(num);
     }
 }

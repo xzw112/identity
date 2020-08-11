@@ -7,6 +7,7 @@ $(function () {
 });
 var clientIds = [];
 var userId = '';
+
 // 获取组织架构信息
 function initDepartmentData() {
     $.ajax({
@@ -131,22 +132,22 @@ function initClientData() {
             return JSON.stringify(data);
         },
         // 全部选择
-        onCheckAll:function(rows){
-            if (rows.length > 0) {
-                for (let i = 0; i < rows.length; i++) {
-                    clientIds.push(rows[i].clientId);
+        onCheckAll: function (row) {
+            if (row != null && row != '') {
+                for (let i = 0; i < row.length; i++) {
+                    clientIds.push(row[i].clientId);
                 }
             }
         },
         // 单个选择
-        onCheck:function(row){
-            if (row.length > 0) {
+        onCheck: function (row) {
+            if (row != null && row != '') {
                 clientIds.push(row.clientId);
             }
         },
         // 单个取消
-        onUncheck:function(row){
-            if (row.length > 0) {
+        onUncheck: function (row) {
+            if (row != null && row != '') {
                 clientIds.forEach(function (item, index, arr) {
                     if (item == row.clientId) {
                         arr.splice(index, 1);
@@ -156,7 +157,7 @@ function initClientData() {
         },
         // 全部取消
         onUncheckAll: function (row) {
-            if (row.length > 0) {
+            if (row != null && row != '') {
                 for (var i = 0; i < row.length; i++) {
                     for (var j = 0; j < clientIds.length; j++) {
                         if (row[i].clientId == clientIds[j]) {
@@ -206,7 +207,10 @@ $("#departmentTree1").on("changed.jstree", function (e, data) {
                     peopleArr = unique(peopleArr);
                     var str = '';
                     for (var i = 0; i < peopleArr.length; i++) {
-                        str += "<tr onclick='getPeople(event, this)' data-id='"+peopleArr[i].id+"'><td>"+peopleArr[i].loginName+"</td><td>"+peopleArr[i].name+"</td></tr>";
+                        str += "<tr onclick='getPeople(event, this)' data-id='" + peopleArr[i].id + "'>" +
+                            "<td>" + peopleArr[i].loginName + "</td>" +
+                            "<td>" + peopleArr[i].name + "</td>" +
+                            "</tr>";
                     }
                     $("#exTable1").html("<tr>" +
                         "<th>账户名称</th>" +
@@ -248,11 +252,14 @@ function getPeople(e, obj) {
         }
     });
 }
+
 // 按账户授权应用 -- 保存
 $("#saveBtn1").click(function () {
+    console.log(clientIds);
     if (clientIds.length > 0 && userId != '') {
+        console.log(clientIds)
         var data = {};
-        data['userId'] =  userId;
+        data['userId'] = userId;
         data['clientId'] = clientIds;
         $.ajax({
             url: baseUrl + '/customer/userClient/insert',
@@ -272,6 +279,8 @@ $("#saveBtn1").click(function () {
 // =============================按应用授权============================
 
 // 初始化应用数据
+var clientId = '';// 应用id
+var client_users = []; // 应用下的用户
 function initClientData2() {
     $('#appTable2').bootstrapTable('destroy');
     // 初始化表格,动态从服务器加载数据
@@ -297,17 +306,6 @@ function initClientData2() {
         idField: "clientId",
         columns: [{
             checkbox: true,
-            formatter: function (value, row, index) {
-                if ($.inArray(row.clientId, clientIds) != -1) {
-                    return {
-                        checked: true
-                    };
-                } else {
-                    return {
-                        checked: false
-                    };
-                }
-            }
         }, {
             title: '序号',
             formatter: function (value, row, index) {
@@ -331,29 +329,51 @@ function initClientData2() {
             return JSON.stringify(data);
         },
         // 单个选择
-        onCheck:function(row){
-            if (row.length > 0) {
-                clientIds.push(row.clientId);
+        onCheck: function (row) {
+            if (row != null) {
+                clientId = row.clientId;
+                // 获取应用下的人员
+                getClientUser(clientId);
             }
         },
         // 单个取消
-        onUncheck:function(row){
-            if (row.length > 0) {
-                clientIds.forEach(function (item, index, arr) {
-                    if (item == row.clientId) {
-                        arr.splice(index, 1);
-                    }
-                });
+        onUncheck: function (row) {
+            if (row != null && row != '') {
+                clientId = '';
+                // 取消，清空应用下的人员
+                client_users = [];
             }
         }
     });
+}
+
+/**
+ * 根据应用id获取应用下人员
+ * @param clientId_param
+ */
+function getClientUser(clientId_param) {
+    if (clientId_param != null && clientId_param) {
+        $.ajax({
+            url: baseUrl + '/customer/userClient/getUserByClientId?clientId=' + clientId_param,
+            async: false,
+            type: 'POST',
+            contentType: "application/json",
+            success: function (result) {
+                var userData = result.data;
+                if (userData.length > 0) {
+                    for (var i = 0; i < userData.length; i++) {
+                        client_users.push(userData[i].userId);
+                    }
+                }
+            }
+        });
+    }
 }
 
 // 部门树点击事件
 var departmentSelectArr2 = new Array(); // 保存选择的部门信息
 var peopleArr2 = new Array(); // 保存部门下的人员
 $("#departmentTree2").on("changed.jstree", function (e, data) {
-
     if (data.selected.length > 0) {
         departmentSelectArr2 = [];
         departmentSelectArr2.push({
@@ -381,22 +401,35 @@ $("#departmentTree2").on("changed.jstree", function (e, data) {
                     peopleArr2 = unique(peopleArr2);
                     var str = '';
                     for (var i = 0; i < peopleArr2.length; i++) {
-                        str += "<tr>" +
+                        if(client_users.indexOf(peopleArr2[i].id)!==-1){
+                            str += "<tr>" +
                                 "<td>" +
                                     "<div class='form-check-item checkbox-inline checkbox-custom'>" +
-                                        "<input class='form-check-input' type='checkbox' id='inlineCheckbox" + i + "' value='" + peopleArr2[i].id + "'>" +
-                                        "<label class='form-check-label' for='inlineCheckbox" + i + "'></label>" +
+                                    "<input checked='true' class='form-check-input' type='checkbox' id='inlineCheckbox" + i + "' value='" + peopleArr2[i].id + "'>" +
+                                    "<label class='form-check-label' for='inlineCheckbox" + i + "'></label>" +
                                     "</div>" +
                                 "</td>" +
                                 "<td>" + peopleArr2[i].loginName + "</td>" +
                                 "<td>" + peopleArr2[i].name + "</td>" +
-                            "</tr>";
+                                "</tr>";
+                        } else {
+                            str += "<tr>" +
+                                "<td>" +
+                                    "<div class='form-check-item checkbox-inline checkbox-custom'>" +
+                                    "<input class='form-check-input' type='checkbox' id='inlineCheckbox" + i + "' value='" + peopleArr2[i].id + "'>" +
+                                    "<label class='form-check-label' for='inlineCheckbox" + i + "'></label>" +
+                                    "</div>" +
+                                "</td>" +
+                                "<td>" + peopleArr2[i].loginName + "</td>" +
+                                "<td>" + peopleArr2[i].name + "</td>" +
+                                "</tr>";
+                        }
                     }
                     $("#exTable2").html("<tr>" +
                         "<th>" +
                             "<div class='form-check-all checkbox-inline checkbox-custom'>" +
-                                "<input class='form-check-input' type='checkbox' id='inlineCheckbox' value=''>" +
-                                "<label class='form-check-label' for='inlineCheckbox'></label>" +
+                            "<input class='form-check-input' type='checkbox' id='inlineCheckbox' value=''>" +
+                            "<label class='form-check-label' for='inlineCheckbox'></label>" +
                             "</div> " +
                         "</th>" +
                         "<th>账户名称</th>" +
@@ -409,29 +442,63 @@ $("#departmentTree2").on("changed.jstree", function (e, data) {
     }
 });
 
-//单个
-$("#exTable2").on('change', '.form-check-item input',function(){
-    var lenth=$('.form-check-item').length;
-    var len=$('.form-check-item input:checked').length;
-    console.log(lenth);
-    if(lenth==len){
-        console.log("==");
-        $('.form-check-all input').prop("checked",true);
-    }else{
-        console.log("1=");
-        $('.form-check-all input').prop("checked",false);
+//单个选中/取消
+$("#exTable2").on('change', '.form-check-item input', function () {
+    var lenth = $('.form-check-item').length;
+    var len = $('.form-check-item input:checked').length;
+    if (lenth == len) {
+        $('.form-check-all input').prop("checked", true);
+    } else {
+        $('.form-check-all input').prop("checked", false);
+    }
+    // 选中
+    var userId = $(this).val();
+    if ($(this).prop("checked")) {
+        if (client_users.indexOf(userId) == -1) {
+            client_users.push(userId);
+        }
+    } else {
+        // 取消选中
+        if (client_users.length > 0) {
+            if (client_users.indexOf(userId) !== -1) {
+                // 删除对应的用户
+                client_users.forEach(function (item, index, arr) {
+                    if (item == userId) {
+                        arr.splice(index, 1);
+                    }
+                });
+            }
+        }
     }
 });
 
-//全选
+//全选选中/取消
 $("#exTable2").on('change', '.form-check-all input', function () {
-    let boolean=$(this).is(':checked');
-    if(boolean){
-        console.log("==");
-        $('.form-check-item input').prop("checked",true);
-    }else{
-        console.log("1=");
-        $('.form-check-item input').prop("checked",false);
+    let boolean = $(this).is(':checked');
+    if (boolean) {
+        console.log("全部选中");
+        $('.form-check-item input').prop("checked", true);
+    } else {
+        console.log("全部取消");
+        $('.form-check-item input').prop("checked", false);
+    }
+    // 全部选中
+    if ($(this).prop("checked")) {
+        console.log(peopleArr2)
+        if (peopleArr2.length > 0) {
+            peopleArr2.forEach(function (item, index, arr) {
+                if (client_users.indexOf(item.id) == -1) {
+                    client_users.push(item.id);
+                }
+            });
+        }
+    } else {
+        // 全部取消
+        peopleArr2.forEach(function (item, index, arr) {
+            if (client_users.indexOf(item.id) !== -1) {
+                client_users.splice(index, 1);
+            }
+        });
     }
 });
 
@@ -440,8 +507,23 @@ $("#saveBtn2").click(function () {
 
     var clientRows = $("#appTable2").bootstrapTable('getSelections');
 
-    if (clientRows.length > 0 && userRows.length > 0) {
+    if (clientRows.length > 0 && client_users.length > 0) {
         clientId2 = clientRows[0].clientId;
+        var data = {};
+        data['clientId'] = clientId2;
+        data['userId'] = client_users;
+        $.ajax({
+            url: baseUrl + '/customer/userClient/insertByClientId',
+            async: true,
+            method: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (result) {
+                narn('success', result.message);
+                initClientData2();
+                initDepartmentData();
+            }
+        });
     } else {
         narn('error', '请选择授权应用！');
     }

@@ -30,6 +30,9 @@ spring:
       maximum-pool-size: 30
       minimum-idle: 10
       max-lifetime: 1800000
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
   main:
     allow-bean-definition-overriding: true
   redis:
@@ -62,3 +65,6 @@ fdfs:
   tracker-list: 121.36.175.7:22122
   resHost: http://121.36.175.7
   storagePort: 80
+
+# Swagger json url address
+swagger.url: https://petstore.swagger.io/v2/swagger.json

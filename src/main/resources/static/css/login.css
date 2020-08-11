@@ -21,7 +21,7 @@ html, body {
   background: #fff;
   padding: 20px; }
   .login-cont .title {
-    color: #1E6330;
+    color: #3c8dbc;
     font-size: 17px;
     font-weight: bold; }
   .login-cont .login-item {
@@ -66,7 +66,7 @@ html, body {
     width: 320px;
     height: 50px;
     text-align: center;
-    background-color: #1E6330;
+    background-color: #3c8dbc;
     color: #fff;
     margin: 60px auto 0;
     display: block;

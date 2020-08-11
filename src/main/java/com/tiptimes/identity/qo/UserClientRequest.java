@@ -10,4 +10,5 @@ public class UserClientRequest implements Serializable {
     private String userId;
 
     private String[] clientId;
+
 }
