@@ -42,7 +42,7 @@
     ocd.client_domain clientDomain, ocd.is_del isDel
   </sql>
 
-    <sql id="Blob_Column_List">
+  <sql id="Blob_Column_List">
     ocd.additional_information
   </sql>
 
@@ -52,12 +52,56 @@
         <include refid="Base_Column_List"/>
         FROM oauth_client_details ocd
         WHERE ocd.is_del = 1
+        AND ocd.client_domain != 3
         <if test="searchText != null and searchText != ''">
             AND ocd.client_name LIKE CONCAT('%',#{searchText},'%')
         </if>
     </select>
+    <!--查询内部应用-->
+    <select id="selectClientListByType" parameterType="com.tiptimes.identity.qo.ClientRequest"
+            resultType="com.tiptimes.identity.entity.OauthClientDetails">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM oauth_client_details ocd
+        WHERE ocd.is_del = 1
+        AND ocd.status = 1
+        AND ocd.client_domain = 1
+        <if test="searchText != null and searchText != ''">
+            AND ocd.client_name LIKE CONCAT('%',#{searchText},'%')
+        </if>
+    </select>
+    <!--查询外部应用-->
+    <select id="selectOutClientList" parameterType="java.lang.String"
+            resultType="com.tiptimes.identity.entity.OauthClientDetails">
+        select
+          ocd.client_id clientId,
+          ocd.resource_ids resourceIds,
+          ocd.client_secret clientSecret,
+          ocd.scope scope,
+          ocd.authorized_grant_types authorizedGrantTypes,
+          ocd.web_server_redirect_uri webServerRedirectUri,
+          ocd.authorities authorities,
+          ocd.access_token_validity accessTokenValidity,
+          ocd.refresh_token_validity refreshTokenValidity,
+          ocd.create_time createTime,
+          ocd.archived archived,
+          ocd.trusted trusted,
+          ocd.autoapprove autoapprove,
+          ocd.redirect_url redirectUrl,
+          ocd.img_url imgUrl,
+          ocd.status status,
+          ocd.client_type clientType,
+          ocd.client_name clientName,
+          ocd.client_domain clientDomain,
+          ocd.is_del isDel
+        from oauth_client_details ocd
+        where ocd.client_domain = 2
+        and ocd.is_del = 1
+        and ocd.status = 1
+    </select>
 
-    <select id="selectDetail" parameterType="java.lang.String" resultType="com.tiptimes.identity.entity.OauthClientDetails">
+    <select id="selectDetail" parameterType="java.lang.String"
+            resultType="com.tiptimes.identity.entity.OauthClientDetails">
         select
         <include refid="Base_Column_List"/>
         ,
@@ -90,7 +134,7 @@
         oauth_client_details
         set is_del = 0
         where client_id in
-        <foreach collection="array" item="item" open="(" separator="," close=")" >
+        <foreach collection="array" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
     </update>

@@ -4,6 +4,8 @@ import com.tiptimes.identity.common.Constants;
 import com.tiptimes.identity.common.ErrorConstants;
 import com.tiptimes.identity.common.ResponseCodeEnums;
 import com.tiptimes.identity.common.ResponseResult;
+import com.tiptimes.identity.dao.OauthClientDetailsMapper;
+import com.tiptimes.identity.dao.TpMainAdminUserMapper;
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.entity.UserClient;
 import com.tiptimes.identity.qo.ClientRequest;
@@ -12,6 +14,7 @@ import com.tiptimes.identity.qo.UserClientRequest;
 import com.tiptimes.identity.service.UserClientService;
 import com.tiptimes.identity.utils.DateUtil;
 import com.tiptimes.identity.utils.RedisUtil;
+import com.tiptimes.identity.vo.ClientUserVo;
 import com.tiptimes.identity.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,10 @@ public class UserClientController {
     private UserClientService userClientService;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private TpMainAdminUserMapper tpMainAdminUserMapper;
+    @Autowired
+    private OauthClientDetailsMapper oauthClientDetailsMapper;
 
     /**
      * 获取登录人员的应用列表--前端
@@ -44,7 +51,14 @@ public class UserClientController {
             } else {
                 return ResponseResult.error(ResponseCodeEnums.LOGINFAIL.getCode(), "登录失效，请重新登录！");
             }
-            List<OauthClientDetails> list = userClientService.selectUserClientList(userId);
+            ClientUserVo userVo = tpMainAdminUserMapper.selectUserById(userId);
+            List<OauthClientDetails> list = null;
+            if (userVo.getUserType() == 1) { // 内部用户
+                list  = userClientService.selectUserClientList(userId);
+            } else {
+                // 外部应用
+                list = oauthClientDetailsMapper.selectOutClientList();
+            }
             return ResponseResult.successWithData(list);
         } else {
             return ResponseResult.error("请求错误！");

@@ -80,7 +80,7 @@ function initClientData() {
     $("#appTable1").bootstrapTable({
         method: "POST", // 使用get请求到服务器获取数据
         contentType: "application/json;charset=UTF-8",
-        url: baseUrl + "/customer/client/getClientList", // 获取数据的地址
+        url: baseUrl + "/customer/client/getClientListByType", // 获取数据的地址
         pagination: true, // 启动分页
         cache: true,
         maintainSelected: true,
@@ -179,7 +179,6 @@ function initClientData() {
 var departmentSelectArr = new Array(); // 保存选择的部门信息
 var peopleArr = new Array(); // 保存部门下的人员
 $("#departmentTree1").on("changed.jstree", function (e, data) {
-
     if (data.selected.length > 0) {
         departmentSelectArr = [];
         departmentSelectArr.push({
@@ -212,12 +211,12 @@ $("#departmentTree1").on("changed.jstree", function (e, data) {
                             "<td>" + peopleArr[i].name + "</td>" +
                             "</tr>";
                     }
-                    $("#exTable1").html("<tr>" +
-                        "<th>账户名称</th>" +
-                        "<th>姓名</th>" +
-                        "</tr>");
-                    $("#exTable1").append(str);
                 }
+                $("#exTable1").html("<tr>" +
+                    "<th>账户名称</th>" +
+                    "<th>姓名</th>" +
+                    "</tr>");
+                $("#exTable1").append(str);
             }
         });
         if (clientIds.length > 0) {
@@ -287,7 +286,7 @@ function initClientData2() {
     $("#appTable2").bootstrapTable({
         method: "POST", // 使用get请求到服务器获取数据
         contentType: "application/json;charset=UTF-8",
-        url: baseUrl + "/customer/client/getClientList", // 获取数据的地址
+        url: baseUrl + "/customer/client/getClientListByType", // 获取数据的地址
         pagination: true, // 启动分页
         cache: true,
         maintainSelected: true,

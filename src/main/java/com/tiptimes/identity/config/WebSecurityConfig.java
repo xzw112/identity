@@ -1,8 +1,11 @@
 package com.tiptimes.identity.config;
 
 
+import com.tiptimes.identity.moble.MobileSecurityConfigurer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -12,6 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private MobileSecurityConfigurer mobileSecurityConfigurer;
 
 
     @Override
@@ -37,7 +43,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/link/gotoLogin?logout");
         httpSecurity.headers().frameOptions().disable();
+        httpSecurity.apply(mobileSecurityConfigurer);
     }
+
 
 
 

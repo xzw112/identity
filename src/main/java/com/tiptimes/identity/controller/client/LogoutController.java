@@ -1,16 +1,18 @@
 package com.tiptimes.identity.controller.client;
 
+import com.tiptimes.identity.common.Constants;
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.qo.SignOutRequest;
-import com.tiptimes.identity.utils.HttpUtils;
 import com.tiptimes.identity.utils.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * 退出
@@ -33,19 +35,25 @@ public class LogoutController {
             tokenStore.removeAccessToken(accessToken);
             // 清除redis
             redisUtil.delete(userId);
-            clientLoginOut("http://study2.tiptimes.com/identityLogout");
+            List<String> clientList = Constants.CLIENTLIST;
+            if (clientList.size() > 0) {
+                for (int i = 0; i < clientList.size(); i++) {
+                    clientLoginOut(clientList.get(i) + token);
+                }
+            }
             return ResponseResult.successWithData("");
         } else {
             return ResponseResult.error("");
         }
     }
 
-    public void clientLoginOut(String url){
+    private void clientLoginOut(String url){
         RestTemplate rest = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        ResponseEntity resp = rest.postForEntity(url, entity, null);
-    }
+        try {
+            ResponseEntity resp = rest.postForEntity(url, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+    }
 }

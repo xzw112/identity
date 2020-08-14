@@ -68,7 +68,8 @@ public class LoginController {
         criteria.andEqualTo("status", DataStatus.ENABLED.getCode());
         criteria.andEqualTo("isDelete", DataStatus.NOT_DELETE.getCode());
         criteria.andEqualTo("loginName", username);
-        criteria.andEqualTo("userType", 1);
+        criteria.andEqualTo("userType", DataStatus.USER_TYPE_ADMIN.getCode());
+        criteria.andEqualTo("isAdmin", DataStatus.IS_ADMIN.getCode());
         List<TpMainAdminUser> list = tpMainAdminUserMapper.selectByExample(example);
         if (list.size() > 0) {
             subject.getSession().setAttribute("userInfo", list.get(0));

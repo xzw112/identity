@@ -33,6 +33,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public PageResult<OauthClientDetails> selectClientListByType(ClientRequest clientRequest) {
+        PageHelper.startPage(clientRequest.getPageNumber(), clientRequest.getPageSize());
+        List<OauthClientDetails> list = oauthClientDetailsMapper.selectClientListByType(clientRequest);
+        PageInfo<OauthClientDetails> pageInfo = new PageInfo<>(list);
+        PageResult<OauthClientDetails> result = new PageResult<>();
+        result.setTotal(pageInfo.getTotal());
+        result.setRows(list);
+        return result;
+    }
+
+    @Override
     public OauthClientDetails selectDetail(String clientId) {
         return oauthClientDetailsMapper.selectDetail(clientId);
     }

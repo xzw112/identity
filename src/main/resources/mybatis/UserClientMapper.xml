@@ -10,18 +10,29 @@
     id, client_id, user_id
   </sql>
 
+  <!--查询内部用户的应用-->
   <select id="selectUserClientList" parameterType="java.lang.String" resultType="com.tiptimes.identity.entity.OauthClientDetails">
     select
-      ocd.client_id clientId, ocd.resource_ids resourceIds,
-      ocd.client_secret clientSecret, ocd.scope scope,
-      ocd.authorized_grant_types authorizedGrantTypes, ocd.web_server_redirect_uri webServerRedirectUri,
-      ocd.authorities authorities, ocd.access_token_validity accessTokenValidity,
-      ocd.refresh_token_validity refreshTokenValidity, ocd.create_time createTime,
-      ocd.archived archived, ocd.trusted trusted,
-      ocd.autoapprove autoapprove, ocd.redirect_url redirectUrl,
-      ocd.img_url imgUrl, ocd.status status,
-      ocd.client_type clientType, ocd.client_name clientName,
-      ocd.client_domain clientDomain, ocd.is_del isDel
+      ocd.client_id clientId,
+      ocd.resource_ids resourceIds,
+      ocd.client_secret clientSecret,
+      ocd.scope scope,
+      ocd.authorized_grant_types authorizedGrantTypes,
+      ocd.web_server_redirect_uri webServerRedirectUri,
+      ocd.authorities authorities,
+      ocd.access_token_validity accessTokenValidity,
+      ocd.refresh_token_validity refreshTokenValidity,
+      ocd.create_time createTime,
+      ocd.archived archived,
+      ocd.trusted trusted,
+      ocd.autoapprove autoapprove,
+      ocd.redirect_url redirectUrl,
+      ocd.img_url imgUrl,
+      ocd.status status,
+      ocd.client_type clientType,
+      ocd.client_name clientName,
+      ocd.client_domain clientDomain,
+      ocd.is_del isDel
     from user_client uc
     INNER JOIN oauth_client_details ocd on(ocd.client_id = uc.client_id)
     INNER JOIN tp_main_admin_user au on(au.id = uc.user_id)

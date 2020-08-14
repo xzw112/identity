@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiptimes.identity.dao.HatAreaMapper">
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.HatArea">
+    <id column="rid" jdbcType="INTEGER" property="rid" />
+    <result column="area_id" jdbcType="VARCHAR" property="areaId" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="father" jdbcType="VARCHAR" property="father" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    rid, areaID, area, father
+  </sql>
+  <select id="selectByCityId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hat_area
+    where father = #{father,jdbcType=BIGINT}
+  </select>
+</mapper>

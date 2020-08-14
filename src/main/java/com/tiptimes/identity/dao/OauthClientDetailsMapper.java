@@ -10,7 +10,14 @@ import java.util.List;
 @Repository
 public interface OauthClientDetailsMapper {
 
+    // 应用列表--应用管理用
     List<OauthClientDetails> selectClientList(ClientRequest clientRequest);
+
+    // 查询外部用户的应用
+    List<OauthClientDetails> selectOutClientList();
+
+    // 应用列表--应用授权用
+    List<OauthClientDetails> selectClientListByType(ClientRequest clientRequest);
 
     OauthClientDetails selectDetail(String clientId);
 

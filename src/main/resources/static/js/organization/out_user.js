@@ -217,7 +217,6 @@ $("#saveBtn").click(function () {
 
 // 新增
 function addOrEdit() {
-    alert(111)
     var userId = $("#userId").val();
     var data = {};
     var loginName = $("#loginName").val().trim();
@@ -268,8 +267,12 @@ function addOrEdit() {
         data: JSON.stringify(data),
         contentType: "application/json",
         success: function (result) {
-            narn('success', result.message);
-            initData();
+            if (result.code == 0) {
+                narn('error', result.message);
+            } else {
+                narn('success', result.message);
+                initData();
+            }
             $("#myModal").modal('hide');
         }
     });

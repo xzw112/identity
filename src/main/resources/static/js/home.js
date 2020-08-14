@@ -1,5 +1,5 @@
 var regYear;
-$(function () {
+// $(function () {
     // $.ajax({
     //     type : "POST",
     //     url : "admin/base/timeData",
@@ -23,7 +23,7 @@ $(function () {
     //showSysMsg();
     //展示通知公告
     //showNotice();
-});
+// });
 
 /**
  * 显示统计数据

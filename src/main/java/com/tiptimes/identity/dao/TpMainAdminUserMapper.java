@@ -31,6 +31,8 @@ public interface TpMainAdminUserMapper extends MyMapper<TpMainAdminUser> {
 
     UserDetailsVo selectUserByName (String userName);
 
+    UserDetailsVo selectUserByPhone(String phoneNumber);
+
     ClientUserVo selectUserById (String id);
     // 批量离职
     int updateUserLeave(String[] id);

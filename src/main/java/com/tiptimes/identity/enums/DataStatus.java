@@ -20,7 +20,11 @@ public enum DataStatus {
     PUBLISH(1, "已发布"),
     NO_AUDIT(0, "未审核"),
     AUDIT_FAIL(1, "审核未通过"),
-    AUDIT_PASS(2, "审核通过");
+    AUDIT_PASS(2, "审核通过"),
+    IS_ADMIN(1,"管理员"),
+    IS_NOT_ADMIN(0, "非管理员"),
+    USER_TYPE_ADMIN(1, "内部用户"),
+    USER_TYPE_USER(2, "外部用户");
 
     private Integer code;
 

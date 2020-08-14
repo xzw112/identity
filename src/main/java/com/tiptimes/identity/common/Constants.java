@@ -1,12 +1,17 @@
 package com.tiptimes.identity.common;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
  * 常量类
  */
+@Component
 public class Constants {
     @Value("${server.port}")
     private static String PORT;
@@ -41,6 +46,12 @@ public class Constants {
     public static final TimeUnit UNIT = TimeUnit.DAYS;
     public static final Integer TIME_COUNT = 2;
 
-
-
+    // 客户端退出
+    public static final List<String> CLIENTLIST = new ArrayList<>();
+    // 1.知识学习平台
+    //private static final String ZS_LOGOUT_URL = "http://192.168.1.120:8083/identityLogout?token=";
+    private static final String ZS_LOGOUT_URL = "http://study2.tiptimes.com/identityLogout?token=";
+    Constants(){
+        CLIENTLIST.add(ZS_LOGOUT_URL);
+    }
 }

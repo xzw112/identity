@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiptimes.identity.dao.HatCityMapper">
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.HatCity">
+    <id column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="city_id" jdbcType="VARCHAR" property="cityId" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="father" jdbcType="VARCHAR" property="father" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    cid, cityID, city, father
+  </sql>
+  <select id="selectByProvinceId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hat_city
+    where father = #{father,jdbcType=BIGINT}
+  </select>
+
+</mapper>

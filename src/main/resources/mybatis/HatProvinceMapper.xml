@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiptimes.identity.dao.HatProvinceMapper">
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.HatProvince">
+    <id column="sid" jdbcType="INTEGER" property="sid" />
+    <result column="province_id" jdbcType="VARCHAR" property="provinceId" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sid, provinceID, province
+  </sql>
+  <select id="selectProvinceList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hat_province
+  </select>
+</mapper>

@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tiptimes.identity.dao.UserDepartmentMapper">
-  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.UserDepartment">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.UserDepartment">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+    </resultMap>
 
-  <sql id="Base_Column_List">
+    <sql id="Base_Column_List">
     id, department_id, user_id
   </sql>
 
-  <select id="selectUserByDepartmentId" parameterType="java.lang.Integer" resultType="com.tiptimes.identity.vo.UserVo">
+    <select id="selectUserByDepartmentId" parameterType="java.lang.Integer"
+            resultType="com.tiptimes.identity.vo.UserVo">
     SELECT
-            au.id userId,
-            au.user_name userName,
-            au.login_name loginName
-        FROM
-            user_department ud
-        INNER JOIN department d ON ( d.id = ud.department_id)
-        INNER JOIN tp_main_admin_user au ON ( au.id = ud.user_id)
-        WHERE ud.department_id = #{departmentId}
+        au.id userId,
+        au.user_name userName,
+        au.login_name loginName
+    FROM
+        user_department ud
+    INNER JOIN department d ON ( d.id = ud.department_id)
+    INNER JOIN tp_main_admin_user au ON ( au.id = ud.user_id)
+    WHERE ud.department_id = #{departmentId}
+    AND au.is_leave = 0
+	AND au.status = 0
+	AND au.is_delete = 0
+	AND au.user_type = 1
   </select>
 
-  <select id="selectUserDepartmentListByUserId" parameterType="java.lang.String" resultType="com.tiptimes.identity.entity.UserDepartment">
+    <select id="selectUserDepartmentListByUserId" parameterType="java.lang.String"
+            resultType="com.tiptimes.identity.entity.UserDepartment">
     SELECT
     id id,
     user_id userId,
@@ -32,31 +38,31 @@
     WHERE user_id = #{userId}
   </select>
 
-  <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from user_department
-    where id = #{id,jdbcType=INTEGER}
-  </select>
+    <select id="selectDetail" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_department
+        where id = #{id,jdbcType=INTEGER}
+    </select>
 
-  <insert id="insert" parameterType="com.tiptimes.identity.entity.UserDepartment">
+    <insert id="insert" parameterType="com.tiptimes.identity.entity.UserDepartment">
     insert into user_department (department_id, user_id
       )
     values (#{departmentId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
       )
   </insert>
 
-  <update id="updateById" parameterType="com.tiptimes.identity.entity.UserDepartment">
+    <update id="updateById" parameterType="com.tiptimes.identity.entity.UserDepartment">
     update user_department
     set department_id = #{departmentId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <delete id="del" parameterType="java.lang.Integer">
+    <delete id="del" parameterType="java.lang.Integer">
     DELETE FROM user_department WHERE id = #{id}
   </delete>
-  <delete id="delByUserId" parameterType="java.lang.String">
+    <delete id="delByUserId" parameterType="java.lang.String">
     DELETE FROM user_department WHERE user_id = #{userId}
   </delete>
 </mapper>

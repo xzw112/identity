@@ -27,13 +27,31 @@ public class ClientController {
     private ClientService clientService;
 
     /**
-     * 获取列表
+     * 获取列表--应用管理用
      * @param clientRequest
      * @return
      */
     @RequestMapping("/getClientList")
     public PageResult getClientList(@RequestBody ClientRequest clientRequest){
         PageResult<OauthClientDetails> list = clientService.selectClientList(clientRequest);
+        if (list.getRows() != null && list.getRows().size() > 0) {
+            List<OauthClientDetails> rowList = list.getRows();
+            for (int i = 0; i < rowList.size(); i++) {
+                rowList.get(i).setCreateTimeStr(DateUtil.dateMinuteToStr(rowList.get(i).getCreateTime()));
+            }
+            list.setRows(rowList);
+        }
+        return list;
+    }
+
+    /**
+     * 获取列表 --应用授权用
+     * @param clientRequest
+     * @return
+     */
+    @RequestMapping("/getClientListByType")
+    public PageResult getClientListByType(@RequestBody ClientRequest clientRequest){
+        PageResult<OauthClientDetails> list = clientService.selectClientListByType(clientRequest);
         if (list.getRows() != null && list.getRows().size() > 0) {
             List<OauthClientDetails> rowList = list.getRows();
             for (int i = 0; i < rowList.size(); i++) {

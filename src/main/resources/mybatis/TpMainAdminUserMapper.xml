@@ -150,8 +150,35 @@
             u.user_type AS userType
         FROM tp_main_admin_user u
         WHERE u.login_name = #{userName}
-        AND status = 0
-        AND is_delete = 0
+        AND u.status = 0
+        AND u.is_delete = 0
+    </select>
+    <select id="selectUserByPhone" resultType="com.tiptimes.identity.vo.UserDetailsVo"
+            parameterType="java.lang.String">
+        SELECT
+            u.id AS id,
+            u.user_name AS userName,
+            u.login_name AS loginName,
+            u.login_password AS loginPassword,
+            u.user_contact AS userContact,
+            u.user_address AS userAddress,
+            u.mail AS mail,
+            u.create_time AS createTime,
+            u.update_time AS updateTime,
+            u.status AS status,
+            u.is_admin AS isAdmin,
+            u.is_leave AS isLeave,
+            u.nature AS nature,
+            u.post AS post,
+            u.sort AS sort,
+            u.group_id AS groupId,
+            u.department AS department,
+            u.header_url AS headerUrl,
+            u.user_type AS userType
+        FROM tp_main_admin_user u
+        WHERE u.user_contact = #{phoneNumber}
+        AND u.status = 0
+        AND u.is_delete = 0
     </select>
 
     <select id="selectUserById" resultType="com.tiptimes.identity.vo.ClientUserVo"
@@ -175,11 +202,13 @@
             u.group_id AS groupId,
             u.department AS department,
             u.header_url AS headerUrl,
-            u.user_out_type AS userOutType
+            u.user_out_type AS userOutType,
+            u.user_type AS userType
         FROM tp_main_admin_user u
         WHERE u.id = #{id}
-        AND status = 0
-        AND is_delete = 0
+        AND u.status = 0
+        AND u.is_delete = 0
+        AND u.is_leave = 0
     </select>
 
     <update id="updateUserLeave" parameterType="java.lang.String">

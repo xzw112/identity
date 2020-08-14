@@ -5,11 +5,14 @@ import com.tiptimes.identity.common.Constants;
 import com.tiptimes.identity.common.ErrorConstants;
 import com.tiptimes.identity.common.ResponseCodeEnums;
 import com.tiptimes.identity.common.ResponseResult;
+import com.tiptimes.identity.dao.TpMainAdminUserMapper;
 import com.tiptimes.identity.entity.Login;
 import com.tiptimes.identity.entity.OauthCheck;
 import com.tiptimes.identity.entity.TpMainAdminUser;
+import com.tiptimes.identity.qo.MobileRequest;
 import com.tiptimes.identity.qo.RedirectRequest;
 import com.tiptimes.identity.utils.RedisUtil;
+import com.tiptimes.identity.vo.ClientUserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.binary.Base64;
@@ -40,6 +43,8 @@ public class ServerOauth2Controller {
 
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private TpMainAdminUserMapper tpMainAdminUserMapper;
 
 
     private final String client_id = Constants.CLIENT_ID;
@@ -127,7 +132,9 @@ public class ServerOauth2Controller {
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
         ResponseEntity<OAuth2AccessToken> resp = rest.postForEntity(TOKEN_REQUEST_URI, entity, OAuth2AccessToken.class);
         if (!resp.getStatusCode().equals(HttpStatus.OK)) {
-            throw new RuntimeException(resp.toString());
+            result.setCode(ResponseCodeEnums.FAILURE.getCode());
+            result.setMessage("登陆失败！");
+            return result;
         }
         OAuth2AccessToken oAuth2AccessToken = resp.getBody();
         // 将token存入redis库(用户token存入redis 2天)
@@ -138,7 +145,52 @@ public class ServerOauth2Controller {
         if (StringUtils.isEmpty(token)) {
             redisUtil.setEx(userId, oAuth2AccessToken.getValue(), Constants.TIME_COUNT, Constants.UNIT);
         } else {
-            redisUtil.expire(userId, Constants.TIME_COUNT, Constants.UNIT);
+            redisUtil.delete(userId);
+            redisUtil.setEx(userId, oAuth2AccessToken.getValue(), Constants.TIME_COUNT, Constants.UNIT);
+        }
+        result.setCode(ResponseCodeEnums.SUCCESS.getCode());
+        result.setMessage("成功");
+        result.setData(oAuth2AccessToken);
+        return result;
+    }
+
+    /**
+     * 客户端获取token
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/mobileLogin", method = RequestMethod.POST)
+    @ApiOperation(value = "登录")
+    public ResponseResult mobileLogin(@RequestBody MobileRequest mobileRequest) {
+        ResponseResult result = new ResponseResult();
+        String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/mobile?grant_type=mobile&mobile=" + mobileRequest.getPhoneNumber();
+        // 构建header
+        String auth = client_id + ":" + client_secret;
+        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes());
+        String authHeader = "Basic " + new String(encodedAuth);
+        RestTemplate rest = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.add("authorization", authHeader);
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        ResponseEntity<OAuth2AccessToken> resp = rest.postForEntity(TOKEN_REQUEST_URI, entity, OAuth2AccessToken.class);
+        if (!resp.getStatusCode().equals(HttpStatus.OK)) {
+            result.setCode(ResponseCodeEnums.FAILURE.getCode());
+            result.setMessage("登陆失败！");
+            return result;
+        }
+        OAuth2AccessToken oAuth2AccessToken = resp.getBody();
+        // 将token存入redis库(用户token存入redis 2天)
+        Object obj =  oAuth2AccessToken.getAdditionalInformation().get("userInfo");
+        Map<String, String> map = JSON.parseObject(JSON.toJSONString(obj),LinkedHashMap.class);
+        String userId = map.get("id");
+        String token = redisUtil.get(userId);
+        if (StringUtils.isEmpty(token)) {
+            redisUtil.setEx(userId, oAuth2AccessToken.getValue(), Constants.TIME_COUNT, Constants.UNIT);
+        } else {
+            redisUtil.delete(userId);
+            redisUtil.setEx(userId, oAuth2AccessToken.getValue(), Constants.TIME_COUNT, Constants.UNIT);
         }
         result.setCode(ResponseCodeEnums.SUCCESS.getCode());
         result.setMessage("成功");
@@ -157,6 +209,7 @@ public class ServerOauth2Controller {
     @ApiOperation(value = "token校验")
     public ResponseResult checkToken(@RequestParam("token") String token, @RequestParam("userId") String userId) {
         ResponseResult result = new ResponseResult();
+        // 验证oauth2 的token
         String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/check_token";
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -176,16 +229,24 @@ public class ServerOauth2Controller {
         if (!response.getStatusCode().equals(HttpStatus.OK)) {
             throw new RuntimeException(response.toString());
         }
-        OauthCheck oauthCheck = response.getBody();
+        // 验证redis
+        //OauthCheck oauthCheck = response.getBody();
+        if (StringUtils.isEmpty(userId)) {
+            result.setCode(ResponseCodeEnums.FAILURE.getCode());
+            result.setMessage("参数错误");
+            return result;
+        }
         String redisToken = redisUtil.get(userId);
         if (StringUtils.isEmpty(redisToken)) {
             result.setCode(ResponseCodeEnums.FAILURE.getCode());
             result.setMessage("登录失效");
         } else {
+            // token校验成功返回用户基本信息
+            ClientUserVo userVo = tpMainAdminUserMapper.selectUserById(userId);
             result.setCode(ResponseCodeEnums.SUCCESS.getCode());
             result.setMessage("成功");
+            result.setData(userVo);
         }
-        result.setData(token);
         return result;
     }
 
