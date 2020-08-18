@@ -24,7 +24,7 @@ public class HttpUtils {
 
 
     // 1.使用get方式发送报文
-    public static String getData(String url, String token) {
+    public static String getData(String url) {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet get = new HttpGet(url);
         //get.setHeader("Authorization", "Bearer " + token);

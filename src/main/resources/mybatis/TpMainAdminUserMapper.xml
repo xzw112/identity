@@ -101,6 +101,7 @@
         u.id userId,
         u.login_name loginName,
         u.nick_name nickName,
+        u.user_name userName,
         u.sex sex,
         u.create_time createTime,
         u.ip_addr ipAddr,
@@ -203,14 +204,25 @@
             u.department AS department,
             u.header_url AS headerUrl,
             u.user_out_type AS userOutType,
-            u.user_type AS userType
+            u.user_type AS userType,
+            u.birth AS birth,
+            u.nation AS nation,
+            u.province AS province,
+            u.city AS city,
+            u.county AS county,
+            u.post_code AS postCode,
+            u.education AS education
         FROM tp_main_admin_user u
         WHERE u.id = #{id}
         AND u.status = 0
         AND u.is_delete = 0
         AND u.is_leave = 0
     </select>
-
+    <!--查询用户密码-->
+    <select id="selectUserPwd" parameterType="java.lang.String" resultType="java.lang.String">
+        select login_password from tp_main_admin_user where id = #{id}
+    </select>
+    <!--更新为离职用户-->
     <update id="updateUserLeave" parameterType="java.lang.String">
         UPDATE
         tp_main_admin_user
@@ -221,6 +233,7 @@
         </foreach>
     </update>
 
+    <!--还原离职用户-->
     <update id="updateUserUnLeave" parameterType="java.lang.String">
         UPDATE
         tp_main_admin_user
@@ -230,27 +243,25 @@
             #{item}
         </foreach>
     </update>
+    <!--启用用户-->
     <update id="updateUserUse" parameterType="java.lang.String">
          UPDATE
         tp_main_admin_user
         SET status = 0
         where id = #{id}
     </update>
+    <!--禁用用户-->
     <update id="updateUserUnUse" parameterType="java.lang.String">
          UPDATE
         tp_main_admin_user
         SET status = 1
         where id = #{id}
     </update>
-    <!--更新外部用户-->
+    <!--更新外部用户-管理后台用-->
     <update id="updateOutUser" parameterType="com.tiptimes.identity.entity.OutUser">
         update
         tp_main_admin_user
         set
-        login_name = #{loginName},
-        <if test="loginPassword != null and loginPassword != ''">
-            login_password = #{loginPassword},
-        </if>
         user_name = #{userName},
         nick_name = #{nickName},
         sex = #{sex},
@@ -260,8 +271,41 @@
         user_out_type = #{userOutType}
         where id = #{id}
     </update>
-
-    <!--新增外部用户-->
+    <!--更新外部用户-客户端完善用户资料-->
+    <update id="updateOutUserInfo" parameterType="com.tiptimes.identity.qo.OutUserInfoRequest">
+        update
+        tp_main_admin_user
+        set
+        user_name = #{userName},
+        sex = #{sex},
+        nation = #{nation},
+        province = #{province},
+        city = #{city},
+        county = #{county},
+        post_code = #{postCode},
+        user_address = #{userAddress},
+        user_contact = #{userContact},
+        birth = #{birth},
+        education = #{education}
+        where
+        id = #{id}
+    </update>
+    <!--修改用户头像-->
+    <update id="updateUserHead" parameterType="com.tiptimes.identity.qo.UserHeadRequest">
+        update
+        tp_main_admin_user
+        set
+        header_url = #{headerUrl}
+        where id = #{userId}
+    </update>
+    <!--修改用户密码-->
+    <update id="updateUserPwd" parameterType="com.tiptimes.identity.qo.UserPwdRequest">
+        update
+        tp_main_admin_user
+        set login_password = #{newPassword}
+        where id = #{id}
+    </update>
+    <!--新增外部用户-管理后台添加外部用户-->
     <insert id="insertOutUser" parameterType="com.tiptimes.identity.entity.OutUser">
         insert into tp_main_admin_user
         (
@@ -282,6 +326,25 @@
             #{isDelete}, #{createTime},
             #{createUser}, #{userOutType},
             2
+        )
+    </insert>
+    <!--新增外部用户-客户端注册新用户-->
+    <insert id="insertClientOutUser" parameterType="com.tiptimes.identity.qo.RegisterOutUserRequest">
+        insert into tp_main_admin_user
+        (
+            id, login_name,
+            login_password, user_name,
+            sex,
+            user_out_type, user_type,
+            birth, user_contact
+        )
+        values
+        (
+            #{id}, #{loginName},
+            #{loginPassword}, #{userName},
+            #{sex},
+            1, 2,
+            #{birth}, #{userContact}
         )
     </insert>
 

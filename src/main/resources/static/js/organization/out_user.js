@@ -46,8 +46,8 @@ function initData() {
             field: 'loginName',
             title: '登录账号',
         },{
-            field: 'nickName',
-            title: '昵称'
+            field: 'userName',
+            title: '姓名'
         },{
             field: 'sex',
             title: '性别',
@@ -151,6 +151,7 @@ function edit(row) {
     $("#userId").val(row.userId);
     $("#loginName").val(row.loginName);
     $("#loginPassword").val(row.loginPassword);
+    $("#userName").val(row.userName);
     $("#nickName").val(row.nickName);
     $("#sex").val(row.sex);
     $("#userOutType").val(row.userOutType);
@@ -161,6 +162,8 @@ function edit(row) {
         $("[name='my-checkbox']").bootstrapSwitch('state', false);
     }
     $("#saveBtn").show();
+    $("#loginName").attr("readonly", true);
+    $("#loginPassword").attr("readonly", true);
     $("#myModal").modal('show');
 }
 // 启用、禁用
@@ -224,18 +227,19 @@ function addOrEdit() {
     if ($("#loginPassword").val().trim() !== '#*virtual@$password*') {
         loginPassword = new Base64().encode($("#loginPassword").val().trim());
     }
+    var userName = $("#userName").val().trim();
     var nickName = $("#nickName").val().trim();
     var sex = $("#sex").val().trim();
     var userOutType = $("#userOutType").val().trim();
     var status = $("#sw_value").val().trim();
     if (loginName == null || loginName == '') {
-        narn('error', '请输入登录名')
+        narn('error', '请输入登录名');
         return;
     }
     if (userId == null || userId == '' ) {
         data['id'] = userId;
         if (loginPassword == null || loginPassword == '') {
-            narn('error', '请输入密码')
+            narn('error', '请输入密码');
             return;
         } else {
             data['loginPassword'] = loginPassword;
@@ -245,15 +249,21 @@ function addOrEdit() {
             data['loginPassword'] = loginPassword;
         }
     }
+    if (userName == null || userName == '') {
+        narn('error', '请输入姓名');
+        return;
+    }
     if (nickName == null || nickName == '') {
-        narn('error', '请输入昵称')
+        narn('error', '请输入昵称');
         return;
     }
     data['loginName'] = loginName;
     data['nickName'] = nickName;
+    data['userName'] = userName;
     data['sex'] = sex;
     data['userOutType'] = userOutType;
     data['status'] = status;
+    data['id'] = userId;
     var url = '';
     if (userId != null && userId != '') {
         url = '/admin/adminUser/updateOutUser';

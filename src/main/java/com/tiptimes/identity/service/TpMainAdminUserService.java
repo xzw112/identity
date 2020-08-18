@@ -4,11 +4,8 @@ import com.tiptimes.identity.bo.AdminUserParam;
 import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.entity.OutUser;
 import com.tiptimes.identity.entity.TpMainAdminUser;
-import com.tiptimes.identity.qo.OutUserRequest;
-import com.tiptimes.identity.vo.ClientUserVo;
-import com.tiptimes.identity.vo.OutUserVo;
-import com.tiptimes.identity.vo.TpMainAdminUserVO;
-import com.tiptimes.identity.vo.UserDetailsVo;
+import com.tiptimes.identity.qo.*;
+import com.tiptimes.identity.vo.*;
 
 import java.util.List;
 
@@ -71,7 +68,23 @@ public interface TpMainAdminUserService {
     // 新增外部用户
     int insertOutUser(OutUser outUser);
 
+    // 新增外部用户-客户端注册新用户
+    int insertClientOutUser(RegisterOutUserRequest registerOutUserRequest);
+
     int updateUserUse(String id);
     int updateUserUnUse(String id);
+
+    // 更新用户头像
+    int updateUserHead(UserHeadRequest userHeadRequest);
+
+    // 获取省市县数据
+    List<ProvinceVo> cities();
+
+    // 更新外部用户-客户端完善用户资料
+    int updateOutUserInfo(OutUserInfoRequest outUserInfoRequest);
+
+    // 更新用户密码
+    int updateUserPwd(UserPwdRequest userPwdRequest);
+
 
 }

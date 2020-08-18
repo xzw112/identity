@@ -1,4 +1,4 @@
-package com.tiptimes.identity.controller;
+package com.tiptimes.identity.controller.client;
 
 import com.tiptimes.identity.common.Constants;
 import com.tiptimes.identity.common.ErrorConstants;
@@ -37,11 +37,12 @@ public class UserClientController {
 
     /**
      * 获取登录人员的应用列表--前端
+     *
      * @param clientRequest
      * @return
      */
     @RequestMapping(value = "/getUserClientList", method = RequestMethod.POST)
-    public ResponseResult getUserClientList(@RequestBody ClientRequest clientRequest){
+    public ResponseResult getUserClientList(@RequestBody ClientRequest clientRequest) {
         // 重置redis token的有效时间
         String userId = clientRequest.getUserId();
         if (StringUtils.isNotEmpty(userId)) {
@@ -51,14 +52,22 @@ public class UserClientController {
             } else {
                 return ResponseResult.error(ResponseCodeEnums.LOGINFAIL.getCode(), "登录失效，请重新登录！");
             }
-            ClientUserVo userVo = tpMainAdminUserMapper.selectUserById(userId);
             List<OauthClientDetails> list = null;
-            if (userVo.getUserType() == 1) { // 内部用户
-                list  = userClientService.selectUserClientList(userId);
-            } else {
-                // 外部应用
+            // 请求类型 内部登录
+            if (clientRequest.getLoginType() == 1) {
+                list = userClientService.selectUserClientList(userId);
+            }
+            // 请求类型 外部登录
+            if (clientRequest.getLoginType() == 2) {
                 list = oauthClientDetailsMapper.selectOutClientList();
             }
+//            ClientUserVo userVo = tpMainAdminUserMapper.selectUserById(userId);
+//            if (userVo.getUserType() == 1) { // 内部用户
+//                list  = userClientService.selectUserClientList(userId);
+//            } else {
+//                // 外部应用
+//                list = oauthClientDetailsMapper.selectOutClientList();
+//            }
             return ResponseResult.successWithData(list);
         } else {
             return ResponseResult.error("请求错误！");
@@ -67,11 +76,12 @@ public class UserClientController {
 
     /**
      * 获取登录人员的应用列表--后台
+     *
      * @param clientRequest
      * @return
      */
     @RequestMapping(value = "/getAdminUserClientList", method = RequestMethod.POST)
-    public ResponseResult getAdminUserClientList(@RequestBody ClientRequest clientRequest){
+    public ResponseResult getAdminUserClientList(@RequestBody ClientRequest clientRequest) {
         String userId = clientRequest.getUserId();
         if (StringUtils.isNotEmpty(userId)) {
             List<OauthClientDetails> list = userClientService.selectUserClientList(userId);
@@ -83,11 +93,12 @@ public class UserClientController {
 
     /**
      * 根据应用id获取用户
+     *
      * @param clientId
      * @return
      */
     @RequestMapping(value = "/getUserByClientId", method = RequestMethod.POST)
-    public ResponseResult getUserByClientId(String clientId){
+    public ResponseResult getUserByClientId(String clientId) {
         if (StringUtils.isNotEmpty(clientId)) {
             List<UserVo> list = userClientService.selectUserByClientId(clientId);
             return ResponseResult.successWithData(list);
@@ -97,13 +108,13 @@ public class UserClientController {
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public ResponseResult insert(@RequestBody UserClientRequest userClientRequest){
+    public ResponseResult insert(@RequestBody UserClientRequest userClientRequest) {
         int num = userClientService.insert(userClientRequest);
         return ResponseResult.successWithData(num);
     }
 
     @RequestMapping(value = "/insertByClientId", method = RequestMethod.POST)
-    public ResponseResult insertByClientId(@RequestBody ClientUserRequest clientUserRequest){
+    public ResponseResult insertByClientId(@RequestBody ClientUserRequest clientUserRequest) {
         int num = userClientService.insertByClientId(clientUserRequest);
         return ResponseResult.successWithData(num);
     }

@@ -50,7 +50,7 @@ public class ServerOauth2Controller {
     private final String client_id = Constants.CLIENT_ID;
     private final String client_secret = Constants.CLIENT_SECRET;
     private final String redirect_uri = Constants.REDIRECT_URI;
-    private  String localIp;
+    private String localIp;
     @Value("${server.port}")
     private long PORT;
 
@@ -209,26 +209,31 @@ public class ServerOauth2Controller {
     @ApiOperation(value = "token校验")
     public ResponseResult checkToken(@RequestParam("token") String token, @RequestParam("userId") String userId) {
         ResponseResult result = new ResponseResult();
-        // 验证oauth2 的token
-        String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/check_token";
-        RestTemplate rest = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("token", token);
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,null);
-        ResponseEntity<OauthCheck> response = null;
-        try {
-            response = rest.postForEntity(TOKEN_REQUEST_URI, request , OauthCheck.class );
-        } catch (Exception e) {
-            result.setCode(ResponseCodeEnums.FAILURE.getCode());
-            result.setMessage("登录失效");
-            return result;
+        // 验证微信 的token
+        if (token.split("@").length > 1) {
+
+
+        } else { // 验证oauth2 的token
+            String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/check_token";
+            RestTemplate rest = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+            map.add("token", token.split("@")[0]);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map,null);
+            ResponseEntity<OauthCheck> response = null;
+            try {
+                response = rest.postForEntity(TOKEN_REQUEST_URI, request , OauthCheck.class );
+            } catch (Exception e) {
+                result.setCode(ResponseCodeEnums.FAILURE.getCode());
+                result.setMessage("登录失效");
+                return result;
+            }
+            if (!response.getStatusCode().equals(HttpStatus.OK)) {
+                throw new RuntimeException(response.toString());
+            }
         }
 
-        if (!response.getStatusCode().equals(HttpStatus.OK)) {
-            throw new RuntimeException(response.toString());
-        }
         // 验证redis
         //OauthCheck oauthCheck = response.getBody();
         if (StringUtils.isEmpty(userId)) {
@@ -258,7 +263,4 @@ public class ServerOauth2Controller {
     public void toClientIndex(RedirectRequest redirectRequest, HttpServletResponse response) throws IOException {
         response.sendRedirect(redirectRequest.getRedirectUri() + "?token=" + redirectRequest.getToken()+"&userId=" + redirectRequest.getUserId());
     }
-
-
-
 }

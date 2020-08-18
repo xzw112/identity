@@ -7,19 +7,17 @@ import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.dao.*;
 import com.tiptimes.identity.entity.*;
 import com.tiptimes.identity.enums.DataStatus;
-import com.tiptimes.identity.qo.OutUserRequest;
+import com.tiptimes.identity.qo.*;
 import com.tiptimes.identity.service.TpMainAdminUserService;
 import com.tiptimes.identity.utils.*;
-import com.tiptimes.identity.vo.ClientUserVo;
-import com.tiptimes.identity.vo.OutUserVo;
-import com.tiptimes.identity.vo.TpMainAdminUserVO;
-import com.tiptimes.identity.vo.UserDetailsVo;
+import com.tiptimes.identity.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +37,13 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
     private UserDepartmentMapper userDepartmentMapper;
     @Resource
     private UserGroupMapper userGroupMapper;
+    @Resource
+    private HatProvinceMapper hatProvinceMapper;
+    @Resource
+    private HatCityMapper hatCityMapper;
+    @Resource
+    private HatAreaMapper hatAreaMapper;
+
 
     @Override
     public PageResult<TpMainAdminUserVO> selectPageList(AdminUserParam adminUserParam) {
@@ -212,6 +217,13 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
     }
 
     @Override
+    public int insertClientOutUser(RegisterOutUserRequest registerOutUserRequest) {
+        registerOutUserRequest.setId(UUIDUtil.getUUID());
+        registerOutUserRequest.setLoginPassword(BCrypt.hashpw(BASE64Util.getFromBase64(registerOutUserRequest.getLoginPassword()), BCrypt.gensalt()));
+        return tpMainAdminUserMapper.insertClientOutUser(registerOutUserRequest);
+    }
+
+    @Override
     public int updateUserUse(String id) {
         return tpMainAdminUserMapper.updateUserUse(id);
     }
@@ -219,5 +231,100 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
     @Override
     public int updateUserUnUse(String id) {
         return tpMainAdminUserMapper.updateUserUnUse(id);
+    }
+
+    @Override
+    public int updateUserHead(UserHeadRequest userHeadRequest) {
+        return tpMainAdminUserMapper.updateUserHead(userHeadRequest);
+    }
+
+    @Override
+    public List<ProvinceVo> cities() {
+
+        // 返回的结果
+        List<ProvinceVo> list = new ArrayList<>();
+        // 省数据
+        List<HatProvince> provinceList = hatProvinceMapper.selectProvinceList();
+        // 城市数据
+        List<HatCity> cityList = hatCityMapper.selectCityList();
+        // 区县数据
+        List<HatArea> areaList = hatAreaMapper.selectAreaList();
+        // 处理省数据
+        if (provinceList.size() > 0) {
+            for (int i = 0; i < provinceList.size(); i++) {
+                ProvinceVo provinceVo = new ProvinceVo();
+                HatProvince hatProvince = provinceList.get(i);
+                provinceVo.setLable(hatProvince.getProvince());
+                provinceVo.setValue(hatProvince.getProvinceId());
+                list.add(provinceVo);
+            }
+        }
+
+        // 处理城市数据
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                List<CityVo> cityVoList = new ArrayList<>();
+                ProvinceVo provinceVo = list.get(i);
+                for (int j = 0; j < cityList.size(); j++) {
+                    HatCity hatCity = cityList.get(j);
+                    if (provinceVo.getValue().equals(hatCity.getFather())) {
+                        CityVo cityVo = new CityVo();
+                        cityVo.setLable(hatCity.getCity());
+                        cityVo.setValue(hatCity.getCityId());
+                        cityVoList.add(cityVo);
+                    }
+                }
+                list.get(i).setChildren(cityVoList);
+            }
+        }
+
+        // 处理区县数据
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                List<CityVo> cityChildrenList = list.get(i).getChildren();
+                for (int j = 0; j < cityChildrenList.size(); j++) {
+                    List<AreaVo> areaVoList = new ArrayList<>();
+                    CityVo cityVo = cityChildrenList.get(j);
+                    for (int k = 0; k < areaList.size(); k++) {
+                        HatArea hatArea = areaList.get(k);
+                        if (cityVo.getValue().equals(hatArea.getFather())) {
+                            AreaVo areaVo = new AreaVo();
+                            areaVo.setValue(hatArea.getAreaId());
+                            areaVo.setLable(hatArea.getArea());
+                            areaVoList.add(areaVo);
+                        }
+                    }
+                    list.get(i).getChildren().get(j).setChildren(areaVoList);
+                }
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public int updateOutUserInfo(OutUserInfoRequest outUserInfoRequest) {
+        return tpMainAdminUserMapper.updateOutUserInfo(outUserInfoRequest);
+    }
+
+    @Override
+    public int updateUserPwd(UserPwdRequest userPwdRequest) {
+        if (StringUtils.isNotEmpty(userPwdRequest.getId())) {
+            String pwd = tpMainAdminUserMapper.selectUserPwd(userPwdRequest.getId());
+            if (StringUtils.isNotEmpty(pwd)) {
+                if (userPwdRequest.getNewPassword().equals(userPwdRequest.getReportPassword())) {
+                    String newPwd = BASE64Util.getFromBase64(userPwdRequest.getNewPassword());
+                    boolean flag = BCrypt.checkpw(newPwd, pwd);
+                    if (flag) {
+                        int num = tpMainAdminUserMapper.updateUserPwd(userPwdRequest);
+                        return num;
+                    } else {
+                        return -2;
+                    }
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return 0;
     }
 }

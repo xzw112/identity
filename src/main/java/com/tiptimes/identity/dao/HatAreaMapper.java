@@ -7,5 +7,5 @@ import java.util.List;
 @Repository
 public interface HatAreaMapper {
 
-    List<HatArea> selectByCityId(String cityId);
+    List<HatArea> selectAreaList();
 }

@@ -46,7 +46,7 @@ public class Constants {
     public static final TimeUnit UNIT = TimeUnit.DAYS;
     public static final Integer TIME_COUNT = 2;
 
-    // 客户端退出
+    // ======客户端退出开始======
     public static final List<String> CLIENTLIST = new ArrayList<>();
     // 1.知识学习平台
     //private static final String ZS_LOGOUT_URL = "http://192.168.1.120:8083/identityLogout?token=";
@@ -54,4 +54,16 @@ public class Constants {
     Constants(){
         CLIENTLIST.add(ZS_LOGOUT_URL);
     }
+    // ======客户端退出结束======
+
+
+    // ==========微信登录--基础数据===========
+    // 1.微信开放平台 appid
+    public static final String APP_ID = "wx5ca958845d4af7d1";
+    // 2.微信开放平台 appsecret
+    public static final String APP_SECRET = "1d70d2590be19db30f4f6a2020ebf381";
+    // 回调地址
+    public static final String WX_REDIRECT_URL = "http://tbrz.tiptimes.com/customer/weChatCallBack/callback";
+    // ==========微信登录--基础数据===========
+
 }

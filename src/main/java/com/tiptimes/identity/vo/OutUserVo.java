@@ -16,6 +16,8 @@ public class OutUserVo implements Serializable {
 
     private String nickName; // 昵称
 
+    private String userName;
+
     private Integer sex;
 
     private String createTime;// 注册时间

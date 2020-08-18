@@ -7,7 +7,7 @@
     <result column="province" jdbcType="VARCHAR" property="province" />
   </resultMap>
   <sql id="Base_Column_List">
-    sid, provinceID, province
+    sid, province_id, province
   </sql>
   <select id="selectProvinceList" resultMap="BaseResultMap">
     select 

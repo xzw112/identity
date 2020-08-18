@@ -3,7 +3,7 @@ package com.tiptimes.identity.dao;
 import com.tiptimes.identity.bo.AdminUserParam;
 import com.tiptimes.identity.entity.OutUser;
 import com.tiptimes.identity.entity.TpMainAdminUser;
-import com.tiptimes.identity.qo.OutUserRequest;
+import com.tiptimes.identity.qo.*;
 import com.tiptimes.identity.utils.MyMapper;
 import com.tiptimes.identity.vo.ClientUserVo;
 import com.tiptimes.identity.vo.OutUserVo;
@@ -34,6 +34,8 @@ public interface TpMainAdminUserMapper extends MyMapper<TpMainAdminUser> {
     UserDetailsVo selectUserByPhone(String phoneNumber);
 
     ClientUserVo selectUserById (String id);
+
+    String selectUserPwd(String id);
     // 批量离职
     int updateUserLeave(String[] id);
     // 批量还原
@@ -42,6 +44,16 @@ public interface TpMainAdminUserMapper extends MyMapper<TpMainAdminUser> {
     int updateOutUser(OutUser outUser);
     // 新增外部用户
     int insertOutUser(OutUser outUser);
+    // 新增外部用户-客户端注册新用户
+    int insertClientOutUser(RegisterOutUserRequest registerOutUserRequest);
+    // 启用用户
     int updateUserUse(String id);
+    // 禁用用户
     int updateUserUnUse(String id);
+    // 更新用户头像
+    int updateUserHead(UserHeadRequest userHeadRequest);
+    // 更新外部用户-客户端完善用户资料
+    int updateOutUserInfo(OutUserInfoRequest outUserInfoRequest);
+    // 更新用户密码
+    int updateUserPwd(UserPwdRequest userPwdRequest);
 }

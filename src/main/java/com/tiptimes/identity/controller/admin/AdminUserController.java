@@ -345,15 +345,11 @@ public class AdminUserController {
 
     @RequestMapping(value = "/updateOutUser", method = RequestMethod.POST)
     public ResponseResult updateOutUser(@RequestBody OutUser outUser){
-        TpMainAdminUser adminUser = new TpMainAdminUser();
-        adminUser.setId(outUser.getId());
-        adminUser.setLoginName(outUser.getLoginName());
-        boolean flag = checkAdminUserData(adminUser);
-        if (flag) {
-            int num = tpMainAdminUserService.updateOutUser(outUser);
+        int num = tpMainAdminUserService.updateOutUser(outUser);
+        if (num > 0) {
             return ResponseResult.successWithData(num);
         } else {
-            return ResponseResult.error(0, "保存失败！账号已存在！");
+            return ResponseResult.successWithData(num);
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.tiptimes.identity.vo;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

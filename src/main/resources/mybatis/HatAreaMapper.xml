@@ -8,12 +8,11 @@
     <result column="father" jdbcType="VARCHAR" property="father" />
   </resultMap>
   <sql id="Base_Column_List">
-    rid, areaID, area, father
+    rid, area_id, area, father
   </sql>
-  <select id="selectByCityId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectAreaList" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from hat_area
-    where father = #{father,jdbcType=BIGINT}
   </select>
 </mapper>
