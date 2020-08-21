@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class ResponseResult<T> implements Serializable {
 
-    private static final String SUCCESS_MSG = "ok";
+    private static final String SUCCESS_MSG = "成功";
 
     private Integer code;
     private String message;

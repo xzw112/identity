@@ -42,6 +42,16 @@ $("#save_btn").click(function () {
     var appType = $("input[name='appType']:checked").val();
     var redirectUrl = $("#exampleFormControlTextarea1").val();
     var status = $("#sw_value").val();
+    if (appName == null || appName == '') {
+        return narn('error', '请填写应用名称')
+    } 
+    if (redirectUrl == null || redirectUrl == '') {
+        return narn('error', '请填写回调地址');
+    }
+    if (imgUrl == null || imgUrl == '') {
+        return narn('error', '请上传应用图标')
+    }
+
     var data = {};
     data['clientName'] = appName;
     data['clientDomain'] = appDomain;

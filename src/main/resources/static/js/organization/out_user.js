@@ -108,13 +108,13 @@ function initData() {
 function btnGroup () {
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
-        '<a href="####"  id="userDetail" style="margin-left:15px" data-toggle="modal" data-target="#editrole" title="详情">详情' +
+        '<a href="####"  id="userDetail" style="margin-left:15px" data-toggle="modal" data-target="#editrole" title="详情" shiro:hasPermission="user_out_detail">详情' +
         '</a>' +
-        '<a href="####"  id="userEdit" style="margin-left:15px" data-toggle="modal" data-target="#editrole" title="修改">修改' +
+        '<a href="####"  id="userEdit" style="margin-left:15px" data-toggle="modal" data-target="#editrole" title="修改" shiro:hasPermission="user_out_edit">修改' +
         '</a>' +
-        '<a href="####"  id="userStatusEdit" style="margin-left:15px" data-toggle="modal" data-target="#editrole" title="启用/禁用">启用/禁用' +
+        '<a href="####"  id="userStatusEdit" style="margin-left:15px" data-toggle="modal" data-target="#editrole" title="启用/禁用" shiro:hasPermission="user_out_use">启用/禁用' +
         '</a>' +
-        '<a href="####"  id="userDel" style="margin-left:15px" data-toggle="modal" data-target="#editrole" title="删除">删除' +
+        '<a href="####"  id="userDel" style="margin-left:15px" data-toggle="modal" data-target="#editrole" title="删除" shiro:hasPermission="user_out_del">删除' +
         '</a>'
     return html
 }
@@ -145,7 +145,7 @@ function detail(row) {
     $("#saveBtn").hide();
     $("#myModal").modal('show');
 }
-
+// 编辑去显示
 function edit(row) {
     $("#myModalLabel").html('编辑用户');
     $("#userId").val(row.userId);
@@ -188,18 +188,27 @@ function userStatusEdit(row) {
 }
 // 删除用户
 function delUser(id) {
-    $.ajax({
-        url: baseUrl + '/admin/adminUser/batchDel',
-        async: false,
-        type: 'POST',
-        data: id,
-        contentType: "application/json",
-        success: function (result) {
-            narn('success', result.message);
-            initData();
-        }
-    });
-
+    if (id != null && id != '') {
+        $("#modal-confirm").modal('show');
+        $("#confirm_btn").off('click').click(function () {
+            $.ajax({
+                url: baseUrl + '/admin/adminUser/batchDel',
+                async: false,
+                type: 'POST',
+                data: id,
+                contentType: "application/json",
+                success: function (result) {
+                    if (result.code == 1) {
+                        narn('success', result.message);
+                    } else {
+                        narn('error', result.message);
+                    }
+                    initData();
+                    $("#modal-confirm").modal('hide');
+                }
+            });
+        });
+    }
 }
 
 $("#addOutUser").click(function () {

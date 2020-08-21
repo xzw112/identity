@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiptimes.identity.dao.LoginSystemLogMapper">
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.LoginSystemLog">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="operate_type" jdbcType="INTEGER" property="operateType" />
+    <result column="operate_log" jdbcType="VARCHAR" property="operateLog" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ip_address" jdbcType="VARCHAR" property="ipAddress" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, operate_type, operate_log, user_id, create_time, ip_address
+  </sql>
+  <select id="selectList" parameterType="com.tiptimes.identity.qo.LoginSystemLogRequest" resultType="com.tiptimes.identity.vo.LoginSystemLogVo">
+    select 
+    s.id id, s.operate_type operateType,
+    s.operate_log operateLog, s.user_id userId,
+    s.create_time createTime, s.ip_address ipAddress,
+    u.user_name userName, u.login_name loginName
+    from login_system_log s
+    left join tp_main_admin_user u on(s.user_id = u.id)
+    where 1=1
+    <if test="operateType > 0">
+      and s.operate_type = #{operateType}
+    </if>
+    <if test="startTime != null and endTime != null">
+      and s.create_time between #{startTime} and #{endTime}
+    </if>
+    <if test="searchText != null and searchText != ''">
+      and
+      (
+        s.ip_address  like concat('%',#{searchText},'%')
+        or
+        u.user_name like concat('%',#{searchText},'%')
+        or
+        u.login_name like concat('%',#{searchText},'%')
+      )
+    </if>
+    order by s.create_time desc
+  </select>
+  <insert id="insert" parameterType="com.tiptimes.identity.entity.LoginSystemLog">
+    insert into login_system_log (id, operate_type, operate_log, 
+      user_id, create_time, ip_address
+      )
+    values (#{id,jdbcType=VARCHAR}, #{operateType,jdbcType=INTEGER}, #{operateLog,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{ipAddress,jdbcType=VARCHAR}
+      )
+  </insert>
+
+
+</mapper>

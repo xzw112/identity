@@ -1,5 +1,6 @@
 package com.tiptimes.identity.controller;
 
+import com.tiptimes.identity.annotation.LoginLog;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -130,11 +131,30 @@ public class AdminGoToController {
     }
 
     /**
+     * 进出日志
+     * @return
+     */
+    @RequestMapping("/loginLog_index")
+    public String loginLog_index(){
+        return "systemLog/loginLog_index";
+    }
+
+    /**
+     * 消息管理
+     * @return
+     */
+    @RequestMapping("/information_index")
+    public String information_index() {
+        return "/otherManager/information";
+    }
+
+    /**
      * 退出登录
      * @param request
      * @return
      */
     @RequestMapping("/logout")
+    @LoginLog(operateType = 2, operateLog = "登出系统")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();//获取当前session
         if(session != null){

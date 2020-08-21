@@ -1,5 +1,7 @@
 package com.tiptimes.identity.controller.client;
 
+import com.tiptimes.identity.annotation.SystemLog;
+import com.tiptimes.identity.common.OperateTypeConstant;
 import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.Department;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("//customer/department")
+@RequestMapping("/customer/department")
 @Api(description = "组织架构")
 public class DepartmentController {
 
@@ -80,6 +82,7 @@ public class DepartmentController {
 
     @ApiOperation(value = "部门--编辑", hidden = true)
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "修改部门", moduleName = "用户-机构与组")
     public ResponseResult edit(@RequestBody Department department){
         int num = departmentService.updateById(department);
         return ResponseResult.successWithData(num);
@@ -88,6 +91,7 @@ public class DepartmentController {
 
     @ApiOperation(value = "部门--删除", hidden = true)
     @RequestMapping(value = "/del", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.DELETE, operateDetail = "删除部门", moduleName = "用户-机构与组")
     public ResponseResult del(Integer id){
         int num = departmentService.del(id);
         return ResponseResult.successWithData(num);
@@ -97,6 +101,7 @@ public class DepartmentController {
 
     @ApiOperation(value = "部门--添加", hidden = true)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "添加部门", moduleName = "用户-机构与组")
     public ResponseResult add(@RequestBody Department department, HttpServletRequest request){
         String userId = (String)request.getSession().getAttribute("userId");
         department.setCreateUser(userId);

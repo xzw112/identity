@@ -1,6 +1,7 @@
 package com.tiptimes.identity.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tiptimes.identity.annotation.LoginLog;
 import com.tiptimes.identity.bo.LoginParam;
 import com.tiptimes.identity.dao.TpMainAdminUserMapper;
 import com.tiptimes.identity.entity.TpMainAdminUser;
@@ -13,12 +14,10 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Decoder;
 import tk.mybatis.mapper.entity.Example;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +40,7 @@ public class LoginController {
      * @return
      */
     @PostMapping("/login")
+    @LoginLog(operateType = 1, operateLog = "登录系统")
     public JSONObject login(HttpServletRequest request, @RequestBody LoginParam loginParam) {
         JSONObject map = new JSONObject();
         //String sessionCode = (String) request.getSession().getAttribute("code");

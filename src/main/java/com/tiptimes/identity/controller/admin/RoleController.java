@@ -62,7 +62,7 @@ public class RoleController {
      * @return
      */
     @PostMapping(path = "/add")
-    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "新建角色", moduleName = "组织架构-角色管理")
+    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "新建角色", moduleName = "授权-权限系统")
     public ResponseResult add(HttpServletRequest request, @RequestBody TpMainRole tpMainRole) {
         //判断是否存在同名角色
         checkRoleData(tpMainRole);
@@ -86,7 +86,7 @@ public class RoleController {
      * @return
      */
     @PostMapping(path = "/update")
-    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "修改角色", moduleName = "组织架构-角色管理")
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "修改角色", moduleName = "授权-权限系统")
     public ResponseResult update(HttpServletRequest request, @RequestBody TpMainRole tpMainRole) {
         //判断是否存在同名角色
         checkRoleData(tpMainRole);
@@ -119,7 +119,7 @@ public class RoleController {
      * @return
      */
     @PostMapping(path = "/batchDel")
-    @SystemLog(operateType = OperateTypeConstant.DELETE, operateDetail = "删除角色", moduleName = "组织架构-角色管理")
+    @SystemLog(operateType = OperateTypeConstant.DELETE, operateDetail = "删除角色", moduleName = "授权-权限系统")
     public ResponseResult batchDel(HttpServletRequest request, @RequestBody String ids) {
         String [] arr = ids.split(",");
         for(String str : arr){
@@ -140,7 +140,7 @@ public class RoleController {
      * @return
      */
     @PostMapping(path = "/enable")
-    @SystemLog(operateType = OperateTypeConstant.ENABLE, operateDetail = "启用角色", moduleName = "组织架构-角色管理")
+    @SystemLog(operateType = OperateTypeConstant.ENABLE, operateDetail = "启用角色", moduleName = "授权-权限系统")
     public ResponseResult enable(HttpServletRequest request, @RequestBody String id) {
         TpMainRole tpMainRole = new TpMainRole();
         tpMainRole.setId(id);
@@ -160,7 +160,7 @@ public class RoleController {
      * @return
      */
     @PostMapping(path = "/disable")
-    @SystemLog(operateType = OperateTypeConstant.DISABLE, operateDetail = "禁用角色", moduleName = "组织架构-角色管理")
+    @SystemLog(operateType = OperateTypeConstant.DISABLE, operateDetail = "禁用角色", moduleName = "授权-权限系统")
     public ResponseResult disable(HttpServletRequest request, @RequestBody String id) {
         //判断该角色下是否有人员
         checkIsUse(id);
@@ -214,7 +214,7 @@ public class RoleController {
      * @return
      */
     @PostMapping("/saveRolePermission")
-    @SystemLog(operateType = OperateTypeConstant.CONFIG, operateDetail = "权限设置", moduleName = "组织架构-角色管理")
+    @SystemLog(operateType = OperateTypeConstant.CONFIG, operateDetail = "权限设置", moduleName = "授权-权限系统")
     public ResponseResult saveRolePermission(@RequestBody RoleParam roleParam) {
         int result = tpMainRolePermissionService.saveRolePermission(roleParam);
         if (result == 1) {

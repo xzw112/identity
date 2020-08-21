@@ -159,15 +159,13 @@ function jsTreeOnClick(data) {
 function btnGroup() {
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
-        '<a href="####"  id="relationUser" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="关联用户">关联用户' +
-        '</a>' +
-        '<a href="####"  id="groupDetail" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="详情">详情' +
+        '<a href="####"  id="groupDetail" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="详情" shiro:hasPermission="user_organization_detail">详情' +
         '</a>' +
         '<a href="####"  id="groupEdit" data-toggle="modal" data-target="#editinfo" ' +
-        'style="margin-left:15px" title="修改">修改' +
+        'style="margin-left:15px" title="修改" shiro:hasPermission="user_organization_edit">修改' +
         '</a>' +
         '<a href="####"  id="groupDel" data-toggle="modal" data-target="#deleteuser" ' +
-        'style="margin-left:15px" title="删除">删除' +
+        'style="margin-left:15px" title="删除" shiro:hasPermission="user_organization_del">删除' +
         '</a>'
     return html
 };
@@ -247,6 +245,12 @@ function addGroup() {
     var sort = $("#sort").val();
     var status = stateVal;
     var departmentId = $("#selectParentsGroupIds").val();
+    if (groupName == null || groupName == '') {
+        return narn('error', "分组名称不能为空");
+    }
+    if (departmentId == null || departmentId == '') {
+        return narn('error', "请选择所属部门");
+    }
     var data = {};
     data['departmentId'] = departmentId;
     data['parentId'] = parentId;
@@ -277,16 +281,25 @@ function addGroup() {
 // 删除组
 function delGroup(id) {
     if (id != null && id != '') {
-        $.ajax({
-            url: baseUrl + "/customer/group/del?id=" + id,
-            async: false,
-            type: 'POST',
-            contentType: "application/json",
-            success: function (result) {
-                narn('success', result.message);
-                initGroupData();
-            }
+        $("#modal-confirm").modal('show');
+        $("#confirm_btn").off('click').click(function () {
+            $.ajax({
+                url: baseUrl + "/customer/group/del?id=" + id,
+                async: false,
+                type: 'POST',
+                contentType: "application/json",
+                success: function (result) {
+                    if (result.code == 1) {
+                        narn('success', result.message);
+                    } else {
+                        narn('error', result.message);
+                    }
+                    initGroupData();
+                    $("#modal-confirm").modal('hide');
+                }
+            });
         });
+
     }
 }
 
@@ -447,13 +460,13 @@ function initDepartmentData() {
 function btnDepartment() {
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
-        '<a href="####"  id="departmentDetail" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="详情">详情' +
+        '<a href="####"  id="departmentDetail" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="详情" shiro:hasPermission="user_department_detail">详情' +
         '</a>' +
         '<a href="####"  id="departmentEdit" data-toggle="modal" data-target="#editinfo" ' +
-        'style="margin-left:15px" title="修改">修改' +
+        'style="margin-left:15px" title="修改" shiro:hasPermission="user_department_edit">修改' +
         '</a>' +
         '<a href="####"  id="departmentDel" data-toggle="modal" data-target="#deleteuser" ' +
-        'style="margin-left:15px" title="删除">删除' +
+        'style="margin-left:15px" title="删除" shiro:hasPermission="user_department_del">删除' +
         '</a>'
     return html
 };
@@ -522,6 +535,9 @@ $("#saveDepartmentBtn").click(function () {
     var status = departmentStateVal;
     var header = $("#protectUserId").val(); // 主管
     var reduceHeader = $("#protectUserId1").val(); // 分管
+    if (departmentName == null || departmentName == '') {
+        return narn('error', "请填写部门名称");
+    }
     var data = {};
     data['parentId'] = parentDepartment;
     data['name'] = departmentName;
@@ -557,16 +573,26 @@ $("#departmentSearch").click(function () {
 
 // 删除部门
 function delDepartment(id) {
-    $.ajax({
-        url: baseUrl + '/customer/department/del?id=' + id,
-        async: false,
-        type: 'POST',
-        contentType: "application/json",
-        success: function (result) {
-            initDepartmentData();
-            narn('success', result.message);
-        }
-    });
+    if (id != null && id != '') {
+        $("#modal-confirm").modal('show');
+        $("#confirm_btn").off('click').click(function () {
+            $.ajax({
+                url: baseUrl + '/customer/department/del?id=' + id,
+                async: false,
+                type: 'POST',
+                contentType: "application/json",
+                success: function (result) {
+                    if (result.code == 1) {
+                        narn('success', result.message);
+                    } else {
+                        narn('error', result.message);
+                    }
+                    initDepartmentData();
+                    $("#modal-confirm").modal('hide');
+                }
+            });
+        });
+    }
 }
 
 /**
@@ -950,13 +976,13 @@ function initPostData() {
 function btnPost() {
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
-        '<a href="####"  id="postDetail" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="详情">详情' +
+        '<a href="####"  id="postDetail" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="详情" shiro:hasPermission="user_post_detail">详情' +
         '</a>' +
         '<a href="####"  id="postEdit" data-toggle="modal" data-target="#editinfo" ' +
-        'style="margin-left:15px" title="修改">修改' +
+        'style="margin-left:15px" title="修改" shiro:hasPermission="user_post_edit">修改' +
         '</a>' +
         '<a href="####"  id="postDel" data-toggle="modal" data-target="#deleteuser" ' +
-        'style="margin-left:15px" title="删除">删除' +
+        'style="margin-left:15px" title="删除" shiro:hasPermission="user_post_del">删除' +
         '</a>'
     return html;
 };
@@ -982,6 +1008,9 @@ $("#savePostBtn").click(function () {
     var postSort = $("#postSort").val();
     var postDec = $("#postDec").val();
     var departmentId = $("#selectDeptIds3").val();
+    if (postName == null || postName == '') {
+        return narn('error', "请填写岗位名称")
+    }
     var data = {};
     data['postName'] = postName;
     data['postCode'] = postCode;
@@ -1037,16 +1066,25 @@ function postDetail(row, type) {
 // 删除
 function postDel(id) {
     if (id != null && id != '') {
-        $.ajax({
-            url: baseUrl + '/customer/post/del?id=' + id,
-            async: false,
-            type: 'POST',
-            contentType: "application/json",
-            success: function (result) {
-                narn('success', result.message);
-                initPostData();
-            }
-        })
+        $("#modal-confirm").modal('show');
+        $("#confirm_btn").off('click').click(function () {
+            $.ajax({
+                url: baseUrl + '/customer/post/del?id=' + id,
+                async: false,
+                type: 'POST',
+                contentType: "application/json",
+                success: function (result) {
+                    if (result.code == 1) {
+                        narn('success', result.message);
+                    } else {
+                        narn('error', result.message);
+                    }
+                    initPostData();
+                    $("#modal-confirm").modal('hide');
+                }
+            });
+        });
+
     }
 }
 

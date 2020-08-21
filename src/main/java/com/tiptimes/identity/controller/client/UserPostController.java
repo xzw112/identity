@@ -1,5 +1,7 @@
 package com.tiptimes.identity.controller.client;
 
+import com.tiptimes.identity.annotation.SystemLog;
+import com.tiptimes.identity.common.OperateTypeConstant;
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.UserDepartment;
 import com.tiptimes.identity.entity.UserPost;
@@ -54,6 +56,7 @@ public class UserPostController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑", hidden = true)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "编辑用户所属岗位", moduleName = "用户-内部用户")
     public ResponseResult edit(@RequestBody UserPost userPost){
         int num = userPostService.updateById(userPost);
         return ResponseResult.successWithData(num);
@@ -61,6 +64,7 @@ public class UserPostController {
 
     @RequestMapping(value = "/del", method = RequestMethod.POST)
     @ApiOperation(value = "删除", hidden = true)
+    @SystemLog(operateType = OperateTypeConstant.DELETE, operateDetail = "删除用户所属岗位", moduleName = "用户-内部用户")
     public ResponseResult del(Integer id) {
         int num = userPostService.del(id);
         return ResponseResult.successWithData(num);

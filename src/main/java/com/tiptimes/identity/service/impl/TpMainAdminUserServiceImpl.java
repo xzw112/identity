@@ -327,4 +327,13 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
         }
         return 0;
     }
+
+    @Override
+    public int resetPwd(String[] id) {
+        int num = 0;
+        if (id.length > 0) {
+            num = tpMainAdminUserMapper.resetPwd(id);
+        }
+        return num;
+    }
 }

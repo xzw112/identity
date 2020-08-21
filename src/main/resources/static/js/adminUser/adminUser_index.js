@@ -491,6 +491,32 @@ function unLeaveUser() {
 }
 
 /**
+ * 重置密码--后台
+ */
+function resetPwd() {
+    var selectIds = $('#examplePagination').bootstrapTable("getSelections");
+    var id = [];
+    if (selectIds.length > 0) {
+        for (var i = 0; i < selectIds.length; i++) {
+            id.push(selectIds[i].id)
+        }
+        if (id.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: baseUrl + "/admin/adminUser/resetPwd",
+                data: JSON.stringify(id),
+                async: true,
+                contentType: 'application/json;charset=UTF-8',
+                success: function (res) {
+                    console.log(res);
+                    narn('success', res.message)
+                }
+            });
+        }
+    }
+}
+
+/**
  * 重置按钮状态
  */
 function reset_btn() {

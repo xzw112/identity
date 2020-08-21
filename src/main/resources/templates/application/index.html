@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <head>
         <th:block th:include="include :: header('应用列表')" />
     </head>
@@ -10,8 +10,8 @@
                     <span class="label_name">应用列表</span>
                     <div class="crumbs">
                         <span class="gray">主页</span> <i>&nbsp;/&nbsp;</i>
-                        <span>组件</span> <i>&nbsp;/&nbsp;</i>
-                        <span>导航</span>
+                        <span>应用</span> <i>&nbsp;/&nbsp;</i>
+                        <span>应用列表</span>
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                         <span class="input-group-addon" id="basic-addon2">搜 索</span>
                     </div>
                 </div>
-                <div class="col-md-1 pull-right">
+                <div class="col-md-1 pull-right" shiro:hasPermission="application_list_add">
                     <button type="button" id="addApp" class="btn btn-default blue-btn">添加应用</button>
                 </div>
             </div>

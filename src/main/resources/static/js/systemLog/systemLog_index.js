@@ -64,7 +64,7 @@ function initData() {
             title: '操作类型'
         },{
             field: 'ipAddressStr',
-            title: '操作ip'
+            title: 'IP'
         }],
         queryParams: function queryParams(params) {
             // 设置查询参数

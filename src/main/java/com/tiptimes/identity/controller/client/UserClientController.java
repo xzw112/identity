@@ -1,9 +1,7 @@
 package com.tiptimes.identity.controller.client;
 
-import com.tiptimes.identity.common.Constants;
-import com.tiptimes.identity.common.ErrorConstants;
-import com.tiptimes.identity.common.ResponseCodeEnums;
-import com.tiptimes.identity.common.ResponseResult;
+import com.tiptimes.identity.annotation.SystemLog;
+import com.tiptimes.identity.common.*;
 import com.tiptimes.identity.dao.OauthClientDetailsMapper;
 import com.tiptimes.identity.dao.TpMainAdminUserMapper;
 import com.tiptimes.identity.entity.OauthClientDetails;
@@ -54,21 +52,25 @@ public class UserClientController {
             }
             List<OauthClientDetails> list = null;
             // 请求类型 内部登录
-            if (clientRequest.getLoginType() == 1) {
-                list = userClientService.selectUserClientList(userId);
-            }
-            // 请求类型 外部登录
-            if (clientRequest.getLoginType() == 2) {
-                list = oauthClientDetailsMapper.selectOutClientList();
-            }
-//            ClientUserVo userVo = tpMainAdminUserMapper.selectUserById(userId);
-//            if (userVo.getUserType() == 1) { // 内部用户
-//                list  = userClientService.selectUserClientList(userId);
-//            } else {
-//                // 外部应用
+//            if (clientRequest.getLoginType() == 1) {
+//                list = userClientService.selectUserClientList(userId);
+//            }
+//            // 请求类型 外部登录
+//            if (clientRequest.getLoginType() == 2) {
 //                list = oauthClientDetailsMapper.selectOutClientList();
 //            }
-            return ResponseResult.successWithData(list);
+            ClientUserVo userVo = tpMainAdminUserMapper.selectUserById(userId);
+            if (userVo.getUserType() == 1) { // 内部用户
+                list  = userClientService.selectUserClientList(userId);
+            } else {
+                // 外部应用
+                list = oauthClientDetailsMapper.selectOutClientList();
+            }
+            if (list.size() > 0) {
+                return ResponseResult.successWithData(list);
+            } else {
+                return ResponseResult.error("您还没有访问任何应用的权限，请联系管理员！");
+            }
         } else {
             return ResponseResult.error("请求错误！");
         }
@@ -108,12 +110,14 @@ public class UserClientController {
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "按用户授权应用", moduleName = "授权-内部应用授权")
     public ResponseResult insert(@RequestBody UserClientRequest userClientRequest) {
         int num = userClientService.insert(userClientRequest);
         return ResponseResult.successWithData(num);
     }
 
     @RequestMapping(value = "/insertByClientId", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "按应用授权用户", moduleName = "授权-内部应用授权")
     public ResponseResult insertByClientId(@RequestBody ClientUserRequest clientUserRequest) {
         int num = userClientService.insertByClientId(clientUserRequest);
         return ResponseResult.successWithData(num);

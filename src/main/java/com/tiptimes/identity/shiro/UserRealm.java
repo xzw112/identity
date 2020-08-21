@@ -89,7 +89,13 @@ public class UserRealm extends AuthorizingRealm {
         }
         TpMainAdminUser tpMainAdminUser = list.get(0);
         if (tpMainAdminUser != null) {
-            if (BCrypt.checkpw(password, tpMainAdminUser.getLoginPassword())) {
+            boolean flag = false;
+            try {
+                flag = BCrypt.checkpw(password, tpMainAdminUser.getLoginPassword());
+            } catch (Exception e){
+                throw new IncorrectCredentialsException("用户名密码错误");
+            }
+            if (flag) {
                 return new SimpleAuthenticationInfo(username,password,getName());
             }else {
                 throw new IncorrectCredentialsException("密码错误");

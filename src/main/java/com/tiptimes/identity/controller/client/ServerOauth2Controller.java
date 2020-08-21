@@ -1,14 +1,13 @@
 package com.tiptimes.identity.controller.client;
 
 import com.alibaba.fastjson.JSON;
+import com.tiptimes.identity.cahe.redis.VcodeManager;
 import com.tiptimes.identity.common.Constants;
-import com.tiptimes.identity.common.ErrorConstants;
 import com.tiptimes.identity.common.ResponseCodeEnums;
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.dao.TpMainAdminUserMapper;
 import com.tiptimes.identity.entity.Login;
 import com.tiptimes.identity.entity.OauthCheck;
-import com.tiptimes.identity.entity.TpMainAdminUser;
 import com.tiptimes.identity.qo.MobileRequest;
 import com.tiptimes.identity.qo.RedirectRequest;
 import com.tiptimes.identity.utils.RedisUtil;
@@ -33,7 +32,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -45,7 +43,8 @@ public class ServerOauth2Controller {
     private RedisUtil redisUtil;
     @Autowired
     private TpMainAdminUserMapper tpMainAdminUserMapper;
-
+    @Autowired
+    private VcodeManager vcodeManager;
 
     private final String client_id = Constants.CLIENT_ID;
     private final String client_secret = Constants.CLIENT_SECRET;
@@ -62,6 +61,7 @@ public class ServerOauth2Controller {
             e.printStackTrace();
         }
     }
+
 
 
     /**
@@ -154,6 +154,40 @@ public class ServerOauth2Controller {
         return result;
     }
 
+    @GetMapping("/getSmsCode")
+    @ApiOperation(value = "获取手机验证码")
+    public ResponseResult getSmsCode(String phoneNumber){
+        ResponseResult result = new ResponseResult();
+        if (StringUtils.isEmpty(phoneNumber)) {
+            result.setCode(ResponseCodeEnums.FAILURE.getCode());
+            result.setMessage("手机号不能为空！");
+        } else {
+            String smsCode = vcodeManager.generateVcode();
+            String redisCode = redisUtil.get(phoneNumber);
+            if (!StringUtils.isEmpty(redisCode)) {
+                redisUtil.delete(phoneNumber);
+            }
+            // 将code码存入redis
+            try{
+                vcodeManager.saveVcode(phoneNumber, smsCode, Constants.SMS_TIME_COUNT, Constants.SMS_UNIT);
+                // 发送验证码
+                int num = vcodeManager.sendSmsCode(phoneNumber,smsCode);
+                if (num == 1) {
+                    result.setCode(ResponseCodeEnums.SUCCESS.getCode());
+                    result.setMessage("验证码发送成功！");
+                } else {
+                    result.setCode(ResponseCodeEnums.FAILURE.getCode());
+                    result.setMessage("验证码发送失败！");
+                }
+            }catch (Exception e){
+                result.setCode(ResponseCodeEnums.FAILURE.getCode());
+                result.setMessage("验证码存储错误！");
+                return result;
+            }
+        }
+        return result;
+    }
+
     /**
      * 客户端获取token
      *
@@ -164,6 +198,16 @@ public class ServerOauth2Controller {
     @ApiOperation(value = "登录")
     public ResponseResult mobileLogin(@RequestBody MobileRequest mobileRequest) {
         ResponseResult result = new ResponseResult();
+        // 验证码验证
+        // 从redis获取验证码
+        String smsCode = redisUtil.get(mobileRequest.getPhoneNumber());
+        if (!mobileRequest.getCode().equals(smsCode)) {
+            result.setCode(ResponseCodeEnums.FAILURE.getCode());
+            result.setMessage("验证码填写有误！");
+            return result;
+        }
+        // 验证通过，删除redis存储的验证码
+        redisUtil.delete(mobileRequest.getPhoneNumber());
         String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/mobile?grant_type=mobile&mobile=" + mobileRequest.getPhoneNumber();
         // 构建header
         String auth = client_id + ":" + client_secret;
@@ -263,4 +307,5 @@ public class ServerOauth2Controller {
     public void toClientIndex(RedirectRequest redirectRequest, HttpServletResponse response) throws IOException {
         response.sendRedirect(redirectRequest.getRedirectUri() + "?token=" + redirectRequest.getToken()+"&userId=" + redirectRequest.getUserId());
     }
+
 }

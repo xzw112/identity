@@ -21,6 +21,10 @@ spring:
     username: root
     password: root
     #线上
+#    url: jdbc:mysql://121.36.175.7:3088/identity?useUnicode=true&characterEncoding=UTF-8&useSSL=false&useTimezone=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&autoReconnect=true
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: tiptimes@2013
 #    url: jdbc:mysql://localhost:3088/identity?useUnicode=true&characterEncoding=UTF-8&useSSL=false&useTimezone=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true&autoReconnect=true
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    username: root
@@ -65,6 +69,9 @@ fdfs:
   tracker-list: 121.36.175.7:22122
   resHost: http://121.36.175.7
   storagePort: 80
+#文件存储路径
+file-save-path: /data/identity/
+#file-save-path: E:/data/identity/
 
 # Swagger json url address
 swagger.url: https://petstore.swagger.io/v2/swagger.json

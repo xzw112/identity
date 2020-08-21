@@ -26,6 +26,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import tk.mybatis.mapper.entity.Example;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -81,6 +82,7 @@ public class AdminUserController {
         tpMainAdminUser.setCreateTime(new Date());
         tpMainAdminUser.setStatus(DataStatus.ENABLED.getCode());
         tpMainAdminUser.setIsDelete(DataStatus.NOT_DELETE.getCode());
+        tpMainAdminUser.setUserType(DataStatus.USER_TYPE_ADMIN.getCode());
         int result = tpMainAdminUserService.add(tpMainAdminUser);
         if(result > 0){
             return ResponseResult.success(ErrorConstants.SAVE_OK);
@@ -291,12 +293,13 @@ public class AdminUserController {
         if(tpMainAdminUser == null){
             return ResponseResult.error("人员信息不存在");
         }
-        String pass = MD5Util.encryptByMD5(BASE64Util.getFromBase64(adminUserParam.getLoginPassword()));
         String sqlPass = tpMainAdminUser.getLoginPassword();
-        if(!sqlPass.equals(pass)){
+        String password = BASE64Util.getFromBase64(adminUserParam.getLoginPassword());
+        boolean flag = BCrypt.checkpw(password, sqlPass);
+        if(!flag){
             return ResponseResult.error("原始密码不正确");
         }
-        String newPass = MD5Util.encryptByMD5(BASE64Util.getFromBase64(adminUserParam.getNewPassword()));
+        String newPass = BCrypt.hashpw(BASE64Util.getFromBase64(adminUserParam.getNewPassword()), BCrypt.gensalt());
         tpMainAdminUser.setLoginPassword(newPass);
         int result = tpMainAdminUserService.update(tpMainAdminUser);
         if(result > 0){
@@ -308,6 +311,7 @@ public class AdminUserController {
 
     // 批量离职
     @RequestMapping(value = "/updateUserLeave", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "批量离职", moduleName = "用户-内部用户")
     public ResponseResult updateUserLeave(@RequestBody String[] id){
         int num = 0;
         if (id.length > 0) {
@@ -318,6 +322,7 @@ public class AdminUserController {
 
     // 批量还原
     @RequestMapping(value = "/updateUserUnLeave", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "批量还原", moduleName = "用户-内部用户")
     public ResponseResult updateUserUnLeave(@RequestBody String[] id){
         int num = 0;
         if (id.length > 0) {
@@ -327,6 +332,7 @@ public class AdminUserController {
     }
 
     @RequestMapping(value = "/insertOutUser", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "新增外部用户", moduleName = "用户-外部用户")
     public ResponseResult insertOutUser(@RequestBody OutUser outUser){
         TpMainAdminUser adminUser = new TpMainAdminUser();
         adminUser.setLoginName(outUser.getLoginName());
@@ -344,6 +350,7 @@ public class AdminUserController {
     }
 
     @RequestMapping(value = "/updateOutUser", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "修改外部用户", moduleName = "用户-外部用户")
     public ResponseResult updateOutUser(@RequestBody OutUser outUser){
         int num = tpMainAdminUserService.updateOutUser(outUser);
         if (num > 0) {
@@ -352,4 +359,21 @@ public class AdminUserController {
             return ResponseResult.successWithData(num);
         }
     }
+
+    /**
+     *
+     * 批量重置密码
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/resetPwd", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "批量重置密码", moduleName = "用户-内部用户")
+    public ResponseResult resetPwd(@RequestBody String[] id){
+        int num = 0;
+        if (id.length > 0) {
+            num = tpMainAdminUserService.resetPwd(id);
+        }
+        return ResponseResult.successWithData(num);
+    }
+
 }

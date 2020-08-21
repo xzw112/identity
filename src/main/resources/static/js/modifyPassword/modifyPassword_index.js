@@ -40,6 +40,7 @@ function clickEvent() {
             success: function (res) {
                 if(res.code === 1){
                     narn("success", res.message);
+                    window.location.href = ctxPath + "admin/logout";
                 }else{
                     narn("error", res.message);
                 }

@@ -24,29 +24,29 @@ function loadData() {
         sidePagination: "server", // 表示服务端分页
         // 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
         // 设置为limit可以获取limit, offset, search, sort, order
-        queryParamsType : "undefined",
+        queryParamsType: "undefined",
         idField: "clientId",
         columns: [{
             field: 'state',
             checkbox: true
-        },{
+        }, {
             title: '序号',
             formatter: function (value, row, index) {
                 return index + 1;
             }
-        },{
+        }, {
             field: 'clientName',
             title: '应用名称'
-        },{
+        }, {
             field: 'imgUrl',
             title: '应用图标',
             formatter: function (value, row, index) {
-                return '<img src="'+ value +'" width="40px" height="40px"/>';
+                return '<img src="' + value + '" width="40px" height="40px"/>';
             }
-        },{
+        }, {
             field: 'clientId',
             title: '应用ID'
-        },{
+        }, {
             field: 'clientType',
             title: '设备类型',
             formatter: function (value, row, index) {
@@ -60,17 +60,17 @@ function loadData() {
                 }
                 return str;
             }
-        },{
+        }, {
             field: 'status',
             title: '状态',
-            formatter:function (value) {
-                if(value == 1){
+            formatter: function (value) {
+                if (value == 1) {
                     return "启用";
-                }else{
+                } else {
                     return "禁用";
                 }
             }
-        },{
+        }, {
             field: 'operate',
             title: '操作',
             formatter: btnGroup,
@@ -98,16 +98,16 @@ function loadData() {
 }
 
 // 自定义方法，添加操作按钮
-function btnGroup () {
-                         // data-target="xxx" 为点击按钮弹出指定名字的模态框
+function btnGroup() {
+    // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var html =
-        '<a href="####"  id="clientDetail" data-toggle="modal" data-target="#editrole" title="详情">详情' +
+        '<a href="####"  id="clientDetail" data-toggle="modal" data-target="#editrole" title="详情" shiro:hasPermission="application_list_detail">详情' +
         '</a>' +
         '<a href="####"  id="clientEdit" data-toggle="modal" data-target="#editinfo" ' +
-        'style="margin-left:15px" title="修改">修改' +
+        'style="margin-left:15px" title="修改" shiro:hasPermission="application_list_edit">修改' +
         '</a>' +
         '<a href="####"  id="clientDel" data-toggle="modal" data-target="#deleteuser" ' +
-        'style="margin-left:15px" title="删除">删除' +
+        'style="margin-left:15px" title="删除" shiro:hasPermission="application_list_del">删除' +
         '</a>'
     return html
 };
@@ -115,6 +115,7 @@ function btnGroup () {
 $("#basic-addon2").click(function () {
     search();
 });
+
 function search() {
     var searchText = $("#searchText").val();
     if (searchText != null && searchText != '') {
@@ -142,37 +143,31 @@ $("#addApp").click(function () {
  * 删除
  */
 function del(id) {
-    var rows  = $("#examplePagination").bootstrapTable('getSelections');
-    //if (rows.length > 0) {
-        var clientId = [];
-        // for (var i = 0; i < rows.length; i++) {
-        //     clientId.push(rows[i].id);
-        // }
-        clientId.push(id);
-        var data = {};
-        data['clientId'] = clientId;
-        if (clientId.length > 0) {
+    var clientId = [];
+    clientId.push(id);
+    var data = {};
+    data['clientId'] = clientId;
+    if (clientId.length > 0) {
+        $("#modal-confirm").modal('show');
+        $("#confirm_btn").off('click').click(function () {
             $.ajax({
                 url: baseUrl + "/customer/client/del?clientId=" + clientId,
                 method: 'POST',
                 async: true,
                 contentType: 'application/json',
                 success: function (result) {
-                    if (result.success) {
+                    if (result.code == 1) {
                         narn('success', result.message);
                     } else {
                         narn('error', result.message);
                     }
                     loadData();
+                    $("#modal-confirm").modal('hide');
                 }
             });
-        }
-    //} else {
-        narn('error', '请先选择');
-    //}
-
-
-
+        });
+    }
+    narn('error', '请先选择');
 }
 
 /**

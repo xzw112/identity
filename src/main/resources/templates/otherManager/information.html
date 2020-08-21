@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+
+    <th:block th:include="include :: header('消息管理')"/>
+
+    <style>
+        .example-modal .modal {
+            position: relative;
+            top: auto;
+            bottom: auto;
+            right: auto;
+            left: auto;
+            display: block;
+            z-index: 1;
+        }
+
+        .example-modal .modal {
+            background: transparent !important;
+        }
+
+        .modal {
+            overflow: auto !important;
+        }
+
+        .search-in {
+            width: 200px !important;
+        }
+
+        .search-btn {
+            width: auto !important;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        #modal-default .modal-content {
+            width: 1100px;
+            margin-left: -210px;
+        }
+    </style>
+</head>
+<body class="modal-open" style="overflow: hidden">
+<div class="wrapper">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="outter">
+                <div class="row">
+                    <div class="top-nav col-md-12">
+                        <span class="label_name">消息列表</span>
+                        <div class="crumbs">
+                            <span class="gray">主页</span> <i>&nbsp;/&nbsp;</i>
+                            <span>其他管理</span> <i>&nbsp;/&nbsp;</i>
+                            <span>消息管理</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="tag" id="tabChange">
+                            <li class="active">所有消息</li>
+                            <li>已删除消息</li>
+                        </ul>
+                        <div class="part">
+                            <div class="item">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="box">
+                                            <div class="box-body">
+                                                <div class="margin">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control search-in mar16"
+                                                               id="searchtitle"
+                                                               placeholder="请输入标题进行搜索">
+                                                        <select id="informationType"
+                                                                class="form-control search-in mar16">
+                                                            <option value="">请选择消息类型</option>
+                                                            <option value="1">通知</option>
+                                                            <option value="2">公告</option>
+                                                            <option value="3">系统消息</option>
+                                                        </select>
+                                                        <select id="sendType" class="form-control search-in mar16">
+                                                            <option value="">请选择发布对象</option>
+                                                            <option value="1">内部用户</option>
+                                                            <option value="2">外部用户</option>
+                                                            <option value="3">内、外部用户</option>
+                                                        </select>
+                                                        <span class="input-group-btn fl search-btn mar16">
+                                                        <button class="btn btn-primary" type="button"
+                                                                id="searchBtn">搜索</button>
+                                                    </span>
+                                                        <span class="input-group-btn fl search-btn mar16">
+                                                        <button class="btn btn-primary" type="button"
+                                                                id="clearBtn">清空</button>
+                                                    </span>
+                                                        <div class="col-md-1 pull-right" id="addInformationDiv">
+                                                            <button type="button" id="addInformation"
+                                                                    class="btn btn-default blue-btn">发消息
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            <div class="item" style="display: none">-->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-xs-12">-->
+<!--                                        <div class="box">-->
+<!--                                            <div class="box-body">-->
+<!--                                                <div class="margin">-->
+<!--                                                    <div class="input-group">-->
+<!--                                                        <input type="text" class="form-control search-in mar16"-->
+<!--                                                               id="del_searchtitle"-->
+<!--                                                               placeholder="请输入标题进行搜索">-->
+<!--                                                        <select id="del_informationType"-->
+<!--                                                                class="form-control search-in mar16">-->
+<!--                                                            <option value="">请选择消息类型</option>-->
+<!--                                                            <option value="1">通知</option>-->
+<!--                                                            <option value="2">公告</option>-->
+<!--                                                            <option value="3">系统消息</option>-->
+<!--                                                        </select>-->
+<!--                                                        <select id="del_sendType" class="form-control search-in mar16">-->
+<!--                                                            <option value="">请选择发布对象</option>-->
+<!--                                                            <option value="1">内部用户</option>-->
+<!--                                                            <option value="2">外部用户</option>-->
+<!--                                                            <option value="3">内、外部用户</option>-->
+<!--                                                        </select>-->
+<!--                                                        <span class="input-group-btn fl search-btn mar16">-->
+<!--                                                            <button class="btn btn-primary" type="button"-->
+<!--                                                                id="del_searchBtn">搜索</button>-->
+<!--                                                        </span>-->
+<!--                                                        <span class="input-group-btn fl search-btn mar16">-->
+<!--                                                            <button class="btn btn-primary" type="button"-->
+<!--                                                                id="del_clearBtn">清空</button>-->
+<!--                                                        </span>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box">
+                                    <div class="box-body">
+                                        <div class="example-wrap" style="position: relative;">
+                                            <div class="example">
+                                                <table id="examplePagination" data-mobile-responsive="true"
+                                                       data-icon-size="outline"></table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<input type="hidden" value="1" id="informationDelStatus"/>
+
+<!--新增/修改modal-->
+<div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     data-backdrop="static">
+    <input type="hidden" id="id"/>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 id="title_name" class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="partner_form">
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="newsType">消息类型:</label>
+                        <select id="newsType" class="form-control">
+                            <option value="">请选择消息类型</option>
+                            <option value="1">通知</option>
+                            <option value="2">公告</option>
+                            <option value="2">系统消息</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="title">标题:</label>
+                        <input id="title" type="text" class="form-control" maxlength="16" placeholder="请输入消息标题">
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="targetType">发送对象:</label>
+                        <select id="targetType" class="form-control">
+                            <option value="1">内部用户</option>
+                            <option value="2">外部用户</option>
+                            <option value="3">内、外部用户</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="targetType">是否发布:</label>
+                        <input type="hidden" id="sw_value">
+                        <div class="form-group">
+                            <input type="checkbox" name="my-checkbox" data-on-text="发布" data-off-text="不发布">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="text-danger">*</span>
+                        <label for="chapterContent">消息内容:</label>
+                        <script id="chapterContent" type="text/plain" style="width:100%;height: 650px;"></script>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="save_btn" type="button" class="btn btn-primary">保存</button>
+                <button id="cancel" type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:include="include :: del"/>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: confirm"/>
+<script th:src="@{/plugins/ueditor/ueditor.config.js}"></script>
+<script th:src="@{/plugins/ueditor/ueditor.all.js}"></script>
+<script th:src="@{/plugins/ueditor/lang/zh-cn/zh-cn.js}"></script>
+<!--自定义js-->
+<script th:src="@{/js/otherManager/information.js}"></script>
+<script>
+    $("[name='my-checkbox']").bootstrapSwitch();
+    $("[name='my-checkbox']").on('switchChange.bootstrapSwitch', function (event, state) {
+        if (state) {
+            $("#sw_value").val(1)
+        }
+        if (!state) {
+            $("#sw_value").val(0)
+        }
+    });
+    var ue = UE.getEditor('chapterContent', {
+        autoFloatEnabled: false
+    });
+</script>
+</body>
+</html>

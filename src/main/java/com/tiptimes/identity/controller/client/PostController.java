@@ -1,5 +1,7 @@
 package com.tiptimes.identity.controller.client;
 
+import com.tiptimes.identity.annotation.SystemLog;
+import com.tiptimes.identity.common.OperateTypeConstant;
 import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.Department;
@@ -55,6 +57,7 @@ public class PostController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑", hidden = true)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "编辑岗位", moduleName = "用户-机构与组")
     public ResponseResult edit(@RequestBody Post post){
         int num = postService.updateById(post);
         return ResponseResult.successWithData(num);
@@ -62,6 +65,7 @@ public class PostController {
 
     @RequestMapping(value = "/del", method = RequestMethod.POST)
     @ApiOperation(value = "删除", hidden = true)
+    @SystemLog(operateType = OperateTypeConstant.DELETE, operateDetail = "删除岗位", moduleName = "用户-机构与组")
     public ResponseResult del(Integer id){
         int num = postService.del(id);
         return ResponseResult.successWithData(num);
@@ -70,6 +74,7 @@ public class PostController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加", hidden = true)
+    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "添加岗位", moduleName = "用户-机构与组")
     public ResponseResult add(@RequestBody Post post, HttpServletRequest request){
         String userId = (String)request.getSession().getAttribute("userId");
         post.setCreateUser(userId);

@@ -86,5 +86,8 @@ public interface TpMainAdminUserService {
     // 更新用户密码
     int updateUserPwd(UserPwdRequest userPwdRequest);
 
+    // 批量重置用户密码（123123）--后台用
+    int resetPwd(String[] id);
+
 
 }

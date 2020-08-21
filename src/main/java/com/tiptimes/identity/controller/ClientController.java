@@ -1,9 +1,7 @@
 package com.tiptimes.identity.controller;
 
-import com.tiptimes.identity.common.ErrorConstants;
-import com.tiptimes.identity.common.PageResult;
-import com.tiptimes.identity.common.ResponseCodeEnums;
-import com.tiptimes.identity.common.ResponseResult;
+import com.tiptimes.identity.annotation.SystemLog;
+import com.tiptimes.identity.common.*;
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.qo.ClientRequest;
 import com.tiptimes.identity.service.ClientService;
@@ -11,6 +9,7 @@ import com.tiptimes.identity.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -82,7 +81,8 @@ public class ClientController {
         return result;
     }
 
-    @RequestMapping("/edit")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "编辑应用", moduleName = "应用-应用列表")
     public ResponseResult edit(@RequestBody OauthClientDetails oauthClientDetails){
         ResponseResult result = new ResponseResult();
         int num = clientService.updateById(oauthClientDetails);
@@ -101,7 +101,8 @@ public class ClientController {
      * @param oauthClientDetails
      * @return
      */
-    @RequestMapping("/add")
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "添加应用", moduleName = "应用-应用列表")
     public ResponseResult add(@RequestBody OauthClientDetails oauthClientDetails){
         ResponseResult result = new ResponseResult();
         int num = clientService.insert(oauthClientDetails);
@@ -120,7 +121,8 @@ public class ClientController {
      * @param clientId
      * @return
      */
-    @RequestMapping("/del")
+    @RequestMapping(value = "/del", method = RequestMethod.POST)
+    @SystemLog(operateType = OperateTypeConstant.DELETE, operateDetail = "删除应用", moduleName = "应用-应用列表")
     public ResponseResult del(String[] clientId){
         ResponseResult result = new ResponseResult();
         int num = clientService.del(clientId);

@@ -305,6 +305,16 @@
         set login_password = #{newPassword}
         where id = #{id}
     </update>
+    <!--批量重置密码-->
+    <update id="resetPwd" parameterType="java.lang.String">
+        UPDATE
+        tp_main_admin_user
+        SET login_password = '$2a$10$9ZutWhnO5sG8Qb5QyHM.FusFVmlQNiYJwWiEkFoqYN8l1OdGoqeoi'
+        WHERE id IN
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
     <!--新增外部用户-管理后台添加外部用户-->
     <insert id="insertOutUser" parameterType="com.tiptimes.identity.entity.OutUser">
         insert into tp_main_admin_user

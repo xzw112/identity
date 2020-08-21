@@ -32,4 +32,6 @@ public class OperateTypeConstant {
     public static final String CONFIG = "权限设置";
 
     public static final String ALLOC_ITEM = "分配项目";
+
+    public static final String LOGIN_IN = "登录系统";
 }

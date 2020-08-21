@@ -173,98 +173,98 @@ $(function () {
         var site = url.lastIndexOf("\/");
         //截取最后一个/后的值
         var str = url.substring(site + 1, url.length);
-    	switch (str) {
-    		case "home":
-    			title = "首页";
-    			break;
-    		case "new_athlete_index":
-    			title = "运动员管理-运动员注册";
-    			break;
-    		case "athlete_confirm_index":
-    			title = "运动员管理-年度确认运动员";
-    			break;
-    		case "athlete_report_record_index":
-    			title = "运动员管理-上报记录";
-    			break;
-    		case "athlete_info_index":
-    			title = "运动员管理-运动员查询";
-    			break;
-    		case "athlete_pending_index":
-    			title = "运动员管理-运动员审核";
-    			break;
-    		case "athlete_expire_index":
-    			title = "协议到期运动员";
-    			break;
-    		case "athlete_return_index":
-    			title = "退回运动员";
-    			break;
-    		case "physical_test_index":
-    			title = "技术档案-体测信息";
-    			break;
-    		case "athlete_archives_index":
-    			title = "技术档案-运动员档案";
-    			break;
-    		case "field_validation_index":
-    			title = "赛场验证-赛场验证";
-    			break;
-    		case "validation_record_index":
-    			title = "赛场验证-验证记录";
-    			break;
-    		case "enterprise_statistics_index":
-    			title = "数据统计-单位统计";
-    			break;
-            case "item_statistics_index":
-                title = "数据统计-项目统计";
-                break;
-    		case "statistics_report_index":
-    			title = "数据统计-统计报表";
-    			break;
-    		case "sysMsg_manage_index":
-    			title = "消息公告-系统消息";
-    			break;
-    		case "notice_manage_index":
-    			title = "消息公告-通知公告";
-    			break;
-    		case "sysMsg_index":
-    			title = "系统消息";
-    			break;
-    		case "notice_index":
-    			title = "通知公告列表";
-    			break;
-    		case "personalInfo_index":
-    			title = "个人中心-个人资料";
-    			break;
-    		case "modifyPassword_index":
-    			title = "个人中心-修改密码";
-    			break;
-    		case "enterprise_index":
-    			title = "组织架构-单位管理";
-    			break;
-    		case "adminUser_index":
-    			title = "组织架构-人员管理";
-    			break;
-    		case "role_index":
-    			title = "组织架构-角色管理";
-    			break;
-    		case "itemAuth_index":
-    			title = "组织架构-项目权限";
-    			break;
-    		case "timeManage_index":
-    			title = "系统设置-时间管理";
-    			break;
-    		case "systemLog_index":
-    			title = "系统设置-操作日志";
-    			break;
-    		case "regItem_index":
-    			title = "系统设置-数据字典-注册项目";
-    			break;
-    		case "behalfUnit_index":
-    			title = "系统设置-数据字典-代表单位";
-    			break;	
-    		default:
-    			break;
-    	}
-    	$("#navigation_title").html(title);
+    	// switch (str) {
+    	// 	case "home":
+    	// 		title = "首页";
+    	// 		break;
+    	// 	case "new_athlete_index":
+    	// 		title = "运动员管理-运动员注册";
+    	// 		break;
+    	// 	case "athlete_confirm_index":
+    	// 		title = "运动员管理-年度确认运动员";
+    	// 		break;
+    	// 	case "athlete_report_record_index":
+    	// 		title = "运动员管理-上报记录";
+    	// 		break;
+    	// 	case "athlete_info_index":
+    	// 		title = "运动员管理-运动员查询";
+    	// 		break;
+    	// 	case "athlete_pending_index":
+    	// 		title = "运动员管理-运动员审核";
+    	// 		break;
+    	// 	case "athlete_expire_index":
+    	// 		title = "协议到期运动员";
+    	// 		break;
+    	// 	case "athlete_return_index":
+    	// 		title = "退回运动员";
+    	// 		break;
+    	// 	case "physical_test_index":
+    	// 		title = "技术档案-体测信息";
+    	// 		break;
+    	// 	case "athlete_archives_index":
+    	// 		title = "技术档案-运动员档案";
+    	// 		break;
+    	// 	case "field_validation_index":
+    	// 		title = "赛场验证-赛场验证";
+    	// 		break;
+    	// 	case "validation_record_index":
+    	// 		title = "赛场验证-验证记录";
+    	// 		break;
+    	// 	case "enterprise_statistics_index":
+    	// 		title = "数据统计-单位统计";
+    	// 		break;
+        //     case "item_statistics_index":
+        //         title = "数据统计-项目统计";
+        //         break;
+    	// 	case "statistics_report_index":
+    	// 		title = "数据统计-统计报表";
+    	// 		break;
+    	// 	case "sysMsg_manage_index":
+    	// 		title = "消息公告-系统消息";
+    	// 		break;
+    	// 	case "notice_manage_index":
+    	// 		title = "消息公告-通知公告";
+    	// 		break;
+    	// 	case "sysMsg_index":
+    	// 		title = "系统消息";
+    	// 		break;
+    	// 	case "notice_index":
+    	// 		title = "通知公告列表";
+    	// 		break;
+    	// 	case "personalInfo_index":
+    	// 		title = "个人中心-个人资料";
+    	// 		break;
+    	// 	case "modifyPassword_index":
+    	// 		title = "个人中心-修改密码";
+    	// 		break;
+    	// 	case "enterprise_index":
+    	// 		title = "组织架构-单位管理";
+    	// 		break;
+    	// 	case "adminUser_index":
+    	// 		title = "组织架构-人员管理";
+    	// 		break;
+    	// 	case "role_index":
+    	// 		title = "组织架构-角色管理";
+    	// 		break;
+    	// 	case "itemAuth_index":
+    	// 		title = "组织架构-项目权限";
+    	// 		break;
+    	// 	case "timeManage_index":
+    	// 		title = "系统设置-时间管理";
+    	// 		break;
+    	// 	case "systemLog_index":
+    	// 		title = "系统设置-操作日志";
+    	// 		break;
+    	// 	case "regItem_index":
+    	// 		title = "系统设置-数据字典-注册项目";
+    	// 		break;
+    	// 	case "behalfUnit_index":
+    	// 		title = "系统设置-数据字典-代表单位";
+    	// 		break;
+    	// 	default:
+    	// 		break;
+    	// }
+    	//$("#navigation_title").html(title);
     }
     
     // 关闭选项卡菜单

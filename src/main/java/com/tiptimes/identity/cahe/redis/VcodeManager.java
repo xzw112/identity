@@ -17,6 +17,14 @@ public interface VcodeManager {
      */
     String generateVcode();
 
+    /**
+     * 发送短信
+     * @param phoneNumber 手机号
+     * @param smsCode 短信验证码
+     * @return
+     */
+    int sendSmsCode(String phoneNumber, String smsCode);
+
 
 
     /**

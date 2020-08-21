@@ -139,7 +139,7 @@
 <!--                        </li>-->
 <!--                    </ul>-->
 <!--                </li>-->
-                <li class="treeview has-submenu">
+                <li class="treeview has-submenu" shiro:hasPermission="application_index">
                     <a href="#">
                         <i class="fa fa-code-fork"></i> <span>应用</span>
                         <span class="pull-right-container">
@@ -147,19 +147,19 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li>
+                        <li shiro:hasPermission="application_list_index">
                             <a class="J_menuItem" href="admin/applicationList" data-index="0">
                                 <i class="fa fa-circle-o"></i>应用列表
                             </a>
                         </li>
-                        <li>
+                        <li shiro:hasPermission="application_add">
                             <a class="J_menuItem" href="admin/addApplication" data-index="0">
                                 <i class="fa fa-circle-o"></i>添加应用
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="treeview has-submenu">
+                <li class="treeview has-submenu" shiro:hasPermission="user_index">
                     <a href="#">
                         <i class="fa fa-code-fork"></i> <span>用户</span>
                         <span class="pull-right-container">
@@ -167,24 +167,24 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li>
+                        <li shiro:hasPermission="user_organization">
                             <a class="J_menuItem" href="admin/department" data-index="0">
                                 <i class="fa fa-circle-o"></i>机构与组
                             </a>
                         </li>
-                        <li>
+                        <li shiro:hasPermission="user_in_index">
                             <a class="J_menuItem" href="admin/adminUser_index" data-index="0">
                                 <i class="fa fa-circle-o"></i>内部用户
                             </a>
                         </li>
-                        <li>
+                        <li shiro:hasPermission="user_out_index">
                             <a class="J_menuItem" href="admin/outUser" data-index="0">
                                 <i class="fa fa-circle-o"></i>外部用户
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="treeview has-submenu">
+                <li class="treeview has-submenu" shiro:hasPermission="oauth_index">
                     <a href="#">
                         <i class="fa fa-code-fork"></i> <span>授权</span>
                         <span class="pull-right-container">
@@ -192,12 +192,12 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li>
+                        <li shiro:hasPermission="role_index">
                             <a class="J_menuItem" href="admin/role_index" data-index="0">
                                 <i class="fa fa-circle-o"></i>权限系统
                             </a>
                         </li>
-                        <li>
+                        <li shiro:hasPermission="in_oauth_index">
                             <a class="J_menuItem" href="admin/authorizeApp" data-index="0">
                                 <i class="fa fa-circle-o"></i>内部应用授权
                             </a>
@@ -206,7 +206,7 @@
                 </li>
                 <li class="treeview has-submenu" shiro:hasPermission="sysConfig_index">
                     <a href="#">
-                        <i class="fa fa-cog"></i> <span>系统设置</span>
+                        <i class="fa fa-cog"></i> <span>审计</span>
                         <span class="pull-right-container">
                           <i class="fa fa-angle-left pull-right"></i>
                         </span>
@@ -217,6 +217,31 @@
                                 <i class="fa fa-circle-o"></i>操作日志
                             </a>
                         </li>
+                        <li>
+                            <a class="J_menuItem" href="admin/loginLog_index" data-index="0">
+                                <i class="fa fa-circle-o"></i>进/出日志
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview has-submenu">
+                    <a href="#">
+                        <i class="fa fa-cog"></i> <span>其他管理</span>
+                        <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a class="J_menuItem" href="admin/information_index" data-index="0">
+                                <i class="fa fa-circle-o"></i>消息管理
+                            </a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="admin/loginLog_index" data-index="0">
+                                <i class="fa fa-circle-o"></i>意见中心
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -225,9 +250,9 @@
     </aside>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <section class="content-header" height="5%">
-            <h1 id="navigation_title" style="font-family: cursive;">首页</h1>
-        </section>
+<!--        <section class="content-header" height="5%">-->
+<!--            <h1 id="navigation_title" style="font-family: cursive;">首页</h1>-->
+<!--        </section>-->
         <div class="row J_mainContent page-iframe">
             <iframe class="J_iframe single-page-main" name="iframe0" src="admin/home" id="myiframe" frameborder="0"></iframe>
         </div>

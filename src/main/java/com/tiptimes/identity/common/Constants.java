@@ -66,4 +66,27 @@ public class Constants {
     public static final String WX_REDIRECT_URL = "http://tbrz.tiptimes.com/customer/weChatCallBack/callback";
     // ==========微信登录--基础数据===========
 
+    // ==========手机验证码相关==============
+    // 1 手机验证码长度
+    public static final int SMS_CODE_LENGHT = 6;
+    // 2 手机验证码存入redis时长
+    public static final Integer SMS_TIME_COUNT = 10;
+    // 3 手机验证码存入redis时长单位
+    public static final TimeUnit SMS_UNIT = TimeUnit.MINUTES;
+    // 4 手机验证码在容联云有效时长(分钟)
+    public static final String SMS_CLOOPEN_TIME = "10";
+    // 5 发送短信服务器
+    public static final String SMS_SERVER_IP = "app.cloopen.com";
+    // 6 发送短信服务器端口
+    public static final String SMS_SERVER_PORT = "8883";
+    // 7 短信服务账户id
+    public static final String SMS_ACCOUNTS_ID = "8a48b551473976010147629ee8431226";
+    // 8 短信服务账户token
+    public static final String SMS_ACCOUNT_TOKEN = "b162c78411454b99948096ca78a11c77";
+    // 9 短信服务应用id
+    public static final String SMS_APP_ID = "8aaf070870e20ea101712ef9ad002843";
+    // 10 短信服务模板id
+    public static final String SMS_TEMPLATE_ID = "579301";
+    //============手机验证码相关结束========================
+
 }

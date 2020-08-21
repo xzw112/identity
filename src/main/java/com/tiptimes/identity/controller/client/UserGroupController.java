@@ -1,5 +1,7 @@
 package com.tiptimes.identity.controller.client;
 
+import com.tiptimes.identity.annotation.SystemLog;
+import com.tiptimes.identity.common.OperateTypeConstant;
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.UserGroup;
 import com.tiptimes.identity.qo.GroupRequest;
@@ -37,6 +39,7 @@ public class UserGroupController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加", hidden = true)
+    @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "添加用户所属分组", moduleName = "用户-内部用户")
     public ResponseResult add(@RequestBody UserGroup userGroup){
         int num = userGroupService.insert(userGroup);
         return ResponseResult.successWithData(num);
@@ -44,6 +47,7 @@ public class UserGroupController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑", hidden = true)
+    @SystemLog(operateType = OperateTypeConstant.MODIFY, operateDetail = "编辑用户所属分组", moduleName = "用户-内部用户")
     public ResponseResult edit(@RequestBody UserGroup userGroup){
         int num = userGroupService.updateById(userGroup);
         return ResponseResult.successWithData(num);
@@ -51,6 +55,7 @@ public class UserGroupController {
 
     @RequestMapping(value = "/del", method = RequestMethod.POST)
     @ApiOperation(value = "删除", hidden = true)
+    @SystemLog(operateType = OperateTypeConstant.DELETE, operateDetail = "删除用户所属分组", moduleName = "用户-内部用户")
     public ResponseResult del(Integer id){
         int num = userGroupService.del(id);
         return ResponseResult.successWithData(num);

@@ -54,6 +54,8 @@ public interface TpMainAdminUserMapper extends MyMapper<TpMainAdminUser> {
     int updateUserHead(UserHeadRequest userHeadRequest);
     // 更新外部用户-客户端完善用户资料
     int updateOutUserInfo(OutUserInfoRequest outUserInfoRequest);
-    // 更新用户密码
+    // 更新用户密码--客户端用
     int updateUserPwd(UserPwdRequest userPwdRequest);
+    // 批量重置用户密码（123123）--后台用
+    int resetPwd(String[] id);
 }

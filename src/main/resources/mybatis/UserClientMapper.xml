@@ -36,7 +36,7 @@
     from user_client uc
     INNER JOIN oauth_client_details ocd on(ocd.client_id = uc.client_id)
     INNER JOIN tp_main_admin_user au on(au.id = uc.user_id)
-    where uc.user_id = #{userId}
+    where uc.user_id = #{userId} and au.user_type = 1
   </select>
 
   <select id="selectUserByClientId" parameterType="java.lang.String" resultType="com.tiptimes.identity.vo.UserVo">

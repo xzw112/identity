@@ -254,8 +254,7 @@ function getPeople(e, obj) {
 
 // 按账户授权应用 -- 保存
 $("#saveBtn1").click(function () {
-    console.log(clientIds);
-    if (clientIds.length > 0 && userId != '') {
+    if (userId != '') {
         console.log(clientIds)
         var data = {};
         data['userId'] = userId;
@@ -332,6 +331,7 @@ function initClientData2() {
             if (row != null) {
                 clientId = row.clientId;
                 // 获取应用下的人员
+                client_users = [];
                 getClientUser(clientId);
             }
         },
