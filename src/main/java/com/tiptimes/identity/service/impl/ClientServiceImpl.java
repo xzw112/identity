@@ -75,4 +75,14 @@ public class ClientServiceImpl implements ClientService {
     public int updateById(OauthClientDetails oauthClientDetails) {
         return oauthClientDetailsMapper.updateById(oauthClientDetails);
     }
+
+    @Override
+    public int selectInClientCount() {
+        return oauthClientDetailsMapper.selectInClientCount();
+    }
+
+    @Override
+    public int selectOutClientCount() {
+        return oauthClientDetailsMapper.selectOutClientCount();
+    }
 }

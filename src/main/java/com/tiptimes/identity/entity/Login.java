@@ -11,7 +11,7 @@ public class Login implements Serializable {
     @ApiModelProperty(value = "用户名")
     private String username;
 
-    @ApiModelProperty(value = "密码")
+    @ApiModelProperty(value = "密码 需要使用base64加密")
     private String password;
 
     @ApiModelProperty(value = "登录类型 1内部用户 2外部用户")

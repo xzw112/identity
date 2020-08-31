@@ -7,6 +7,7 @@ import com.tiptimes.identity.dao.TpMainAdminUserMapper;
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.entity.UserClient;
 import com.tiptimes.identity.qo.ClientRequest;
+import com.tiptimes.identity.qo.ClientTopRequest;
 import com.tiptimes.identity.qo.ClientUserRequest;
 import com.tiptimes.identity.qo.UserClientRequest;
 import com.tiptimes.identity.service.UserClientService;
@@ -14,6 +15,9 @@ import com.tiptimes.identity.utils.DateUtil;
 import com.tiptimes.identity.utils.RedisUtil;
 import com.tiptimes.identity.vo.ClientUserVo;
 import com.tiptimes.identity.vo.UserVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customer/userClient")
+@Api(description = "用户应用")
 public class UserClientController {
 
     @Autowired
@@ -40,6 +45,7 @@ public class UserClientController {
      * @return
      */
     @RequestMapping(value = "/getUserClientList", method = RequestMethod.POST)
+    @ApiOperation("获取登录人员的应用列表--前端")
     public ResponseResult getUserClientList(@RequestBody ClientRequest clientRequest) {
         // 重置redis token的有效时间
         String userId = clientRequest.getUserId();
@@ -77,12 +83,24 @@ public class UserClientController {
     }
 
     /**
+     * 置顶、取消置顶
+     * @return
+     */
+    @RequestMapping(value = "/updateClientTop",method = RequestMethod.POST)
+    @ApiOperation("置顶、取消置顶")
+    public ResponseResult updateClientTop(@RequestBody ClientTopRequest clientTopRequest){
+        int num = userClientService.updateClientTop(clientTopRequest);
+        return ResponseResult.successWithData(num);
+    }
+
+    /**
      * 获取登录人员的应用列表--后台
      *
      * @param clientRequest
      * @return
      */
     @RequestMapping(value = "/getAdminUserClientList", method = RequestMethod.POST)
+    @ApiOperation(value = "获取登录人员的应用列表--后台", hidden = true)
     public ResponseResult getAdminUserClientList(@RequestBody ClientRequest clientRequest) {
         String userId = clientRequest.getUserId();
         if (StringUtils.isNotEmpty(userId)) {
@@ -100,6 +118,7 @@ public class UserClientController {
      * @return
      */
     @RequestMapping(value = "/getUserByClientId", method = RequestMethod.POST)
+    @ApiOperation(value = "根据应用id获取用户", hidden = true)
     public ResponseResult getUserByClientId(String clientId) {
         if (StringUtils.isNotEmpty(clientId)) {
             List<UserVo> list = userClientService.selectUserByClientId(clientId);
@@ -110,6 +129,7 @@ public class UserClientController {
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @ApiOperation(value = "按用户授权应用", hidden = true)
     @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "按用户授权应用", moduleName = "授权-内部应用授权")
     public ResponseResult insert(@RequestBody UserClientRequest userClientRequest) {
         int num = userClientService.insert(userClientRequest);
@@ -117,6 +137,7 @@ public class UserClientController {
     }
 
     @RequestMapping(value = "/insertByClientId", method = RequestMethod.POST)
+    @ApiOperation(value = "按应用授权用户", hidden = true)
     @SystemLog(operateType = OperateTypeConstant.ADD, operateDetail = "按应用授权用户", moduleName = "授权-内部应用授权")
     public ResponseResult insertByClientId(@RequestBody ClientUserRequest clientUserRequest) {
         int num = userClientService.insertByClientId(clientUserRequest);

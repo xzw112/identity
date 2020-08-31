@@ -312,9 +312,11 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
             String pwd = tpMainAdminUserMapper.selectUserPwd(userPwdRequest.getId());
             if (StringUtils.isNotEmpty(pwd)) {
                 if (userPwdRequest.getNewPassword().equals(userPwdRequest.getReportPassword())) {
-                    String newPwd = BASE64Util.getFromBase64(userPwdRequest.getNewPassword());
-                    boolean flag = BCrypt.checkpw(newPwd, pwd);
+                    String oldPwd = BASE64Util.getFromBase64(userPwdRequest.getOldPassword());
+                    boolean flag = BCrypt.checkpw(oldPwd, pwd);
                     if (flag) {
+                        String newPwd = BASE64Util.getFromBase64(userPwdRequest.getNewPassword());
+                        userPwdRequest.setNewPassword(BCrypt.hashpw(newPwd, BCrypt.gensalt()));
                         int num = tpMainAdminUserMapper.updateUserPwd(userPwdRequest);
                         return num;
                     } else {
@@ -335,5 +337,15 @@ public class TpMainAdminUserServiceImpl implements TpMainAdminUserService {
             num = tpMainAdminUserMapper.resetPwd(id);
         }
         return num;
+    }
+
+    @Override
+    public int selectInUserCount() {
+        return tpMainAdminUserMapper.selectInUserCount();
+    }
+
+    @Override
+    public int selectOutUserCount() {
+        return tpMainAdminUserMapper.selectOutUserCount();
     }
 }

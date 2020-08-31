@@ -10,7 +10,7 @@ public class ClientUserVo implements Serializable {
 
     private String id;
 
-    private String userName;
+    private String realName;
 
     private String loginName;
 
@@ -58,6 +58,12 @@ public class ClientUserVo implements Serializable {
 
     private Integer userType; // 用户类型（1.内部用户 2外部用户）
 
+    private String nickName;
+
+    private Integer sex;
+
+    private String ipAddr;
+
     private Integer userOutType; // 外部用户类型（1普通 2学生）--外部用户专用
 
     private String birth; // 生日
@@ -73,4 +79,12 @@ public class ClientUserVo implements Serializable {
     private String postCode;// 邮政编码
 
     private String education;// 学历
+
+    private String departmentId;
+    private String departmentName;
+
+    private String deputyPostId;
+
+    private String deputyPost;
+    private String groupName;
 }

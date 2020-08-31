@@ -11,6 +11,8 @@ public class TpMainAdminUserVO implements Serializable {
 
     private String id;
 
+    private String userId;
+
     @ApiModelProperty(value = "用户名")
     private String userName;
     @ApiModelProperty(value = "登录名")

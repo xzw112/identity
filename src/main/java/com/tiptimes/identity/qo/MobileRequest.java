@@ -11,6 +11,6 @@ public class MobileRequest implements Serializable {
     @ApiModelProperty(value = "手机号")
     private String phoneNumber; // 手机号
 
-    @ApiModelProperty(value = "验证码")
+    @ApiModelProperty(value = "验证码 使用base64加密")
     private String code; // 验证码
 }

@@ -2,6 +2,7 @@ package com.tiptimes.identity.dao;
 
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.entity.UserClient;
+import com.tiptimes.identity.qo.ClientTopRequest;
 import com.tiptimes.identity.vo.UserVo;
 import org.springframework.stereotype.Repository;
 
@@ -25,4 +26,6 @@ public interface UserClientMapper {
     int insert(UserClient userClient);
 
     int updateById(UserClient userClient);
+
+    int updateClientTop(ClientTopRequest clientTopRequest);
 }

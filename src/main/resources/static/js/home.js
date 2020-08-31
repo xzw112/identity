@@ -1,262 +1,235 @@
-var regYear;
-// $(function () {
-    // $.ajax({
-    //     type : "POST",
-    //     url : "admin/base/timeData",
-    //     async:false,
-    //     contentType:'application/json;charset=UTF-8',
-    //     success : function(res) {
-    //         if(res.code === 1){
-    //             regYear = res.data;
-    //             //判断是否有到期运动员
-    //             showExpireDialog();
-    //             //展示统计数字
-    //             showStatisticNumber();
-    //             //展示饼状图
-    //             showPieChart();
-    //         }else{
-    //             narn("error", res.message);
-    //         }
-    //     }
-    // });
-    //展示系统消息
-    //showSysMsg();
-    //展示通知公告
-    //showNotice();
-// });
+var baseUrl = window.location.origin;
+$(function () {
+    getInClientCount();
+    getOutClientCount();
+    getInUserCount();
+    getOutUserCount();
+    initOperateData();
+    initLoginData();
+    initInformation();
+    initOpinion();
+});
 
 /**
- * 显示统计数据
+ * 获取内部应用的数量
  */
-function showStatisticNumber() {
-    var data = {};
-    data['regYear'] = regYear;
+function getInClientCount() {
     $.ajax({
-        type: "POST",
-        url: "admin/home/selectStatisticNumber",
-        async: true,
-        data: JSON.stringify(data),
-        contentType: 'application/json;charset=UTF-8',
-        success: function (res) {
-            if (res.code === 1) {
-                $("#firstRegCount").html(res.data.firstRegCount);
-                $("#reRegCount").html(res.data.reRegCount);
-                $("#yearConfirmCount").html(res.data.yearConfirmCount);
-                $("#auditPassCount").html(res.data.auditPassCount);
-                $("#auditReturnCount").html(res.data.auditReturnCount);
-            } else {
-                narn("error", res.message);
-            }
+        url: baseUrl + '/customer/client/selectInClientCount',
+        async: false,
+        method: 'GET',
+        contentType: 'application/json',
+        success: function (result) {
+            $("#inClientTotalCount").html(result.data)
+        }
+    });
+}
+/**
+ * 获取外部应用的数量
+ */
+function getOutClientCount() {
+    $.ajax({
+        url: baseUrl + '/customer/client/selectOutClientCount',
+        async: false,
+        method: 'GET',
+        contentType: 'application/json',
+        success: function (result) {
+            $("#outClientTotalCount").html(result.data)
         }
     });
 }
 
 /**
- * 饼图展示
+ * 获取内部用户的数量
  */
-function showPieChart(){
-    var data = {};
-    data['regYear'] = regYear;
+function getInUserCount() {
     $.ajax({
-        type: "POST",
-        url: "admin/home/selectPieData",
-        async: true,
-        data: JSON.stringify(data),
-        contentType: 'application/json;charset=UTF-8',
-        success: function (res) {
-            if (res.code === 1) {
-                var pieData = res.data;
-                // 基于准备好的dom，初始化echarts实例
-                var myChart = echarts.init(document.getElementById('chart'));
-                option = {
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b} : {c} ({d}%)'
-                    },
-                    legend: {
-                        x : 'center',
-                        y : 'bottom'
-                    },
-                    toolbox: {
-                        show : true,
-                        feature : {
-                            mark : {show: true},
-                            dataView : {show: true, readOnly: false},
-                            magicType : {
-                                show: true,
-                                type: ['pie', 'funnel'],
-                                option: {
-                                    funnel: {
-                                        x: '25%',
-                                        width: '50%',
-                                        funnelAlign: 'center',
-                                        max: 1548
-                                    }
-                                }
-                            },
-                            restore : {show: true},
-                            saveAsImage : {show: true}
-                        }
-                    },
-                    calculable : true,
-                    //设置饼状图每个颜色块的颜色
-                    color : [ "#9860E5", "#889BEA", "#8A7CD4", "#B58BEF", "#759FEB", "#4ECCCB", "#58CA73", "#87E1A1",
-                        "#F9D247", "#EAA675", "#73B987", "#D26517", "#DC81D2", "#F2637B", "#88D1EA"],
-                    series: [
-                        {
-                            name: '注册量占比',
-                            legendHoverLink:true,
-                            type: 'pie',
-                            radius : ['50%', '70%'],
-                            itemStyle : {
-                                normal : {
-                                    label : {
-                                        show : false
-                                    },
-                                    labelLine : {
-                                        show : false
-                                    }
-                                },
-                                emphasis : {
-                                    label : {
-                                        show : true,
-                                        position : 'center',
-                                        textStyle : {
-                                            fontSize : '30',
-                                            fontWeight : 'bold'
-                                        }
-                                    }
-                                }
-                            },
-                            data: pieData
-                        }
-                    ]
-                };
-                // 使用刚指定的配置项和数据显示图表。
-                myChart.setOption(option);
-            } else {
-                narn("error", res.message);
-            }
+        url: baseUrl + '/admin/adminUser/selectInUserCount',
+        async: false,
+        method: 'GET',
+        contentType: 'application/json',
+        success: function (result) {
+            $("#inUserCount").html(result.data)
         }
     });
 }
 
 /**
- * 系统消息
+ * 获取外部用户的数量
  */
-function showSysMsg() {
-    var data = {};
-    data['pageNumber'] = 1;
-    data['pageSize'] = 5;
-    data['status'] = 1;
+function getOutUserCount() {
     $.ajax({
-        type: "POST",
-        url: "admin/sysMsg/getViewList",
-        data: JSON.stringify(data),
-        async: true,
-        contentType: 'application/json;charset=UTF-8',
-        success: function (res) {
-            var list = res.rows;
-            for(var i = 0; i < list.length; i++){
-                var item = '<div class="home-note-item">' +
-                            '   <p class="txt">' + list[i].content + '</p>' +
-                            '   <span class="time">' + list[i].publishTime + '</span>' +
-                            '</div>';
-                $("#sysMsgDiv").append(item);
-            }
+        url: baseUrl + '/admin/adminUser/selectOutUserCount',
+        async: false,
+        method: 'GET',
+        contentType: 'application/json',
+        success: function (result) {
+            $("#outUserCount").html(result.data)
         }
     });
 }
 
-/**
- * 通知公告
- */
-function showNotice() {
-    var data = {};
-    data['pageNumber'] = 1;
-    data['pageSize'] = 5;
-    data['status'] = 1;
-    $.ajax({
-        type: "POST",
-        url: "admin/notice/getList",
-        data: JSON.stringify(data),
-        async: true,
-        contentType: 'application/json;charset=UTF-8',
-        success: function (res) {
-            var list = res.rows;
-            for(var i = 0; i < list.length; i++){
-                var item = '<div class="home-note-item home-note-item1">' +
-                    '   <p class="txt">' + list[i].title + '</p>' +
-                    '   <span class="time">' + list[i].publishTime + '</span>' +
-                    '</div>';
-                $("#noticeDiv").append(item);
+function initOperateData() {
+    $('#operatePagination').bootstrapTable('destroy');
+    // 初始化表格,动态从服务器加载数据
+    $("#operatePagination").bootstrapTable({
+        method: "POST", // 使用get请求到服务器获取数据
+        contentType: "application/json;charset=UTF-8",
+        url: "admin/systemLog/getList", // 获取数据的地址
+        pagination: true, // 启动分页
+        cache: true,
+        maintainSelected: true,
+        striped: true, // 表格显示条纹
+        pageNumber: 1, // 当前第几页
+        pageSize: 6, // 每页显示的记录数
+        pageList: [6], // 记录数可选列表
+        formatNoMatches: function () {  //没有匹配的结果
+            return '没有找到匹配的记录';
+        },
+        sidePagination: "server", // 表示服务端分页
+        // 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+        // 设置为limit可以获取limit, offset, search, sort, order
+        queryParamsType : "undefined",
+        idField: "id",
+        columns: [{
+            title: '序号',
+            formatter: function (value, row, index) {
+                return index + 1;
             }
+        },{
+            field: 'operateTime',
+            title: '操作时间'
+        },{
+            field: 'operatorName',
+            title: '操作人员'
+        },{
+            field: 'modules',
+            title: '所属模块'
+        },{
+            field: 'operateType',
+            title: '操作类型'
+        },{
+            field: 'ipAddressStr',
+            title: 'IP'
+        }],
+        queryParams: function queryParams(params) {
+            // 设置查询参数
+            var data = {};
+            data['pageNumber'] = 1;
+            data['pageSize'] = 6;
+            return JSON.stringify(data);
         }
     });
 }
 
-/**
- * 到期运动员
- */
-function showExpireDialog() {
-    var data = {};
-    data['pageNumber'] = 1;
-    data['pageSize'] = 5;
-    data['isAgreementExpire'] = 1;
-    data['queryCurrentTable'] = 1;
-    data['regYear'] = regYear;
-    $.ajax({
-        type: "POST",
-        url: "admin/athleteApply/getAthleteList",
-        data: JSON.stringify(data),
-        async: true,
-        contentType: 'application/json;charset=UTF-8',
-        success: function (res) {
-            var list = res.rows;
-            if(list != null && list.length > 0){
-                $('.home-dialog').show();
-
-                var title = '<tr><th>姓名</th><th>证件号</th><th>协议开始时间</th><th>协议结束时间</th></tr>';
-                $("#expireTable").append(title);
-                for(var i = 0; i < list.length; i++){
-                    var item = '<tr>' +
-                                '   <td>' + list[i].name + '</td>' +
-                                '   <td>' + list[i].certificateNo + '</td>' +
-                                '   <td>' + list[i].agreementStartTime + '</td>' +
-                                '   <td>' + list[i].agreementEndTime + '</td>' +
-                                '</tr>';
-                    $("#expireTable").append(item);
+function initLoginData() {
+    $('#loginPagination').bootstrapTable('destroy');
+    // 初始化表格,动态从服务器加载数据
+    $("#loginPagination").bootstrapTable({
+        method: "POST", // 使用get请求到服务器获取数据
+        contentType: "application/json;charset=UTF-8",
+        url: "admin/systemLog/getLoginLogList", // 获取数据的地址
+        pagination: true, // 启动分页
+        cache: true,
+        maintainSelected: true,
+        striped: true, // 表格显示条纹
+        pageNumber: 1, // 当前第几页
+        pageSize: 6, // 每页显示的记录数
+        pageList: [6], // 记录数可选列表
+        formatNoMatches: function () {  //没有匹配的结果
+            return '没有找到匹配的记录';
+        },
+        sidePagination: "server", // 表示服务端分页
+        // 设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
+        // 设置为limit可以获取limit, offset, search, sort, order
+        queryParamsType : "undefined",
+        idField: "id",
+        columns: [{
+            title: '序号',
+            formatter: function (value, row, index) {
+                return index + 1;
+            }
+        },{
+            field: 'createTime',
+            title: '操作时间'
+        },{
+            field: 'userName',
+            title: '操作人员'
+        },{
+            field: 'loginName',
+            title: '账号'
+        },{
+            field: 'operateType',
+            title: '操作类型',
+            formatter: function (value, row, index) {
+                if (value == 1) {
+                    return "登录系统";
                 }
-
-                $('.close').click(function(){
-                    $('.home-dialog').hide();
-                });
+                if (value == 2) {
+                    return "登出系统";
+                }
             }
+        },{
+            field: 'operateLog',
+            title: '操作内容'
+        },{
+            field: 'ipAddress',
+            title: 'IP'
+        }],
+        queryParams: function queryParams(params) {
+            // 设置查询参数
+            var data = {};
+            data['pageNumber'] = 1;
+            data['pageSize'] = 6;
+            return JSON.stringify(data);
         }
     });
 }
 
-/**
- * 跳转到系统消息列表
- */
-function goSysMsg() {
-    parent.document.getElementById("sysMsg").classList.add("active");
-    parent.document.getElementById("sysMsg").click();
+// 消息
+function initInformation() {
+    var data = {};
+    data['pageSize'] = 4;
+    data['pageNumber'] = 1;
+    $.ajax({
+        url: baseUrl + '/admin/information/getInformationList',
+        method: 'POST',
+        async: false,
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function (result) {
+            var str = '';
+            for (var i = 0; i < result.rows.length; i++) {
+                str += "<tr>" +
+                    "<td>"+result.rows[i].title+"</td>" +
+                    "<td>"+result.rows[i].createTimeStr.split(' ')[0]+"</td>" +
+                    "</tr>"
+            }
+            $("#informationList").html(str);
+        }
+    });
 }
 
-/**
- * 跳转到通知公告列表
- */
-function goNotice() {
-    parent.document.getElementById("notice").classList.add("active");
-    parent.document.getElementById("notice").click();
+// 意见
+function initOpinion() {
+    var data = {};
+    data['pageSize'] = 4;
+    data['pageNumber'] = 1;
+    $.ajax({
+        url: baseUrl + '/admin/opinion/getOpinionList',
+        method: 'POST',
+        async: false,
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function (result) {
+            var str = '';
+            for (var i = 0; i < result.rows.length; i++) {
+                str += "<tr>" +
+                    "<td>"+result.rows[i].opinionTitle+"</td>" +
+                    "<td>"+result.rows[i].createTimeStr.split(' ')[0]+"</td>" +
+                    "</tr>"
+            }
+            $("#opinionList").html(str);
+        }
+    });
 }
-
-/**
- * 跳转到协议到期运动员列表
- */
-function goAthleteExpire() {
-    parent.document.getElementById("athlete-expire").classList.add("active");
-    parent.document.getElementById("athlete-expire").click();
-}
-

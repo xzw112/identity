@@ -7,10 +7,7 @@ import com.tiptimes.identity.qo.ClientRequest;
 import com.tiptimes.identity.service.ClientService;
 import com.tiptimes.identity.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -134,6 +131,26 @@ public class ClientController {
             result.setMessage(ErrorConstants.DELETE_ERROR);
         }
         return result;
+    }
+
+    /**
+     * 查询内部应用数量
+     * @return
+     */
+    @GetMapping(value = "/selectInClientCount")
+    public ResponseResult selectInClientCount(){
+        int num = clientService.selectInClientCount();
+        return ResponseResult.successWithData(num);
+    }
+
+    /**
+     * 查询外部应用数量
+     * @return
+     */
+    @GetMapping(value = "/selectOutClientCount")
+    public ResponseResult selectOutClientCount(){
+        int num = clientService.selectOutClientCount();
+        return ResponseResult.successWithData(num);
     }
 
 }

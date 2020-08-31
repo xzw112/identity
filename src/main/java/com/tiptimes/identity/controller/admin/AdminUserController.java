@@ -376,4 +376,24 @@ public class AdminUserController {
         return ResponseResult.successWithData(num);
     }
 
+    /**
+     * 查询内部用户数量
+     * @return
+     */
+    @GetMapping("/selectInUserCount")
+    public ResponseResult selectInUserCount(){
+        int num = tpMainAdminUserService.selectInUserCount();
+        return ResponseResult.successWithData(num);
+    }
+
+    /**
+     * 查询外部用户数量
+     * @return
+     */
+    @GetMapping("/selectOutUserCount")
+    public ResponseResult selectOutUserCount(){
+        int num = tpMainAdminUserService.selectOutUserCount();
+        return ResponseResult.successWithData(num);
+    }
+
 }

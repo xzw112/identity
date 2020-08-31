@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiptimes.identity.dao.OpinionMapper">
+
+  <resultMap id="BaseResultMap" type="com.tiptimes.identity.entity.Opinion">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="opinion_type" jdbcType="INTEGER" property="opinionType" />
+    <result column="opinion_title" jdbcType="VARCHAR" property="opinionTitle" />
+    <result column="opinion_content" jdbcType="VARCHAR" property="opinionContent" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, opinion_type, opinion_title, opinion_content, create_time, create_user, file_id, 
+    file_name
+  </sql>
+
+  <select id="selectOpinionList" resultType="com.tiptimes.identity.vo.OpinionVo" parameterType="com.tiptimes.identity.qo.OpinionRequest">
+    select
+    o.id id,
+    o.opinion_type opinionType,
+    o.opinion_title opinionTitle,
+    o.opinion_content opinionContent,
+    o.create_time createTimeStr,
+    o.create_user createUser,
+    o.file_id fileId,
+    o.file_name fileName,
+    u.user_name userName
+    from opinion o
+    left join tp_main_admin_user u on(u.id = o.create_user)
+    where 1=1
+    <if test="userId != null and userId != ''">
+      and o.create_user = #{userId}
+    </if>
+    <if test="opinionType > 0">
+      and o.opinion_type = #{opinionType}
+    </if>
+    <if test="opinionTitle != null and opinionTitle != ''">
+      and o.opinion_title = #{opinionTitle}
+    </if>
+    ORDER BY o.create_time DESC
+  </select>
+
+  <select id="selectDetailById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from opinion
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insert" parameterType="com.tiptimes.identity.entity.Opinion">
+    insert into opinion (id, opinion_type, opinion_title, 
+      opinion_content, create_time, create_user, 
+      file_id, file_name)
+    values (#{id,jdbcType=VARCHAR}, #{opinionType,jdbcType=INTEGER}, #{opinionTitle,jdbcType=VARCHAR}, 
+      #{opinionContent,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR})
+  </insert>
+</mapper>

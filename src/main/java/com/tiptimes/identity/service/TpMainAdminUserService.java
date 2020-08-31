@@ -89,5 +89,10 @@ public interface TpMainAdminUserService {
     // 批量重置用户密码（123123）--后台用
     int resetPwd(String[] id);
 
+    // 查询内部用户数量
+    int selectInUserCount();
+    // 查询外部用户数量
+    int selectOutUserCount();
+
 
 }

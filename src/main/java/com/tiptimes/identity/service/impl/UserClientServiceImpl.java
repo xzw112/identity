@@ -3,6 +3,7 @@ package com.tiptimes.identity.service.impl;
 import com.tiptimes.identity.dao.UserClientMapper;
 import com.tiptimes.identity.entity.OauthClientDetails;
 import com.tiptimes.identity.entity.UserClient;
+import com.tiptimes.identity.qo.ClientTopRequest;
 import com.tiptimes.identity.qo.ClientUserRequest;
 import com.tiptimes.identity.qo.UserClientRequest;
 import com.tiptimes.identity.service.UserClientService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -77,5 +79,11 @@ public class UserClientServiceImpl implements UserClientService {
     @Override
     public int updateById(UserClient userClient) {
         return 0;
+    }
+
+    @Override
+    public int updateClientTop(ClientTopRequest clientTopRequest) {
+        clientTopRequest.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        return userClientMapper.updateClientTop(clientTopRequest);
     }
 }

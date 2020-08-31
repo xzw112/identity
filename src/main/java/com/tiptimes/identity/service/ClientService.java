@@ -22,4 +22,8 @@ public interface ClientService {
     int del(String[] clientId);
 
     int updateById(OauthClientDetails oauthClientDetails);
+
+    int selectInClientCount();
+
+    int selectOutClientCount();
 }

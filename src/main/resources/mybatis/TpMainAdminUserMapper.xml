@@ -38,6 +38,7 @@
             resultType="com.tiptimes.identity.vo.TpMainAdminUserVO">
         SELECT
         u.id AS id,
+        u.id AS userId,
         u.user_name AS userName,
         u.login_name AS loginName,
         u.user_contact AS userContact,
@@ -131,7 +132,7 @@
             parameterType="java.lang.String">
         SELECT
             u.id AS id,
-            u.user_name AS userName,
+            u.user_name AS realName,
             u.login_name AS loginName,
             u.login_password AS loginPassword,
             u.user_contact AS userContact,
@@ -148,7 +149,18 @@
             u.group_id AS groupId,
             u.department AS department,
             u.header_url AS headerUrl,
-            u.user_type AS userType
+            u.user_type AS userType,
+            u.nick_name AS nickName,
+            u.sex AS sex,
+            u.ip_addr AS ipAddr,
+            u.user_out_type AS userOutType,
+            u.birth AS birth,
+            u.nation AS nation,
+            u.province AS province,
+            u.city AS city,
+            u.county AS county,
+            u.post_code AS postCode,
+            u.education AS education
         FROM tp_main_admin_user u
         WHERE u.login_name = #{userName}
         AND u.status = 0
@@ -158,7 +170,7 @@
             parameterType="java.lang.String">
         SELECT
             u.id AS id,
-            u.user_name AS userName,
+            u.user_name AS realName,
             u.login_name AS loginName,
             u.login_password AS loginPassword,
             u.user_contact AS userContact,
@@ -175,7 +187,18 @@
             u.group_id AS groupId,
             u.department AS department,
             u.header_url AS headerUrl,
-            u.user_type AS userType
+            u.user_type AS userType,
+            u.nick_name AS nickName,
+            u.sex AS sex,
+            u.ip_addr AS ipAddr,
+            u.user_out_type AS userOutType,
+            u.birth AS birth,
+            u.nation AS nation,
+            u.province AS province,
+            u.city AS city,
+            u.county AS county,
+            u.post_code AS postCode,
+            u.education AS education
         FROM tp_main_admin_user u
         WHERE u.user_contact = #{phoneNumber}
         AND u.status = 0
@@ -186,7 +209,7 @@
             parameterType="java.lang.String">
         SELECT
             u.id AS id,
-            u.user_name AS userName,
+            u.user_name AS realName,
             u.login_name AS loginName,
             u.login_password AS loginPassword,
             u.user_contact AS userContact,
@@ -200,19 +223,33 @@
             u.nature AS nature,
             u.post AS post,
             u.sort AS sort,
-            u.group_id AS groupId,
             u.department AS department,
             u.header_url AS headerUrl,
             u.user_out_type AS userOutType,
             u.user_type AS userType,
+            u.nick_name AS nickName,
+            u.sex AS sex,
+            u.ip_addr AS ipAddr,
             u.birth AS birth,
             u.nation AS nation,
             u.province AS province,
             u.city AS city,
             u.county AS county,
             u.post_code AS postCode,
-            u.education AS education
+            u.education AS education,
+            GROUP_CONCAT(DISTINCT d.id ) AS departmentId,
+			GROUP_CONCAT(DISTINCT d.NAME ) AS departmentName,
+			GROUP_CONCAT(DISTINCT up.post_id) AS deputyPostId,
+			GROUP_CONCAT(DISTINCT p.post_name ORDER BY p.id) AS deputyPost,
+			GROUP_CONCAT(DISTINCT ug.group_id) AS groupId,
+			GROUP_CONCAT(DISTINCT g.group_name) AS groupName
         FROM tp_main_admin_user u
+        LEFT JOIN user_post up ON(up.user_id = u.id)
+        LEFT JOIN post p ON(p.id = u.post)
+        LEFT JOIN user_department ud ON ( ud.user_id = u.id )
+        LEFT JOIN department d ON ( d.id = ud.department_id )
+        LEFT JOIN user_group ug ON (ug.user_id = u.id)
+        LEFT JOIN tp_group g ON (g.id = ug.group_id)
         WHERE u.id = #{id}
         AND u.status = 0
         AND u.is_delete = 0
@@ -221,6 +258,23 @@
     <!--查询用户密码-->
     <select id="selectUserPwd" parameterType="java.lang.String" resultType="java.lang.String">
         select login_password from tp_main_admin_user where id = #{id}
+    </select>
+    <!--查询内部用户数量-->
+    <select id="selectInUserCount" resultType="java.lang.Integer">
+        select count(1) from tp_main_admin_user where user_type = 1 and is_delete = 0
+    </select>
+    <!--查询外部用户数量-->
+    <select id="selectOutUserCount" resultType="java.lang.Integer">
+        select count(1) from tp_main_admin_user where user_type = 2 and is_delete = 0
+    </select>
+    <!--查询用户所属部门-->
+    <select id="selectDepartmentByUserId" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        department
+        from tp_main_admin_user
+        where id = #{id}
+        and is_delete = 0
+        and status = 0
     </select>
     <!--更新为离职用户-->
     <update id="updateUserLeave" parameterType="java.lang.String">

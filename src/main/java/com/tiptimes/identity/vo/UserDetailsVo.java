@@ -16,7 +16,7 @@ public class UserDetailsVo implements UserDetails, Serializable {
 
     private String id;
 
-    private String userName;
+    private String realName;
 
     private String loginName;
 
@@ -64,6 +64,31 @@ public class UserDetailsVo implements UserDetails, Serializable {
     private String groupId;
 
     private Integer userType;
+
+    private String nickName;
+
+    private Integer sex;
+
+    private String ipAddr;
+
+    private Integer userOutType;
+
+    private String birth;
+
+    private String nation;
+
+    private Integer province;
+
+    private Integer city;
+
+    private Integer county;
+
+    private String postCode;
+
+    private String education;
+
+
+
 
 //    private List<String> authorities; // 权限
 //

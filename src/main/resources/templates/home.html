@@ -9,98 +9,148 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
     <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}"/>
-    <!-- Font Awesome -->
-<!--    <link rel="stylesheet" th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}">-->
     <!--table-->
     <link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap-table.min.css}"/>
-<!--    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css}">-->
-    <!-- iCheck for checkboxes and radio inputs -->
-<!--    <link rel="stylesheet" th:href="@{/plugins/iCheck/minimal/_all.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/plugins/bootstrap-switch/bootstrap-switch.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/plugins/jstree/style.css}">-->
-    <!-- Theme style -->
-<!--    <link rel="stylesheet" th:href="@{/res/css/style.css}">-->
 
-<!--    <link rel="stylesheet" th:href="@{/res/modal/css/demo.css}">-->
-<!--    <link rel="stylesheet" th:href="@{/res/modal/css/naranja.min.css}">-->
+    <link rel="stylesheet" th:href="@{/res/css/style.css}">
 
-
-    <!-- daterange picker -->
-<!--    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-daterangepicker/daterangepicker.css}"/>-->
-
-    <!-- select2 -->
-<!--    <link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}"/>-->
-
-<!--    <link rel="stylesheet" th:href="@{/css/new.css}"/>-->
-
-<!--    <link rel="stylesheet" th:href="@{/css/tab.css}"/>-->
-<!--    <link rel="stylesheet" th:href="@{/css/bootstrap-select1.10.0.min.css}"/>-->
+    <link rel="stylesheet" th:href="@{/res/modal/css/naranja.min.css}">
 
     <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
-    <div class="home">
-        首页
+<input type="hidden" id="operatorId" th:value="${session.userId}">
+<div class="row">
+    <div class="col-md-3">
+        <div class="s-item">
+            <div class="title">快捷访问</div>
+            <div class="add">
+                <p shiro:hasPermission="application_list_index">
+                    <a href="admin/applicationList">管理应用</a>
+                </p>
+                <p shiro:hasPermission="user_organization">
+                    <a href="admin/department">管理组织架构</a>
+                </p>
+                <p shiro:hasPermission="in_oauth_index">
+                    <a href="admin/authorizeApp">授权应用</a>
+                </p>
+                <p shiro:hasPermission="user_in_index">
+                    <a href="admin/adminUser_index">管理账户</a>
+                </p>
+            </div>
+        </div>
     </div>
-    <!-- jQuery 3 -->
-    、
-    <!-- Bootstrap 3.3.7 -->
-<!--    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>-->
-    <!--table-->
-<!--    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap-table.min.js}"></script>-->
-<!--    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap-table-zh-CN.min.js}"></script>-->
-<!--    <script th:src="@{/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js}"></script>-->
-<!--    <script th:src="@{/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js}"></script>-->
-    <!-- iCheck 1.0.1 -->
-<!--    <script th:src="@{/plugins/iCheck/icheck.min.js}"></script>-->
+    <div class="col-md-3">
+        <div class="s-item">
+            <div class="title">内部应用数量</div>
+            <div class="specific">
+                <span class="num" id="inClientTotalCount"></span>
+                <span class="unit">个</span>
+            </div>
+            <div class="text" shiro:hasPermission="application_list_index">
+                <a href="admin/applicationList">查看应用列表</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="s-item">
+            <div class="title">外部应用数量</div>
+            <div class="specific">
+                <span class="num" id="outClientTotalCount">0</span>
+                <span class="unit">个</span>
+            </div>
+            <div class="text" shiro:hasPermission="application_list_index">
+                <a href="admin/applicationList">查看应用列表</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="s-item">
+            <div class="title">消息提醒</div>
+            <div class="specific">
+                <ul id="informationList">
 
-<!--    <script th:src="@{/plugins/bootstrap-switch/bootstrap-switch.js}"></script>-->
-    <!--jsTree-->
-<!--    <script th:src="@{/res/js/plugins/jsTree/jstree.js}"></script>-->
-    <!-- 弹框 -->
-<!--    <script th:src="@{/res/modal/js/naranja.js}"></script>-->
-    <!--base 64加密-->
-<!--    <script th:src="@{/res/js/Base64.js}"></script>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="s-item">
+            <div class="title">内部用户数</div>
+            <div class="specific">
+                <span class="num" id="inUserCount"></span>
+                <span class="unit">人</span>
+            </div>
+            <div class="text" shiro:hasPermission="user_in_index">
+                <a href="admin/adminUser_index">查看账户列表</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="s-item">
+            <div class="title">外部用户数</div>
+            <div class="specific">
+                <span class="num" id="outUserCount"></span>
+                <span class="unit">人</span>
+            </div>
+            <div class="text" shiro:hasPermission="user_out_index">
+                <a href="admin/outUser">查看账户列表</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="s-item">
+            <div class="title">意见中心</div>
+            <div class="specific">
+                <ul id="opinionList">
 
-    <!-- 设置dialog可拖拽 -->
-<!--    <script th:src="@{/plugins/jquery-ui/jquery-ui.js}"></script>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="list">
+            <div class="title">操作日志</div>
+            <ul class="tag">
+                <li class="active">操作日志</li>
+                <li>出/入日志</li>
+            </ul>
+            <div class="tag-details">
+                <div class="tag-details-item">
+                    <table id="operatePagination" data-mobile-responsive="true"
+                           data-icon-size="outline"></table>
+                </div>
+                <div class="tag-details-item" style="display: none">
+                    <table id="loginPagination" data-mobile-responsive="true"
+                           data-icon-size="outline"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- element-ui -->
-<!--    <script th:src="@{/plugins/element-ui/vue.2.6.11.js}"></script>-->
-<!--    <script th:src="@{/plugins/element-ui/element-ui.js}"></script>-->
-
-
-    <!-- bootstrap datepicker -->
-<!--    <script th:src="@{/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>-->
-
-    <!-- date-range-picker -->
-<!--    <script th:src="@{/bower_components/moment/min/moment.min.js}"></script>-->
-<!--    <script th:src="@{/bower_components/bootstrap-daterangepicker/daterangepicker.js}"></script>-->
-
-    <!-- ueditor -->
-<!--    <script th:src="@{/plugins/ueditor/ueditor.config.js}"></script>-->
-<!--    <script th:src="@{/plugins/ueditor/ueditor.all.js}"> </script>-->
-<!--    <script th:src="@{/plugins/ueditor/lang/zh-cn/zh-cn.js}"></script>-->
-
-    <!-- ajaxfileupload -->
-<!--    <script th:src="@{/plugins/ajaxfileupload/ajaxfileupload.js}"></script>-->
-
-    <!-- echarts -->
-<!--    <script th:src="@{/plugins/echarts/echarts.min.js}"></script>-->
-
-    <!-- select2 -->
-<!--    <script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>-->
-
-    <!--公共js-->
-<!--    <script th:src="@{/js/common.js}"></script>-->
-<!--    <script th:src="@{/js/select.js}"></script>-->
-
-    <!--公共业务相关js-->
-<!--    <script th:src="@{/js/public.js}"></script>-->
-
-<!--    <script th:src="@{/js/bootstrap-select1.10.0.min.js}"></script>-->
-<!--    <script th:src="@{/js/defaults-zh_CN.1.10.0.min.js}"></script>-->
+<!-- jQuery 3 -->
+<script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+<!--table-->
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap-table.min.js}"></script>
+<script th:src="@{/bower_components/bootstrap/dist/js/bootstrap-table-zh-CN.min.js}"></script>
+<!-- 弹框 -->
+<script th:src="@{/res/modal/js/naranja.js}"></script>
 <!--自定义js-->
 <script th:src="@{/js/home.js}"></script>
+<script>
+    //tab页面切换
+    $(".tag li").click(function () {
+        $(this).addClass("active").siblings().removeClass("active");
+        var index = $(this).index();
+        $(".tag-details").find(".tag-details-item").eq(index).show().siblings().hide();
+    });
+</script>
 </body>
 </html>

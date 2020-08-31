@@ -32,11 +32,13 @@
       ocd.client_type clientType,
       ocd.client_name clientName,
       ocd.client_domain clientDomain,
-      ocd.is_del isDel
+      ocd.is_del isDel,
+      uc.client_sort isTop
     from user_client uc
     INNER JOIN oauth_client_details ocd on(ocd.client_id = uc.client_id)
     INNER JOIN tp_main_admin_user au on(au.id = uc.user_id)
     where uc.user_id = #{userId} and au.user_type = 1
+    ORDER BY uc.client_sort ASC , uc.update_time DESC
   </select>
 
   <select id="selectUserByClientId" parameterType="java.lang.String" resultType="com.tiptimes.identity.vo.UserVo">
@@ -82,5 +84,13 @@
       user_id = #{userId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!--置顶、取消置顶-->
+  <update id="updateClientTop" parameterType="com.tiptimes.identity.qo.ClientTopRequest">
+    update user_client
+    set client_sort = #{isTop},
+    update_time = #{updateTime}
+    where id = #{id}
+  </update>
+
 
 </mapper>

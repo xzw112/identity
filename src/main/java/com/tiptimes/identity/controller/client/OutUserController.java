@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customer/outUser")
-@Api("外部用户")
+@Api(description = "外部用户")
 public class OutUserController {
 
     @Autowired

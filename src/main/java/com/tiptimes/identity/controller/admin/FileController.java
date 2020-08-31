@@ -1,4 +1,4 @@
-package com.tiptimes.identity.controller.client;
+package com.tiptimes.identity.controller.admin;
 
 import com.tiptimes.identity.common.ErrorConstants;
 import com.tiptimes.identity.common.ResponseResult;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

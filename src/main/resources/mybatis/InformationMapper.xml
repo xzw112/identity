@@ -37,7 +37,7 @@
             u.user_name userName,
             u.login_name loginName
         FROM information i
-        INNER JOIN tp_main_admin_user u ON ( u.id = i.create_user )
+        LEFT JOIN tp_main_admin_user u ON ( u.id = i.create_user )
         WHERE 1 = 1
         AND i.is_del = #{isDel}
         <if test="title != null and title != ''">
@@ -47,7 +47,12 @@
             AND i.information_type = #{informationType}
         </if>
         <if test="sendType > 0">
-            AND i.send_type = #{sendType}
+            AND
+            (
+                i.send_type = #{sendType}
+                OR
+                i.send_type = 3
+            )
         </if>
         ORDER BY i.create_time DESC
     </select>

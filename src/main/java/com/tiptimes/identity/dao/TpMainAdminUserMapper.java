@@ -35,6 +35,8 @@ public interface TpMainAdminUserMapper extends MyMapper<TpMainAdminUser> {
 
     ClientUserVo selectUserById (String id);
 
+    String selectDepartmentByUserId(String id);
+
     String selectUserPwd(String id);
     // 批量离职
     int updateUserLeave(String[] id);
@@ -58,4 +60,8 @@ public interface TpMainAdminUserMapper extends MyMapper<TpMainAdminUser> {
     int updateUserPwd(UserPwdRequest userPwdRequest);
     // 批量重置用户密码（123123）--后台用
     int resetPwd(String[] id);
+    // 查询内部用户数量
+    int selectInUserCount();
+    // 查询外部用户数量
+    int selectOutUserCount();
 }

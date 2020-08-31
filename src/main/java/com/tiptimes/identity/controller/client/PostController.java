@@ -6,6 +6,7 @@ import com.tiptimes.identity.common.PageResult;
 import com.tiptimes.identity.common.ResponseResult;
 import com.tiptimes.identity.entity.Department;
 import com.tiptimes.identity.entity.Post;
+import com.tiptimes.identity.entity.TreeEntity;
 import com.tiptimes.identity.qo.DepartmentRequest;
 import com.tiptimes.identity.qo.PostRequest;
 import com.tiptimes.identity.service.PostService;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 岗位
@@ -40,6 +43,27 @@ public class PostController {
     public PageResult getPostList(@RequestBody PostRequest postRequest) {
         PageResult<PostVo> list = postService.selectPostList(postRequest);
         return list;
+    }
+
+    @RequestMapping(value = "/getClientPostList", method = RequestMethod.POST)
+    @ApiOperation(value = "获取岗位列表---vue用")
+    public ResponseResult getClientPostList() {
+        PostRequest postRequest = new PostRequest();
+        postRequest.setPageNumber(1);
+        postRequest.setPageSize(Integer.MAX_VALUE);
+        PageResult<PostVo> list = postService.selectPostList(postRequest);
+        List<TreeEntity> treeEntityList = new ArrayList<>();
+        if (list.getRows() != null) {
+            List<PostVo> postVoList = list.getRows();
+            for (int i = 0; i < postVoList.size(); i++) {
+                TreeEntity treeEntity = new TreeEntity();
+                PostVo postVo = postVoList.get(i);
+                treeEntity.setId(postVo.getId());
+                treeEntity.setText(postVo.getPostName());
+                treeEntityList.add(treeEntity);
+            }
+        }
+        return ResponseResult.successWithData(treeEntityList);
     }
 
     /**

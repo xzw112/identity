@@ -162,7 +162,7 @@ function btnGroup() {
     // data-target="xxx" 为点击按钮弹出指定名字的模态框
     var informationDelStatus = $("#informationDelStatus").val();
     var str = '';
-    if (informationDelStatus == 1) {
+    if (informationDelStatus == 1) { // 未删除的消息
         str = '<a href="####"  id="changeSend" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="撤销/发布">撤销/发布' +
             '</a>'+
             '<a href="####"  id="informationEdit" data-toggle="modal" data-target="#editinfo" ' +
@@ -171,7 +171,7 @@ function btnGroup() {
             '<a href="####"  id="informationDel" data-toggle="modal" data-target="#deleteuser" ' +
             'style="margin-left:15px" title="删除">删除' +
             '</a>';
-    } else if (informationDelStatus == 0) {
+    } else if (informationDelStatus == 0) {// 已删除的消息
         str = '<a href="####"  id="reSend" data-toggle="modal" data-target="#editrole" style="margin-left:15px" title="还原">还原' +
             '</a>'+
             '<a href="####"  id="del" data-toggle="modal" data-target="#deleteuser" ' +

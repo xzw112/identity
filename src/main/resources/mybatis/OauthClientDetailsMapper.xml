@@ -109,6 +109,13 @@
         from oauth_client_details ocd
         where client_id = #{clientId,jdbcType=VARCHAR}
     </select>
+    <select id="selectInClientCount" resultType="java.lang.Integer">
+        select count(1) from oauth_client_details where client_domain = 1 and is_del = 1
+    </select>
+    <select id="selectOutClientCount" resultType="java.lang.Integer">
+        select count(1) from oauth_client_details where client_domain = 2 and is_del = 1
+    </select>
+
 
     <insert id="insert" parameterType="com.tiptimes.identity.entity.OauthClientDetails">
     insert into oauth_client_details (client_id, resource_ids, client_secret, 

@@ -53,4 +53,6 @@ public class OauthClientDetails implements Serializable {
 
     private Integer isDel; // 是否删除（1未删除 0删除）
 
+    private Integer isTop;// 是否置顶 1是 0否
+
 }

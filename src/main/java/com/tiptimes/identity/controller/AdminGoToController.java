@@ -149,6 +149,15 @@ public class AdminGoToController {
     }
 
     /**
+     * 意见中心
+     * @return
+     */
+    @RequestMapping("/opinion_index")
+    public String opinion_index(){
+        return "/otherManager/opinion";
+    }
+
+    /**
      * 退出登录
      * @param request
      * @return

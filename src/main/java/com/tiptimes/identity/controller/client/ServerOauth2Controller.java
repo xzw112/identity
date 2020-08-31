@@ -10,6 +10,7 @@ import com.tiptimes.identity.entity.Login;
 import com.tiptimes.identity.entity.OauthCheck;
 import com.tiptimes.identity.qo.MobileRequest;
 import com.tiptimes.identity.qo.RedirectRequest;
+import com.tiptimes.identity.utils.BASE64Util;
 import com.tiptimes.identity.utils.RedisUtil;
 import com.tiptimes.identity.vo.ClientUserVo;
 import io.swagger.annotations.Api;
@@ -61,8 +62,6 @@ public class ServerOauth2Controller {
             e.printStackTrace();
         }
     }
-
-
 
     /**
      * 获取授权码
@@ -120,7 +119,8 @@ public class ServerOauth2Controller {
     @ApiOperation(value = "登录")
     public ResponseResult clientLogin(@RequestBody Login login) {
         ResponseResult result = new ResponseResult();
-        String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/token?grant_type=password&username=" + login.getUsername() + "&password=" + login.getPassword();
+        String pwd = BASE64Util.getFromBase64(login.getPassword());
+        String TOKEN_REQUEST_URI = localIp + PORT + "/oauth/token?grant_type=password&username=" + login.getUsername() + "&password=" + pwd;
         // 构建header
         String auth = client_id + ":" + client_secret;
         byte[] encodedAuth = Base64.encodeBase64(auth.getBytes());
@@ -130,7 +130,14 @@ public class ServerOauth2Controller {
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.add("authorization", authHeader);
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        ResponseEntity<OAuth2AccessToken> resp = rest.postForEntity(TOKEN_REQUEST_URI, entity, OAuth2AccessToken.class);
+        ResponseEntity<OAuth2AccessToken> resp = null;
+        try {
+           resp = rest.postForEntity(TOKEN_REQUEST_URI, entity, OAuth2AccessToken.class);
+        } catch (Exception e) {
+            result.setCode(ResponseCodeEnums.FAILURE.getCode());
+            result.setMessage("登陆失败！");
+            return result;
+        }
         if (!resp.getStatusCode().equals(HttpStatus.OK)) {
             result.setCode(ResponseCodeEnums.FAILURE.getCode());
             result.setMessage("登陆失败！");
@@ -195,13 +202,14 @@ public class ServerOauth2Controller {
      * @return
      */
     @RequestMapping(value = "/mobileLogin", method = RequestMethod.POST)
-    @ApiOperation(value = "登录")
+    @ApiOperation(value = "手机号登录")
     public ResponseResult mobileLogin(@RequestBody MobileRequest mobileRequest) {
         ResponseResult result = new ResponseResult();
         // 验证码验证
         // 从redis获取验证码
         String smsCode = redisUtil.get(mobileRequest.getPhoneNumber());
-        if (!mobileRequest.getCode().equals(smsCode)) {
+        String requestCode = BASE64Util.getFromBase64(mobileRequest.getCode());
+        if (!requestCode.equals(smsCode)) {
             result.setCode(ResponseCodeEnums.FAILURE.getCode());
             result.setMessage("验证码填写有误！");
             return result;
@@ -218,7 +226,14 @@ public class ServerOauth2Controller {
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.add("authorization", authHeader);
         HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        ResponseEntity<OAuth2AccessToken> resp = rest.postForEntity(TOKEN_REQUEST_URI, entity, OAuth2AccessToken.class);
+        ResponseEntity<OAuth2AccessToken> resp = null;
+        try {
+            resp = rest.postForEntity(TOKEN_REQUEST_URI, entity, OAuth2AccessToken.class);
+        } catch (Exception e) {
+            result.setCode(ResponseCodeEnums.FAILURE.getCode());
+            result.setMessage("登陆失败！");
+            return result;
+        }
         if (!resp.getStatusCode().equals(HttpStatus.OK)) {
             result.setCode(ResponseCodeEnums.FAILURE.getCode());
             result.setMessage("登陆失败！");

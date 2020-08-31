@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,7 +35,7 @@ public class InformationServiceImpl implements InformationService {
 
     @Override
     public Information selectDetailById(String id) {
-        return null;
+        return informationMapper.selectDetailById(id);
     }
 
     @Override
